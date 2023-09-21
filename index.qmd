@@ -1,0 +1,32 @@
+---
+about:
+  template: jolla
+  id: about-block
+  image: "img/IMG_4246.jpg"
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/Scott_Oatley_
+    - icon: github
+      text: Github
+      href: https://github.com/Scott0atley
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/scott-oatley-b87408157/
+    - icon: envelope
+      text: Email
+      href: "mailto:mail.scottoatley59@gmail.com"  
+---
+
+::: {#about-block}
+:::
+
+# Biography
+
+I am currently a PhD student at the University of Edinburgh studying Youth in Transition: Longitudinal Comparisons of Youth Transitions in the UK using Cohort and Synthetic Cohort Data. I am particularly interested in social stratification, social class, and social mobility. The key substantive focus of my research is the sociology of social stratification. My research draws on a range of quantitative methodological techniques, including but not limited to: logistic regression, continuation ratio models, sensitivity analysis, and multiple imputation. My research mainly uses longitudinal birth cohort data. 
+
+My PhD examines the role structural inequality has upon choice and opportunity for youth entering into the world of economic activity for the first time post-mandatory education. I study this impact within two birth cohorts - the National Childhood Development Study and the British Cohort Study. I also use the UK Household Longitudinal Study to construct synthetic cohorts to cover a period of time whereby no birth cohort data is present. My PhD also compares cross-cohort differences within a socio-historical context. 
+
+On this website, you will find information on my research. 
+Please feel free to [contact me](mailto:mail.scottoatley59@gmail.com) if you have any questions or would like to discuss potential projects.
+

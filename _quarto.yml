@@ -1,0 +1,58 @@
+
+# website settings
+website:
+  title: "Scott Oatley"                                # Your name
+  description: "PhD Student in Sociology"   # 
+  image: img/IMG_4246.jpg
+  
+  # start of the navigation bar at the top of the website
+  navbar:
+    pinned: true
+    
+    # your sub-pages
+    left:
+      - text: "CV"
+        href: cv/index.qmd
+    
+    # your social media handles
+    right:
+      - icon: GitHub
+        href: https://github.com/Scott0atley
+      - icon: twitter
+        href: https://twitter.com/Scott_Oatley_
+      - icon: linkedin
+        href: https://www.linkedin.com/in/scott-oatley-b87408157/
+      - icon: envelope
+        aria-label: email
+        href: "mailto:mail.s2265605@ed.ac.uk"  
+  
+  
+  search: 
+    location: navbar
+    type: textbox
+
+project:
+  type: website
+  output-dir: docs
+
+  preview: 
+    port: 22222
+    browser: true
+    watch-inputs: true
+    navigate: true
+
+execute:
+  freeze: true
+
+format:
+  html:
+    fontsize: 1.1em
+    theme: 
+      - pulse
+      - html/styles.scss
+    toc: false
+    code-link: true
+    anchor-sections: true
+    fig-cap-location: margin
+    reference-location: margin
+    footnotes-hover: true

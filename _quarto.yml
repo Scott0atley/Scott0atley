@@ -3,7 +3,7 @@
 website:
   title: "Scott Oatley"                                # Your name
   description: "PhD Student in Sociology"   # 
-  image: img/IMG_4246.jpg
+  image: img/profile.jpeg
   
   # start of the navigation bar at the top of the website
   navbar:

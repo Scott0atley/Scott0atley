@@ -36,16 +36,6 @@ Here is a list of academic conference presentations I have delivered:
 
 ---
 
-## How should we handle missing data?
-
-**Conference:** Large Social Survey Symposium  
-**Date:** 2024  
-**Location:** Stirling, Scotland  
-
-- [View Slides](large_surveys_missing_data_02052024.pdf){target="_blank"}
-
----
-
 ## Using Shiny as a teaching tool? Construction of the GBCS, NS-SEC, and Wright’s Neo-Marxian Schema as an open-source class calculator application
 
 **Conference:** British Journal of Sociology Inaugural Conference  

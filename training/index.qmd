@@ -45,3 +45,20 @@ Description: This training will focus on setting up Jupyter Notebook on individu
 - [View PowerPoint](Jupyter.pptx){target="_blank"}
 
 ---
+
+## Introduction to Statistics in Stata
+
+**Type:** Teaching Materials 
+**Date:** Jan 1st 2023
+**Location:** Edinburgh, Scotland
+
+Description: These files will provide a holistic undergraduate level understanding of quantiative methods. 
+
+- [View Intro to Quantitative Statistics](QuantitativeStatistics.docx){target="_blank"}
+- [View Intro to Advanced Quantitative Statistics](AdvancedQuantitativeStatistics .docs){target="_blank"}
+- [View Example Dataset](teachingset.dta){target="_blank"}  
+- [View Example Code #1](GettingStartedwithStata1.do){target="_blank"}  
+- [View Example Code #2](GettingStartedwithStata2.do){target="_blank"}  
+- [View Example Code #3](GettingStartedwithStata3.do){target="_blank"}  
+
+---

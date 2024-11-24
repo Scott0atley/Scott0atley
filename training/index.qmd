@@ -42,6 +42,7 @@ Description: This training event will cover teaching users about the Shiny packa
 
 Description: This training will focus on setting up Jupyter Notebook on individual devices and importing the user’s data analysis software of choice (course taught in Stata) into the Notebook environment. After setup is complete, training will focus on establishing the various tools that Jupyter Notebook has to offer; demonstrating how Jupyter goes beyond the clunky and sometimes dysfunctional .do files of Stata and other software providers.
 
+- [View Training Materials](shinytrainingblog.pdf){target="_blank"}  
 - [View PowerPoint](Jupyter.pptx){target="_blank"}
 
 ---

@@ -30,6 +30,8 @@ Description: This training event will cover teaching users about the Shiny packa
 - [View Example Code #6](examplecode6_SO_22112024.R){target="_blank"}  
 - [View Example Code #7](examplecode7_SO_22112024.R){target="_blank"}  
 - [View Example Code #8](examplecode8_SO_22112024.R){target="_blank"}  
+- [View Example .css Code](custom.css){target="_blank"}  
+- [View Example .js Code](customjavascript){target="_blank"}  
 - [View PowerPoint](shinytraining.pptx){target="_blank"}
 
 ---

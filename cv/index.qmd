@@ -1,0 +1,18 @@
+---
+title: "Curriculum Vitae"
+format: html
+---
+
+Welcome to my CV page. Below, you can find a preview of my CV and a link to download the full document.
+
+---
+
+### **Download My CV**
+[Download my CV as a PDF](AcademicCV.pdf){.btn .btn-primary}
+
+---
+
+### **Preview**
+<embed src="AcademicCV.pdf" type="application/pdf" width="100%" height="600px" style="border: 1px solid #ccc;" />
+
+> If the preview does not load, you can [download the CV here](AcademicCV.pdf).

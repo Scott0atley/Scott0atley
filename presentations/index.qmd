@@ -16,6 +16,17 @@ Here is a list of academic conference presentations I have delivered:
 
 ---
 
+## WEBERIAN SOCIAL STATUS REIMAGINED: A SOCIOLOGICAL AND EMPIRICAL CRITIQUE OF EXISTING STATUS MEASURES AND A VIABLE ALTERNATIVE
+
+**Conference:** Large Social Survey Symposium  
+**Date:** 2024  
+**Location:** Edinburgh, Scotland  
+
+- [View Slides](large_surveys_social_status_29112024.pdf){target="_blank"} 
+- [View .do File](status_test_29112024.pdf){target="_blank"} 
+
+---
+
 ## Youth in Transition: Longitudinal Comparisons of Youth Transitions in the UK using Cohort and Synthetic Cohort Data
 
 **Conference:** Social Stratification Seminar  

@@ -23,7 +23,9 @@ Here is a list of academic conference presentations I have delivered:
 **Location:** Edinburgh, Scotland  
 
 - [View Slides](large_surveys_social_status_29112024.pdf){target="_blank"} 
-- [View .do File](status_test_29112024.pdf){target="_blank"} 
+- [View .do File](status_test_29112024.do){target="_blank"} 
+- [View Jupyter Notebook File](social_status_so_01122024_v1.ipynb){target="_blank"} 
+
 
 ---
 
@@ -34,6 +36,7 @@ Here is a list of academic conference presentations I have delivered:
 **Location:** Stirling, Scotland  
 
 - [View Slides](stirling_scott_oatley_20240827.pdf){target="_blank"} 
+- [View Github](https://github.com/Scott0atley/YouthTransitions){target="_blank"} 
 
 ---
 
@@ -44,6 +47,7 @@ Here is a list of academic conference presentations I have delivered:
 **Location:** Stirling, Scotland  
 
 - [View Slides](large_surveys_missing_data_02052024.pdf){target="_blank"}
+- [View Github](https://github.com/Scott0atley/comparingmissingdatamethods/tree/main){target="_blank"} 
 
 ---
 
@@ -55,6 +59,8 @@ Here is a list of academic conference presentations I have delivered:
 **Location:** London, UK  
 
 - [View Slides](BJS_Conference_Shiny_13042024.pdf){target="_blank"} 
+- [View Github](https://github.com/EOSSCC/Class-Calculator){target="_blank"} 
+- [View App](https://eosscc.shinyapps.io/Class_Calculator/){target="_blank"} 
 
 ---
 

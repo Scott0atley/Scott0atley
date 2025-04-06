@@ -13,6 +13,17 @@ format:
 # Teaching
   
 Here is a list of my courses I have previously taught, or currently teach on:
+
+## Multi-Level Modelling in Social Science: SSPS10024 & PGSP11424
+  
+  **Description:**  
+The course enables students to understand and use multilevel models mainly in the context of social science, but examples are also given from medicine and some aspects of biological science. 
+
+  **Date:** 2025, Semester 2
+  
+[Course Catalogue](http://www.drps.ed.ac.uk/20-21/dpt/cxpgsp11424.htm)
+    
+  ---
       
 ## Introduction to Political Data Analysis: PLIT08009
   

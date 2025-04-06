@@ -16,6 +16,19 @@ Here is a list of academic conference presentations I have delivered:
 
 ---
 
+## A Simulation Study Comparing Handling Missing Data Strategies
+
+**Conference:** New Directions
+**Date:** 2025  
+**Location:** Edinburgh, Scotland  
+
+- [View Slides](new_directions_missing_data_05042025.pdf){target="_blank"}
+- [View Github](https://github.com/Scott0atley/comparingmissingdatamethods/tree/main){target="_blank"} 
+- [View Jupyter Notebook File of Simulation](Handling_Missing_Simulation.ipynb){target="_blank"} 
+- [View Jupyter Notebook File of Handling Missing Data in different Software](Handling_Missing_Data_Methods_Software.ipynb){target="_blank"} 
+
+---
+
 ## WEBERIAN SOCIAL STATUS REIMAGINED: A SOCIOLOGICAL AND EMPIRICAL CRITIQUE OF EXISTING STATUS MEASURES AND A VIABLE ALTERNATIVE
 
 **Conference:** Large Social Survey Symposium  

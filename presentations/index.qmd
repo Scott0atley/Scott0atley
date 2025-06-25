@@ -18,7 +18,7 @@ Here is a list of academic conference presentations I have delivered:
 
 ## Weberian Social Status Reimagined: A Sociological And Empirical Critique Of Existing Status Measures And A Viable Alternative
 
-**Conference:** Stirling All Hands Seminar
+**Conference:** Stirling All Hands Seminar    
 **Date:** 2025  
 **Location:** Stirling, Scotland  
 
@@ -28,7 +28,7 @@ Here is a list of academic conference presentations I have delivered:
 
 ## Is there really a pot of gold at the end of the rainbow: an investigation of sexual orientation pay gaps in the UK
 
-**Conference:** Large Social Survey Symposium
+**Conference:** Large Social Survey Symposium   
 **Date:** 2025  
 **Location:** Edinburgh, Scotland  
 
@@ -38,7 +38,7 @@ Here is a list of academic conference presentations I have delivered:
 
 ## Gender Performance Scale as a Quantitative insight into Intracategorical Intersectionality
 
-**Conference:** Intersectional analysis and quantitative methods
+**Conference:** Intersectional analysis and quantitative methods Workshop      
 **Date:** 2025  
 **Location:** Loughborough, England  
 
@@ -49,7 +49,7 @@ Here is a list of academic conference presentations I have delivered:
 
 ## A Simulation Study Comparing Handling Missing Data Strategies
 
-**Conference:** New Directions
+**Conference:** New Directions   
 **Date:** 2025  
 **Location:** Edinburgh, Scotland  
 

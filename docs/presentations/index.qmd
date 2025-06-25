@@ -16,6 +16,37 @@ Here is a list of academic conference presentations I have delivered:
 
 ---
 
+## Weberian Social Status Reimagined: A Sociological And Empirical Critique Of Existing Status Measures And A Viable Alternative
+
+**Conference:** Stirling All Hands Seminar
+**Date:** 2025  
+**Location:** Stirling, Scotland  
+
+- [View Slides](status_stirling_SO_v1_23062025.pdf){target="_blank"} 
+
+---
+
+## Is there really a pot of gold at the end of the rainbow: an investigation of sexual orientation pay gaps in the UK
+
+**Conference:** Large Social Survey Symposium
+**Date:** 2025  
+**Location:** Edinburgh, Scotland  
+
+- [View Slides](Sexuality_Income_Gap_SO_27052025_v2.pdf){target="_blank"}
+
+---
+
+## Gender Performance Scale as a Quantitative insight into Intracategorical Intersectionality
+
+**Conference:** Intersectional analysis and quantitative methods
+**Date:** 2025  
+**Location:** Loughborough, England  
+
+- [View Slides](genderperformance_SO_10042025.pdf){target="_blank"}
+- [View Jupyter Notebook File](Gender_Performance_SO_10032025_V2.ipynb){target="_blank"} 
+
+---
+
 ## A Simulation Study Comparing Handling Missing Data Strategies
 
 **Conference:** New Directions
@@ -29,7 +60,7 @@ Here is a list of academic conference presentations I have delivered:
 
 ---
 
-## WEBERIAN SOCIAL STATUS REIMAGINED: A SOCIOLOGICAL AND EMPIRICAL CRITIQUE OF EXISTING STATUS MEASURES AND A VIABLE ALTERNATIVE
+## Weberian Social Status Reimagined: A Sociological And Empirical Critique Of Existing Status Measures And A Viable Alternative
 
 **Conference:** Large Social Survey Symposium  
 **Date:** 2024  

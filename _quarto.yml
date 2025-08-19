@@ -1,8 +1,8 @@
 
 # website settings
 website:
-  title: "Scott Oatley"                                # My name
-  description: "PhD Student in Sociology"   # My Title
+  title: "Dr Scott Oatley"                                # My name
+  description: "Research Associate (ELSA)"   # My Title
   image: img/profile.jpeg
   
   # start of the navigation bar at the top of the website
@@ -27,12 +27,12 @@ website:
       - icon: GitHub
         href: https://github.com/Scott0atley
       - icon: twitter
-        href: https://twitter.com/Scott_Oatley_
+        href: https://bsky.app/profile/scottoatley.bsky.social
       - icon: linkedin
         href: https://www.linkedin.com/in/scott-oatley-b87408157/
       - icon: envelope
         aria-label: email
-        href: "mailto:mail.s2265605@ed.ac.uk"  
+        href: "mailto:mail.scott.oatley@manchester.ac.uk"  
   
   
   search: 

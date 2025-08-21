@@ -52,4 +52,12 @@ Stata program to compute and analyze social stratification variables. socstrat i
 
   
   ---
+## Project 5: Dervied Detailed Ethnicity Measure for English Longitudinal Study of Ageing (ELSA)
+  
+  **Description:**  
+
+-[View Project](ELSA_Ethnicity_Report_SO_30062025_v2.pdf){target="_blank"} 
+Detailed Roadmap of Ethnicity Data Collection in the English Longitudinal Study of Ageing (ELSA)
+  
+  ---
   

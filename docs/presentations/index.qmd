@@ -1,0 +1,129 @@
+---
+title: "Presentations"
+format: 
+  html:
+    toc: true
+    toc-title: "On This Page"
+    number-sections: false
+    self-contained: true
+    code-fold: true
+
+---
+
+# Academic Presentations
+
+Here is a list of academic conference presentations I have delivered:
+
+---
+
+## The forgotten form of stratification: Sexual Orientation in large social survey research
+
+**Conference:** Stirling Social Stratification Conference
+**Date:** 2025  
+**Location:** Stirling, Scotland  
+
+- [View Slides](sexualitystirling_so_21082025_v1.pdf){target="_blank"} 
+
+---
+
+## Weberian Social Status Reimagined: A Sociological And Empirical Critique Of Existing Status Measures And A Viable Alternative
+
+**Conference:** Stirling All Hands Seminar
+**Date:** 2025  
+**Location:** Stirling, Scotland  
+
+- [View Slides](status_stirling_SO_v1_23062025.pdf){target="_blank"} 
+
+---
+
+## Is there really a pot of gold at the end of the rainbow: an investigation of sexual orientation pay gaps in the UK
+
+**Conference:** Large Social Survey Symposium
+**Date:** 2025  
+**Location:** Edinburgh, Scotland  
+
+- [View Slides](Sexuality_Income_Gap_SO_27052025_v2.pdf){target="_blank"}
+
+---
+
+## Gender Performance Scale as a Quantitative insight into Intracategorical Intersectionality
+
+**Conference:** Intersectional analysis and quantitative methods
+**Date:** 2025  
+**Location:** Loughborough, England  
+
+- [View Slides](genderperformance_SO_10042025.pdf){target="_blank"}
+- [View Jupyter Notebook File](Gender_Performance_SO_10032025_V2.ipynb){target="_blank"} 
+
+---
+
+## A Simulation Study Comparing Handling Missing Data Strategies
+
+**Conference:** New Directions
+**Date:** 2025  
+**Location:** Edinburgh, Scotland  
+
+- [View Slides](new_directions_missing_data_05042025.pdf){target="_blank"}
+- [View Github](https://github.com/Scott0atley/comparingmissingdatamethods/tree/main){target="_blank"} 
+- [View Jupyter Notebook File of Simulation](Handling_Missing_Simulation.ipynb){target="_blank"} 
+- [View Jupyter Notebook File of Handling Missing Data in different Software](Handling_Missing_Data_Methods_Software.ipynb){target="_blank"} 
+
+---
+
+## Weberian Social Status Reimagined: A Sociological And Empirical Critique Of Existing Status Measures And A Viable Alternative
+
+**Conference:** Large Social Survey Symposium  
+**Date:** 2024  
+**Location:** Edinburgh, Scotland  
+
+- [View Slides](large_surveys_social_status_29112024.pdf){target="_blank"} 
+- [View .do File](status_test_29112024.do){target="_blank"} 
+- [View Jupyter Notebook File](social_status_so_01122024_v1.ipynb){target="_blank"} 
+
+
+---
+
+## Youth in Transition: Longitudinal Comparisons of Youth Transitions in the UK using Cohort and Synthetic Cohort Data
+
+**Conference:** Social Stratification Seminar  
+**Date:** 2024  
+**Location:** Stirling, Scotland  
+
+- [View Slides](stirling_scott_oatley_20240827.pdf){target="_blank"} 
+- [View Github](https://github.com/Scott0atley/YouthTransitions){target="_blank"} 
+
+---
+
+## How should we handle missing data?
+
+**Conference:** Large Social Survey Symposium  
+**Date:** 2024  
+**Location:** Stirling, Scotland  
+
+- [View Slides](large_surveys_missing_data_02052024.pdf){target="_blank"}
+- [View Github](https://github.com/Scott0atley/comparingmissingdatamethods/tree/main){target="_blank"} 
+
+---
+
+
+## Using Shiny as a teaching tool? Construction of the GBCS, NS-SEC, and Wright’s Neo-Marxian Schema as an open-source class calculator application
+
+**Conference:** British Journal of Sociology Inaugural Conference  
+**Date:** 2024  
+**Location:** London, UK  
+
+- [View Slides](BJS_Conference_Shiny_13042024.pdf){target="_blank"} 
+- [View Github](https://github.com/EOSSCC/Class-Calculator){target="_blank"} 
+- [View App](https://eosscc.shinyapps.io/Class_Calculator/){target="_blank"} 
+
+---
+
+## Youth Transitions and Economic Activity: A Re-examination of NCDS data
+
+**Conference:** New Directions  
+**Date:** 2023  
+**Location:** Edinburgh, Scotland  
+
+- [View Slides](qstep_18022024.pdf){target="_blank"}
+
+---

@@ -1,0 +1,56 @@
+---
+title: "Projects"
+format: 
+  html:
+    toc: true
+    toc-title: "On This Page"
+    number-sections: false
+    self-contained: true
+    code-fold: true
+
+---
+  
+# My Projects
+  
+Here is a list of my web applications, data projects, and other software solutions:
+  
+## Project 1: Class Calculator
+  
+  **Description:**  
+This web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with teh ability to test how different measure of social class are constructed and used in a survey environment.  
+-[View Project](https://eosscc.shinyapps.io/Class_Calculator/)  
+-[Source Code](https://github.com/EOSSCC/Class-Calculator/tree/main)
+  
+  ---
+  
+## Project 2: Shiny Conference Appendix App
+  
+  **Description:**  
+This web application was designed to aid in conference presentation, it hosts every figure/graph/table in a given paper presentation. The app itself uses R code using the Shiny package.
+
+-[View Project](https://scottoatley.shinyapps.io/Youth_In_Transition/)  
+
+  
+  ---
+  
+## Project 3: Remote Survey Hosting and Structured Data Storage App
+  
+  **Description:**  
+This web application was designed to showcase the verstalilty of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote google sheets. 
+
+-[View Project](https://scottoatley.shinyapps.io/trainingapp/)  
+
+  
+  ---
+
+## Project 4: socstrat a social stratification command in Stata
+  
+  **Description:**  
+Stata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General's Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option and generates a new variable that represents the computed social stratification variable.
+
+-[View Project](https://github.com/Scott0atley/socstrat)  
+
+  
+  ---
+
+  

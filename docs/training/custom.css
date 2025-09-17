@@ -1,0 +1,44 @@
+/* styles.css */
+  
+.survey-container { 
+    max-width: 600px; 
+    margin: auto; 
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+
+.survey-question {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.survey-input {
+  margin-top: 10px;
+}
+
+.btn-primary {
+  background-color: #4CAF50;
+    color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.submit-container {
+  text-align: center; 
+  margin-top: 30px;
+}
+
+.mandatory-asterisk {
+  color: red;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.thank-you {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 50px;
+}

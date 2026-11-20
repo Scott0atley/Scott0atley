@@ -1,0 +1,104 @@
+/* Redesign mock-up: one style for the whole site, including the guides. */
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap");
+
+:root {
+  --bg: #ffffff;
+  --surface: #f6f6f4;
+  --ink: #161616;
+  --muted: #5f5f5f;
+  --rule: #e2e2de;
+  --accent: #2e7d6b;
+  --accent-soft: #e4f1ec;
+  --link: #1f5fa8;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141515; --surface: #1d1f1f; --ink: #ececea; --muted: #a8a8a4;
+    --rule: #2e3130; --accent: #5cc0a5; --accent-soft: #1f3530; --link: #8db8ec;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141515; --surface: #1d1f1f; --ink: #ececea; --muted: #a8a8a4;
+  --rule: #2e3130; --accent: #5cc0a5; --accent-soft: #1f3530; --link: #8db8ec;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Source Sans 3", Arial, sans-serif; font-size: 18px; line-height: 1.55; }
+a { color: var(--link); }
+img { max-width: 100%; }
+.container { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+.site-header { border-bottom: 1px solid var(--rule); background: var(--bg); position: sticky; top: 0; z-index: 10; }
+.site-header .container { display: flex; align-items: center; gap: 24px; min-height: 60px; flex-wrap: wrap; }
+.brand { font-weight: 700; font-size: 20px; color: var(--ink); text-decoration: none; margin-right: auto; }
+.menu { display: flex; gap: 20px; flex-wrap: wrap; }
+.menu a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 16px; padding: 4px 0; border-bottom: 2px solid transparent; }
+.menu a:hover, .menu a.active { color: var(--ink); border-bottom-color: var(--accent); }
+.social { display: flex; gap: 12px; }
+.social a { color: var(--muted); display: inline-flex; }
+.social a:hover { color: var(--ink); }
+.social svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* Home hero */
+.hero { display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: center; padding: 56px 0 40px; }
+.hero img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; }
+.hero h1 { font-size: 42px; line-height: 1.1; margin: 0 0 6px; }
+.hero .role { color: var(--muted); font-size: 20px; margin: 0 0 14px; }
+.hero .statement { font-size: 21px; margin: 0 0 18px; max-width: 640px; }
+.buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--ink); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 16px; }
+.btn.primary { background: var(--ink); color: var(--bg); }
+
+/* Cards */
+.section { padding: 28px 0; border-top: 1px solid var(--rule); }
+.section h2 { font-size: 26px; margin: 0 0 6px; }
+.section .lead { color: var(--muted); margin: 0 0 18px; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; }
+.card .kicker { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.card h3 { font-size: 20px; line-height: 1.25; margin: 0 0 8px; }
+.card p { margin: 0 0 12px; color: var(--muted); font-size: 16px; }
+.card .more { margin-top: auto; font-weight: 600; font-size: 16px; }
+.themes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 32px; padding: 0; list-style: none; margin: 0; }
+.themes li { padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.themes b { display: block; }
+.themes span { color: var(--muted); font-size: 16px; }
+
+/* Listing pages */
+.page-head { padding: 40px 0 8px; }
+.page-head h1 { font-size: 38px; margin: 0 0 6px; }
+.page-head p { color: var(--muted); margin: 0; max-width: 700px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0 8px; }
+.filters button { font: inherit; font-size: 15px; font-weight: 600; padding: 5px 14px; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--muted); cursor: pointer; }
+.filters button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.group { padding: 18px 0 8px; }
+.group h2 { font-size: 22px; margin: 0 0 4px; }
+.entry { display: grid; grid-template-columns: 70px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.entry .year { font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.entry h3 { font-size: 19px; line-height: 1.3; margin: 0 0 2px; }
+.entry .venue { color: var(--muted); font-size: 16px; margin: 0 0 8px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 14px; font-weight: 600; text-decoration: none; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink); background: var(--bg); }
+.chip:hover { border-color: var(--ink); }
+.chip.guide { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.chip.note { color: var(--muted); border-style: dashed; }
+
+/* Guides hub */
+.preview { height: 110px; border-radius: 8px; background: var(--bg); border: 1px solid var(--rule); margin-bottom: 14px; display: flex; align-items: flex-end; gap: 6px; padding: 12px; }
+.preview i { flex: 1; background: var(--accent); border-radius: 3px 3px 0 0; opacity: .85; }
+
+.mock-banner { background: #fff4d6; color: #5a4300; text-align: center; font-size: 14px; padding: 6px 16px; }
+footer.site { border-top: 1px solid var(--rule); margin-top: 40px; padding: 24px 0 40px; color: var(--muted); font-size: 15px; }
+
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; gap: 20px; padding-top: 32px; text-align: left; }
+  .hero img { width: 120px; height: 120px; }
+  .hero h1 { font-size: 34px; }
+  .cards, .themes { grid-template-columns: 1fr; }
+  .entry { grid-template-columns: 1fr; gap: 2px; }
+  .site-header .container { gap: 10px 16px; padding-top: 8px; padding-bottom: 8px; }
+  .menu { gap: 14px; order: 3; width: 100%; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; }
+}

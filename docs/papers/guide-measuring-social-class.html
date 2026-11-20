@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Measuring social class: an interactive guide | Scott Oatley</title>
+<meta name="description" content="Interactive guide to the chapter Measuring social class: subjective and ad hoc measures, RGSC, EGP, NS-SEC, ESeC, micro-classes, Wright's schema, inductive measures and sensitivity analysis.">
+<link rel="stylesheet" href="guide.css">
+<style>
+  .back { font-size:14px; margin-bottom:18px; display:inline-block; }
+  .sorter td:last-child { width:230px; }
+  .grp0 { background:#f2f2f2; } .grp1 { background:#fff; }
+  .pill { display:inline-block; padding:2px 8px; border:1px solid var(--rule); font-size:13px; margin-left:6px; }
+  .big { font-size:22px; font-weight:bold; margin:6px 0; }
+  .bar { height:12px; background:var(--ink); display:inline-block; vertical-align:middle; }
+  .bar.warn { background:var(--red); }
+  ul.recs li { margin-bottom:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents">
+  <div class="navhead">Contents</div>
+  <ol>
+    <li><a href="#start">Start here</a></li>
+    <li><a href="#avoid">1. What not to use</a></li>
+    <li><a href="#occupation">2. Occupation-based measures</a></li>
+    <li><a href="#schemas">3. Schema explorer</a></li>
+    <li><a href="#micro">4. Micro-classes</a></li>
+    <li><a href="#wright">5. Wright's schema</a></li>
+    <li><a href="#inductive">6. Inductive measures</a></li>
+    <li><a href="#power">7. Categories and sample size</a></li>
+    <li><a href="#decide">8. Choosing a measure</a></li>
+    <li><a href="#check">9. Check yourself</a></li>
+    <li><a href="#reading">10. Reading</a></li>
+  </ol>
+</nav>
+<main>
+<a class="back" href="index.html">&larr; Back to Papers</a>
+<header id="start">
+  <h1>Measuring social class: an interactive guide</h1>
+  <p class="sub">A walk-through of the main measures of social class, how each is built, and how to choose between them</p>
+  <p class="muted small">Oatley, S. (2027) ‘Measuring social class’, in <em>Encyclopedia of Measurement in Social Sciences</em>, 2nd edn, Vol. 3, pp. 394–402. Elsevier. <a href="https://www.sciencedirect.com/science/chapter/referencework/abs/pii/B9780443266294002641">Read the chapter</a>.</p>
+  <p>There is no single agreed way to measure social class. Measures differ because they rest on different theories (Weberian, Marxian, Durkheimian and Bourdieusian) and because some are not grounded in theory at all. This guide follows the chapter’s structure. Each section explains how a measure is built and what it costs to use, with a widget to try it out.</p>
+  <p><b>The chapter’s advice in brief</b></p>
+  <ul>
+    <li>Avoid subjective and ad hoc measures unless self-perception is the topic.</li>
+    <li>Use validated measures, and the most up-to-date version unless the analysis is historical.</li>
+    <li>Where several validated measures are available, compare them in a sensitivity analysis rather than choosing on theory alone.</li>
+  </ul>
+</header>
+
+<h2 id="avoid"><span class="num">1</span>What not to use: subjective and ad hoc measures</h2>
+<p><b>Subjective</b> measures ask people to place themselves on a class ladder or name their class. They suit research on class identity, but they are not comparable across people: one person’s “middle class” is another’s “working class”. An occupation question is hard to misread in comparison: a cleaner reports being a cleaner.</p>
+<p><b>Ad hoc</b> measures are home-made indices, often called socio-economic status (SES), that combine income, education, occupation and other items. They lack theory and outside validation. Income and education are <em>epiphenomenal</em> to class: they are related to it, but they are not class. If you use such an index, call it SES, not social class.</p>
+<div class="widget">
+  <div class="wtitle">Sort these measures</div>
+  <table class="sorter" id="sorter"><thead><tr><th>Measure</th><th>Your call</th></tr></thead><tbody></tbody></table>
+  <button id="sortBtn">Check</button>
+  <div class="answer" id="sortOut"></div>
+</div>
+
+<h2 id="occupation"><span class="num">2</span>Occupation-based measures</h2>
+<p>Since the 1970s the dominant view has been that occupations are the backbone of the class structure. Occupation-based measures are reliable and parsimonious. They are built from two pieces of information:</p>
+<ul>
+  <li>an occupation code: in the UK the four-digit <b>Standard Occupational Classification (SOC)</b>, revised every ten years (latest SOC 2020); internationally the ILO’s <b>ISCO</b> codes;</li>
+  <li>a measure of <b>employment status</b>: employer, self-employed, manager, supervisor or employee.</li>
+</ul>
+<p>Turning free-text job descriptions into codes is slow, even with tools such as CASCOT, and there are hundreds of codes. Automated tools such as <a href="guide-socstrat.html">socstrat</a> then turn codes and status into a class measure.</p>
+<h3>Three families of occupation-based measure</h3>
+<table>
+  <thead><tr><th>Family</th><th>Basis</th><th>Examples</th></tr></thead>
+  <tbody>
+    <tr><td>A priori</td><td>Assumed hierarchy of occupational standing or skill; little theory</td><td>Registrar General’s Social Classes (RGSC), first used 1911</td></tr>
+    <tr><td>Weberian / Goldthorpian</td><td>Employment relations: market situation (security, prospects) and work situation (authority, control)</td><td>EGP, NS-SEC (official UK measure since 2001), ESeC</td></tr>
+    <tr><td>Micro-class</td><td>Durkheimian: detailed occupations themselves are the classes</td><td>80–100 micro-classes</td></tr>
+  </tbody>
+</table>
+
+<h2 id="schemas"><span class="num">3</span>Schema explorer</h2>
+<p>Weberian schemas have many categories, so each comes with official ways to collapse it. Fewer classes give more people per class (more statistical power) but less detail. Pick a schema and a version to see which full classes are grouped together.</p>
+<div class="widget">
+  <div class="wtitle">Full and collapsed versions</div>
+  <div class="controls">
+    <label>Schema <select id="sch"><option value="rgsc">RGSC</option><option value="egp">EGP</option><option value="nssec" selected>NS-SEC</option><option value="esec">ESeC</option></select></label>
+    <label>Version <select id="ver"></select></label>
+  </div>
+  <div class="readout" id="schRead"></div>
+  <table id="schTab"></table>
+  <p class="small muted" id="schNote"></p>
+</div>
+<p><b>RGSC</b> divides non-manual from manual work. It is easy to understand, but it is a priori and failed attempts at validation; the chapter judges its strengths too weak to outweigh its weaknesses. <b>EGP</b> was the first theory-led schema and works well across countries, though its documentation was long hard to obtain. <b>NS-SEC</b> grew out of EGP after the ESRC review and is the measure to use for UK analysis. <b>ESeC</b> uses ISCO codes and is built for cross-national European comparison.</p>
+
+<h2 id="micro"><span class="num">4</span>Micro-classes</h2>
+<p>The micro-class approach keeps the belief that occupation is central, but rejects grouping occupations into a few “big classes”, which hides real differences between detailed occupations. The costs are 80–100 categories, which strain statistical power even in large samples, and few ready-made derivations. The gain is detail. Micro-classes also fit naturally as a second level in a random-effects (multilevel) model. Section 7 shows what that many categories does to cell sizes.</p>
+
+<h2 id="wright"><span class="num">5</span>Wright’s neo-Marxian schema</h2>
+<p>Erik Olin Wright’s schema centres on exploitation rather than market position. It divides <b>owners</b> by how many people they employ, and divides <b>wage labourers</b> along two axes: organisational assets (manager, supervisor, neither) and skill or credential assets (expert, semi-skilled, unskilled). Answer the questions to place a person.</p>
+<div class="widget">
+  <div class="wtitle">Place a person in Wright’s 12-class schema</div>
+  <div class="controls">
+    <label>Owns means of production? <select id="wOwn"><option value="yes">Yes, owner</option><option value="no" selected>No, wage labourer</option></select></label>
+    <label id="wEmpL">Number of employees <select id="wEmp"><option value="10">10 or more</option><option value="2">2 to 9</option><option value="1">0 or 1</option></select></label>
+    <label id="wOrgL">Organisational assets <select id="wOrg"><option value="m">Manager</option><option value="s">Supervisor</option><option value="n" selected>Neither</option></select></label>
+    <label id="wSkL">Skill / credential assets <select id="wSk"><option value="e">Expert</option><option value="s" selected>Semi-skilled</option><option value="u">Unskilled</option></select></label>
+  </div>
+  <div class="big" id="wOut"></div>
+  <table id="wTab"></table>
+</div>
+<p>Wright’s measure is far harder to build than a Weberian one. It needs eight sets of survey items, turned into seven intermediate typologies, and few surveys ask them all. Anyone with a missing answer on any item cannot be classified, although missing-data methods can fill some of these gaps.</p>
+
+<h2 id="inductive"><span class="num">6</span>Inductive measures: capitals, assets and resources</h2>
+<p>All the measures above are <b>deductive</b>: a fixed schema says which class each answer pattern belongs to. <b>Inductive</b> measures, inspired by Bourdieu, estimate classes from each sample using latent class analysis, factor analysis or multiple correspondence analysis on economic, social and cultural capital. The best known is the Great British Class Survey. One sample may give three classes and another nine, and the classes have no fixed order. They can also be expressed as a scale, which helps when many categories would cost too much power. Like Wright’s schema, these measures need many survey items.</p>
+
+<h2 id="power"><span class="num">7</span>Categories and sample size</h2>
+<p>A recurring trade-off in the chapter is detail versus statistical power. This widget spreads a sample across classes using the NS-SEC distribution of the NCDS cohort at age 33 (from the <a href="guide-socstrat.html">socstrat</a> paper). For each class it shows the expected number of people and the 95% margin of error for a proportion of 50% estimated within that class.</p>
+<div class="widget">
+  <div class="wtitle">How thin do the classes get?</div>
+  <div class="controls">
+    <label>Sample size: <b id="nLab">2,000</b> <input type="range" id="nIn" min="200" max="20000" step="100" value="2000"></label>
+    <label>Measure <select id="pv"><option value="8">NS-SEC 8 classes</option><option value="5">NS-SEC 5 classes</option><option value="3">NS-SEC 3 classes</option><option value="90">Micro-classes (90, equal shares)</option></select></label>
+  </div>
+  <div class="readout" id="pRead"></div>
+  <table id="pTab"></table>
+  <p class="try"><b>Try this</b>At 1,000 people compare 8 and 3 classes. Then switch to micro-classes and find the sample size at which the average class reaches 100 people.</p>
+</div>
+
+<h2 id="decide"><span class="num">8</span>Choosing a measure</h2>
+<p>The chapter’s recommendations depend on the question and on what the data allow. Describe your study to get them.</p>
+<div class="widget guide">
+  <fieldset><legend>Is the topic people’s own sense of class?</legend>
+    <label><input type="radio" name="d1" value="no" checked> No</label><label><input type="radio" name="d1" value="yes"> Yes, class identity or self-perception</label></fieldset>
+  <fieldset><legend>Where is the comparison?</legend>
+    <label><input type="radio" name="d2" value="uk" checked> Within the UK</label><label><input type="radio" name="d2" value="cross"> Across European countries</label><label><input type="radio" name="d2" value="hist"> Historical UK data (before NS-SEC)</label></fieldset>
+  <fieldset><legend>What does the survey have?</legend>
+    <label><input type="radio" name="d3" value="occ" checked> Occupation and employment status</label><label><input type="radio" name="d3" value="wright"> Detailed items on ownership, authority, autonomy and credentials</label><label><input type="radio" name="d3" value="car"> Detailed items on economic, social and cultural capital</label></fieldset>
+  <fieldset><legend>Sample and model</legend>
+    <label><input type="radio" name="d4" value="std" checked> Ordinary sample, single-level models</label><label><input type="radio" name="d4" value="big"> Very large sample or multilevel models</label></fieldset>
+  <div class="answer" id="dOut"></div>
+</div>
+
+<h2 id="check"><span class="num">9</span>Check yourself</h2>
+<div class="guide" id="quiz"></div>
+<div class="answer" id="quizOut"></div>
+
+<h2 id="reading"><span class="num">10</span>Reading</h2>
+<ul>
+  <li>The chapter: <a href="https://www.sciencedirect.com/science/chapter/referencework/abs/pii/B9780443266294002641">Measuring social class</a> (doi: 10.1016/B978-0-443-26629-4.00264-1)</li>
+  <li>Companion chapter: <a href="guide-measuring-educational-attainment.html">Measuring educational attainment: an interactive guide</a></li>
+  <li>Building NS-SEC and RGSC in Stata: <a href="guide-socstrat.html">socstrat: an interactive guide</a></li>
+  <li>Connelly, R., Gayle, V. and Lambert, P.S. (2016) A review of occupation-based social classifications for social survey research. <em>Methodological Innovations</em>, 9.</li>
+</ul>
+<footer>Scott Oatley. Everything on this page runs in your browser; no data are sent anywhere.</footer>
+</main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+
+// Section 1: sorter.
+const SORT = [
+  ["Respondents place themselves on a 1–10 ladder of society", "sub"],
+  ["An index adding up income, years of schooling and an occupation score", "adhoc"],
+  ["NS-SEC derived from SOC 2020 and employment status", "valid"],
+  ["Open text answer to “What social class are you?”", "sub"],
+  ["EGP seven-class version", "valid"],
+  ["Household income quintile labelled “social class”", "adhoc"]
+];
+const SORT_LAB = {sub: "Subjective", adhoc: "Ad hoc / SES", valid: "Validated class measure"};
+$("sorter").querySelector("tbody").innerHTML = SORT.map((s, i) => "<tr><td>" + s[0] + '</td><td><select id="s' + i + '"><option value="">choose…</option><option value="sub">Subjective</option><option value="adhoc">Ad hoc / SES</option><option value="valid">Validated class measure</option></select></td></tr>').join("");
+$("sortBtn").onclick = () => {
+  let right = 0;
+  SORT.forEach((s, i) => { if ($("s" + i).value === s[1]) right++; });
+  $("sortOut").innerHTML = "<p><b>" + right + " of " + SORT.length + " correct.</b></p><ul>" + SORT.map(s => "<li>" + s[0] + ": <b>" + SORT_LAB[s[1]] + "</b></li>").join("") + "</ul><p class=\"small\">Subjective measures are fine only when identity is the topic. Indices of income or schooling are SES, not class: label them that way.</p>";
+};
+
+// Section 3: schema explorer. Each schema: full classes [code, label] and versions mapping each full class to a group label.
+const SCH = {
+  rgsc: { name: "RGSC", full: [["I","Professional (e.g. accountants, doctors, lawyers)"],["II","Intermediate (e.g. police officers, bank managers, teachers)"],["IIIN","Skilled non-manual (e.g. clerical workers, driving instructors)"],["IIIM","Skilled manual (e.g. butchers, welders, decorators)"],["IV","Partly skilled (e.g. postal workers, caretakers, security guards)"],["V","Unskilled (e.g. labourers, cleaners, refuse collectors)"]],
+    versions: { "Six classes": ["I","II","IIIN","IIIM","IV","V"], "Manual / non-manual": ["Non-manual","Non-manual","Non-manual","Manual","Manual","Manual"] },
+    note: "Source: chapter Table 1. The manual / non-manual split is the schema’s only organising idea." },
+  egp: { name: "EGP", full: [["I","Higher-grade professionals, administrators and officials; large proprietors"],["II","Lower-grade professionals, administrators and officials; higher-grade technicians"],["IIIa","Routine non-manual, higher grade"],["IIIb","Routine non-manual, lower grade"],["IVa","Small proprietors and artisans with employees"],["IVb","Small proprietors and artisans without employees"],["IVc","Farmers and smallholders"],["V","Lower-grade technicians; supervisors of manual workers"],["VI","Skilled manual workers"],["VIIa","Semi- and unskilled manual workers (not agriculture)"],["VIIb","Agricultural workers"]],
+    versions: { "Eleven classes (full)": ["I","II","IIIa","IIIb","IVa","IVb","IVc","V","VI","VIIa","VIIb"],
+      "Seven classes": ["I+II Service class","I+II Service class","III Routine non-manual","III Routine non-manual","IVa+b Petty bourgeoisie","IVa+b Petty bourgeoisie","IVc Farmers","V+VI Skilled workers","V+VI Skilled workers","VIIa Non-skilled workers","VIIb Agricultural labourers"],
+      "Five classes": ["I–III White-collar","I–III White-collar","I–III White-collar","I–III White-collar","IVa+b Petty bourgeoisie","IVa+b Petty bourgeoisie","IVc+VIIb Farm workers","V+VI Skilled workers","V+VI Skilled workers","VIIa Non-skilled workers","IVc+VIIb Farm workers"],
+      "Three classes": ["Non-manual","Non-manual","Non-manual","Non-manual","Non-manual","Non-manual","Farm workers","Manual","Manual","Manual","Farm workers"] },
+    note: "Source: chapter Table 2 (Goldthorpe and Erikson, 1992). The seven-class version is the one most used in practice." },
+  nssec: { name: "NS-SEC", full: [["1.1","Large employers and higher managerial and administrative"],["1.2","Higher professional"],["2","Lower managerial, administrative and professional"],["3","Intermediate"],["4","Small employers and own account workers"],["5","Lower supervisory and technical"],["6","Semi-routine"],["7","Routine"],["8","Never worked and long-term unemployed"]],
+    versions: { "Eight classes (full)": ["1 Higher managerial and professional","1 Higher managerial and professional","2 Lower managerial and professional","3 Intermediate","4 Small employers and own account","5 Lower supervisory and technical","6 Semi-routine","7 Routine","8 Never worked / long-term unemployed"],
+      "Five classes": ["1 Higher and lower managerial and professional","1 Higher and lower managerial and professional","1 Higher and lower managerial and professional","2 Intermediate","3 Small employers and own account","4 Lower supervisory and technical","5 Semi-routine and routine","5 Semi-routine and routine","(not classified)"],
+      "Three classes": ["1 Higher managerial, administrative and professional","1 Higher managerial, administrative and professional","1 Higher managerial, administrative and professional","2 Intermediate","2 Intermediate","3 Routine and manual","3 Routine and manual","3 Routine and manual","(not classified)"] },
+    note: "Source: chapter Table 3. Class 1 can be split into 1.1 and 1.2 when the sample allows." },
+  esec: { name: "ESeC", full: [["1","Large employers, higher grade professional, administrative and managerial"],["2","Lower grade professional, administrative and managerial; higher grade technician and supervisory"],["3","Intermediate"],["4","Small employer and self-employed (excluding agriculture)"],["5","Self-employed (agriculture)"],["6","Lower supervisory and lower technician"],["7","Lower services, sales and clerical"],["8","Lower technical"],["9","Routine"],["10","Never worked and long-term unemployed"]],
+    versions: { "Common term": ["Higher salariat","Lower salariat","Higher grade white collar","Petit bourgeoisie or independents","Petit bourgeoisie or independents","Higher grade blue collar","Lower grade white collar","Skilled workers","Semi- and non-skilled workers","Unemployed"],
+      "Employment regulation": ["Service relationship","Service relationship (modified)","Mixed","Not applicable","Not applicable","Mixed","Labour contract (modified)","Labour contract (modified)","Labour contract","Not applicable"] },
+    note: "Source: chapter Table 4 (Rose and Harrison, 2007). Built from ISCO codes for cross-national European comparison; compare its categories with NS-SEC." }
+};
+function fillVersions() {
+  const s = SCH[$("sch").value];
+  $("ver").innerHTML = Object.keys(s.versions).map(v => "<option>" + v + "</option>").join("");
+  drawSchema();
+}
+function drawSchema() {
+  const s = SCH[$("sch").value], groups = s.versions[$("ver").value];
+  const distinct = groups.filter((g, i) => groups.indexOf(g) === i && g !== "(not classified)");
+  let h = "<thead><tr><th>Full class</th><th>Description</th><th>Group in this version</th></tr></thead><tbody>";
+  s.full.forEach((c, i) => { const k = distinct.indexOf(groups[i]); h += '<tr class="grp' + (k < 0 ? 0 : k % 2) + '"><td>' + c[0] + "</td><td>" + c[1] + "</td><td><b>" + groups[i] + "</b></td></tr>"; });
+  $("schTab").innerHTML = h + "</tbody>";
+  $("schRead").innerHTML = s.name + ": <b>" + s.full.length + "</b> full classes shown as <b>" + distinct.length + "</b> groups.";
+  $("schNote").textContent = s.note;
+}
+$("sch").addEventListener("change", fillVersions); $("ver").addEventListener("change", drawSchema); fillVersions();
+
+// Section 5: Wright schema.
+const W = {1:"Capitalist (10+ employees)",2:"Small employer (2–9 employees)",3:"Petite bourgeoisie (no more than 1 employee)",4:"Manager, expert",5:"Supervisor, expert",6:"Worker, skilled",7:"Manager, semi-skilled",8:"Supervisor, semi-skilled",9:"Worker, semi-skilled",10:"Manager, unskilled",11:"Supervisor, unskilled",12:"Worker, unskilled"};
+const WGRID = { m: {e:4, s:7, u:10}, s: {e:5, s:8, u:11}, n: {e:6, s:9, u:12} };
+function wright() {
+  const own = $("wOwn").value === "yes";
+  $("wEmpL").style.display = own ? "" : "none"; $("wOrgL").style.display = own ? "none" : ""; $("wSkL").style.display = own ? "none" : "";
+  const c = own ? {"10":1, "2":2, "1":3}[$("wEmp").value] : WGRID[$("wOrg").value][$("wSk").value];
+  $("wOut").textContent = "Class " + c + ": " + W[c];
+  let h = '<thead><tr><th>Owners</th><th></th><th>Expert</th><th>Semi-skilled</th><th>Unskilled</th></tr></thead><tbody>';
+  const rows = [[1,"Manager","m"],[2,"Supervisor","s"],[3,"Neither","n"]];
+  rows.forEach(r => { const g = WGRID[r[2]]; const cell = k => "<td" + (k === c ? ' style="background:#111;color:#fff"' : "") + ">" + k + " " + W[k].split(",")[0] + "</td>"; h += "<tr>" + cell(r[0]) + '<td class="muted">' + r[1] + "</td>" + cell(g.e) + cell(g.s) + cell(g.u) + "</tr>"; });
+  $("wTab").innerHTML = h + "</tbody>";
+}
+["wOwn","wEmp","wOrg","wSk"].forEach(id => $(id).addEventListener("change", wright)); wright();
+
+// Section 7: categories and sample size. Shares: NS-SEC (SOC 1990) in NCDS at 33, from the socstrat paper's Example 1.
+const SH8 = [["1.1",4.79],["1.2",6.33],["2",22.20],["3",19.04],["4",5.38],["5",8.75],["6",15.74],["7",17.75]];
+function sharesFor(v) {
+  if (v === "8") return SH8;
+  if (v === "5") return [["1",4.79+6.33+22.20],["2",19.04],["3",5.38],["4",8.75],["5",15.74+17.75]];
+  if (v === "3") return [["1",4.79+6.33+22.20],["2",19.04+5.38],["3",8.75+15.74+17.75]];
+  return null;
+}
+function power() {
+  const n = +$("nIn").value, v = $("pv").value;
+  $("nLab").textContent = n.toLocaleString();
+  const moe = k => k > 0 ? (196 * Math.sqrt(0.25 / k)).toFixed(1) : "–";
+  if (v === "90") {
+    const k = n / 90;
+    $("pRead").innerHTML = "With 90 equal classes each holds about <b>" + Math.round(k) + "</b> people; margin of error ±<b>" + moe(k) + "</b> points. Real micro-classes are unequal, so many would be smaller still.";
+    $("pTab").innerHTML = "";
+    return;
+  }
+  const sh = sharesFor(v);
+  let min = Infinity;
+  let h = '<thead><tr><th>Class</th><th class="n">Share %</th><th class="n">Expected n</th><th class="n">±95% margin (points)</th><th></th></tr></thead><tbody>';
+  sh.forEach(s => { const k = n * s[1] / 100; min = Math.min(min, k); const warn = k < 100; h += "<tr><td>" + s[0] + '</td><td class="n">' + s[1].toFixed(1) + '</td><td class="n">' + Math.round(k).toLocaleString() + '</td><td class="n' + (warn ? " bad" : "") + '">' + moe(k) + '</td><td><span class="bar' + (warn ? " warn" : "") + '" style="width:' + Math.min(200, k / 10) + 'px"></span></td></tr>'; });
+  $("pTab").innerHTML = h + "</tbody>";
+  $("pRead").innerHTML = "Smallest class: <b>" + Math.round(min).toLocaleString() + "</b> people (±" + moe(min) + " points). Classes under 100 people are marked red.";
+}
+$("nIn").addEventListener("input", power); $("pv").addEventListener("change", power); power();
+
+// Section 8: decision guide.
+function decide() {
+  const v = n => document.querySelector('input[name="' + n + '"]:checked').value;
+  const r = [];
+  if (v("d1") === "yes") r.push("A subjective measure is appropriate for questions about class identity. Keep it separate from any objective class measure.");
+  if (v("d3") === "occ") {
+    if (v("d2") === "uk") r.push("Use <b>NS-SEC</b>, the official UK measure, built from the current SOC version.");
+    if (v("d2") === "cross") r.push("Use <b>ESeC</b>, built from ISCO codes for cross-national comparison. EGP is an established alternative.");
+    if (v("d2") === "hist") r.push("<b>RGSC</b> or <b>EGP</b> may be needed to match historical data or earlier studies; build NS-SEC as well if the codes allow, and compare.");
+  }
+  if (v("d3") === "wright") r.push("<b>Wright’s schema</b> is possible. Check how many people have complete answers on every item, and consider missing-data methods.");
+  if (v("d3") === "car") r.push("An inductive <b>capitals, assets and resources</b> measure is possible (latent class, factor or correspondence analysis). Report how many classes the sample supports.");
+  if (v("d4") === "big") r.push("<b>Micro-classes</b> are worth considering, for example as a second level in a random-effects model.");
+  else r.push("Check cell sizes; use a collapsed version (section 3) if classes are thin.");
+  r.push("Wherever two or more validated measures can be built, run a <b>sensitivity analysis</b>: fit the same model with each and compare fit and substantive results. An appendix is a fine place for it.");
+  $("dOut").innerHTML = '<ul class="recs">' + r.map(x => "<li>" + x + "</li>").join("") + "</ul>";
+}
+document.querySelectorAll('input[name^="d"]').forEach(i => i.addEventListener("change", decide)); decide();
+
+// Section 9: quiz.
+const Q = [
+  ["Which two pieces of information do Weberian measures such as NS-SEC need?", ["Income and education", "Occupation code and employment status", "Self-placement and occupation"], 1, "Only two survey questions are needed, which is why these measures are so widely available."],
+  ["What makes a measure ‘inductive’?", ["It uses a fixed coding flowchart", "Classes are estimated from the sample itself", "It uses only occupation"], 1, "Capitals, assets and resources measures find classes in each sample with latent class or similar methods."],
+  ["Why is Wright’s schema rarely used?", ["It ignores ownership", "It needs many survey items that few surveys ask", "It has only three classes"], 1, "Eight sets of items feed seven intermediate typologies; missing any one item rules a person out."],
+  ["The chapter’s preferred way to choose between validated measures is…", ["Pick the one closest to your theory", "Compare them in a sensitivity analysis", "Use the one with the most classes"], 1, "Test theoretical assumptions on the sample rather than taking them as given."]
+];
+$("quiz").innerHTML = Q.map((q, i) => "<fieldset><legend>" + (i + 1) + ". " + q[0] + "</legend>" + q[1].map((o, j) => '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + o + "</label>").join("") + "</fieldset>").join("") + '<button id="qBtn">Check answers</button>';
+$("qBtn").onclick = () => {
+  let right = 0, out = "";
+  Q.forEach((q, i) => { const c = document.querySelector('input[name="q' + i + '"]:checked'); const ok = c && +c.value === q[2]; if (ok) right++; out += "<p><b>" + (i + 1) + ".</b> " + (ok ? '<span class="good">Correct.</span> ' : '<span class="bad">Not quite.</span> ') + q[3] + "</p>"; });
+  $("quizOut").innerHTML = "<p><b>" + right + " of " + Q.length + " correct.</b></p>" + out;
+};
+</script>
+</body>
+</html>

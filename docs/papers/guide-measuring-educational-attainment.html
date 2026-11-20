@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Measuring educational attainment: an interactive guide | Scott Oatley</title>
+<meta name="description" content="Interactive guide to the chapter Measuring educational attainment: years of education, highest qualification, National Qualification Frameworks, CASMIN, ISCED and scaled measures.">
+<link rel="stylesheet" href="guide.css">
+<style>
+  .back { font-size:14px; margin-bottom:18px; display:inline-block; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:8px 0 12px; }
+  .card { border:1px solid var(--rule); padding:10px 12px; }
+  .card h4 { margin:0 0 6px; font-size:16px; }
+  .bar { height:14px; background:var(--ink); display:inline-block; vertical-align:middle; }
+  .bar.alt { background:var(--teal); }
+  .bar.warn { background:var(--red); }
+  .big { font-size:22px; font-weight:bold; margin:6px 0; }
+  ul.recs li { margin-bottom:6px; }
+  @media (max-width:900px) { .pair { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents">
+  <div class="navhead">Contents</div>
+  <ol>
+    <li><a href="#start">Start here</a></li>
+    <li><a href="#years">1. Years of education</a></li>
+    <li><a href="#highest">2. Highest qualification</a></li>
+    <li><a href="#nqf">3. National frameworks</a></li>
+    <li><a href="#cross">4. CASMIN and ISCED</a></li>
+    <li><a href="#sparse">5. Categories and sample size</a></li>
+    <li><a href="#scale">6. Scaled measures</a></li>
+    <li><a href="#decide">7. Choosing a measure</a></li>
+    <li><a href="#check">8. Check yourself</a></li>
+    <li><a href="#reading">9. Reading</a></li>
+  </ol>
+</nav>
+<main>
+<a class="back" href="index.html">&larr; Back to Papers</a>
+<header id="start">
+  <h1>Measuring educational attainment: an interactive guide</h1>
+  <p class="sub">How to measure the highest level of education a person has achieved, and how to choose between measures</p>
+  <p class="muted small">Oatley, S. and Costello, P. (2027) ‘Measuring educational attainment’, in <em>Encyclopedia of Measurement in Social Sciences</em>, 2nd edn, Vol. 3, pp. 386–393. Elsevier. <a href="https://www.sciencedirect.com/science/chapter/referencework/abs/pii/B9780443266294002562">Read the chapter</a>.</p>
+  <p>Educational attainment measures an <em>output</em> of education: the highest level a person has completed. It is used as a control variable and as an outcome in its own right. It is harder to measure than it looks, because education systems change over time and differ between countries: a 16-year-old in England sits GCSEs, one in Scotland sits National 5s, and in some countries there are no exams at that age at all.</p>
+  <p><b>The chapter’s four recommendations</b></p>
+  <ol>
+    <li>Avoid simple measures such as years of education.</li>
+    <li>Within one country, use its National Qualification Framework.</li>
+    <li>Across countries, run sensitivity analyses with more than one measure.</li>
+    <li>Consider whether a scaled measure is practical for your study.</li>
+  </ol>
+</header>
+
+<h2 id="years"><span class="num">1</span>Years of education</h2>
+<p>Years of education is easy to collect and can go straight into a model as a continuous variable. The chapter recommends against it unless nothing else is available, for three reasons: it confuses time spent with what was achieved, its implied ranking can contradict how the education system actually works, and the meaning of a year changes over time. Pick a scenario to see the problem.</p>
+<div class="widget">
+  <div class="wtitle">Same achievement, different years?</div>
+  <div class="controls"><label>Scenario <select id="ySc">
+    <option value="retake">Repeating a year</option>
+    <option value="nations">English and Scottish degrees</option>
+    <option value="appr">Apprenticeship and degree</option>
+  </select></label></div>
+  <div class="pair" id="yPair"></div>
+  <div class="readout" id="yRead"></div>
+</div>
+<p class="small muted">Durations follow the chapter’s examples. Apprenticeships last from eight months to six years; the four-year example is one point in that range. Levels are from the NVQ table in section 3.</p>
+<p>The third problem is credential inflation. In the 1970s about 60% of young people in England left education at 16, and five good O levels were a real achievement. By the early 2000s, university for half of all young people was a realistic goal. The same number of years meant something different. Section 6 returns to this.</p>
+
+<h2 id="highest"><span class="num">2</span>Highest qualification</h2>
+<p>Qualification-based measures use richer information: the type of course, academic or vocational track, and the grade. The simplest version asks people to pick their highest qualification from a list. Raw lists cause problems when qualifications and their names change over time, or differ between countries (the UK has both problems at once). The chapter advises against raw lists unless you know exactly how they were built.</p>
+<p>Collapsing a long list into a few categories, even down to two, is sometimes advised for comparability. That throws information away. It is justified mainly by statistical power: a small sample spread over many categories (section 5).</p>
+
+<h2 id="nqf"><span class="num">3</span>National Qualification Frameworks: the NVQ example</h2>
+<p>Most countries have a National Qualification Framework (NQF) that places academic, vocational and work-based qualifications on one ordered scale. In England this is the NVQ framework, a five-level ordinal scale. Its main strength is consistency over time: an O level and a GCSE never existed at the same time, but both sit at level 2. Its weakness is that comparisons across countries only work through a wider framework such as the European Qualifications Framework.</p>
+<div class="widget">
+  <div class="wtitle">Compare two people on the NVQ scale</div>
+  <div class="controls">
+    <label>Person A <select id="qA"></select></label>
+    <label>Person B <select id="qB"></select></label>
+  </div>
+  <div class="pair" id="qPair"></div>
+  <div class="readout" id="qRead"></div>
+  <p class="try"><b>Try this</b>Compare an O level with a GCSE at grades 4–9, then a BTEC First Diploma with an intermediate apprenticeship. Three different routes can lead to the same level.</p>
+</div>
+<p class="small muted">Source: chapter Table 1 (England). Routes: academic, vocational, and applied or work-based.</p>
+
+<h2 id="cross"><span class="num">4</span>Cross-national schemas: CASMIN and ISCED</h2>
+<p>For comparisons across countries, two schemas were designed for the job.</p>
+<div class="pair">
+  <div class="card"><h4>CASMIN</h4><p class="small">Developed in the 1970s for comparative social mobility research and refined since. Nine categories in three tiers (primary, secondary, tertiary), separating general and vocational tracks. Preferred in formal statistical modelling, and it performs better for European countries than for North American ones.</p></div>
+  <div class="card"><h4>ISCED</h4><p class="small">UNESCO’s classification; the 2011 edition has nine levels (0–8) with detailed sub-categories. Mostly used for international reports. Its construct validity is low because countries interpret its levels differently, and surveys rarely collect the sub-categories.</p></div>
+</div>
+<table>
+  <thead><tr><th>Tier</th><th>CASMIN</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Tertiary</td><td>3b</td><td>Higher tertiary: completed academically oriented university education</td></tr>
+    <tr><td></td><td>3a</td><td>Lower tertiary: shorter, vocationally oriented</td></tr>
+    <tr><td>Secondary</td><td>2c_gen / 2c_voc</td><td>Full maturity certificate, general or vocational</td></tr>
+    <tr><td></td><td>2b / 2a</td><td>Intermediate general / intermediate vocational</td></tr>
+    <tr><td></td><td>1c</td><td>Basic vocational training above compulsory education</td></tr>
+    <tr><td>Primary</td><td>1b</td><td>General elementary education</td></tr>
+    <tr><td></td><td>1a</td><td>Inadequately completed general education</td></tr>
+  </tbody>
+</table>
+<p class="small muted">Source: chapter Table 2 (Brauns, Scherer and Steinmann, 2003).</p>
+<p>Both schemas change model results compared with national frameworks. Any general schema sacrifices some national detail, and which countries lose most depends on the schema. Hence recommendation 3: with cross-national data, run the analysis with more than one measure and compare.</p>
+
+<h2 id="sparse"><span class="num">5</span>Categories and sample size</h2>
+<p>Detailed schemas such as CASMIN and ISCED often leave some categories nearly empty even in large surveys. The chapter does not recommend collapsing them unless there is no alternative. This widget spreads a sample over schemas of different sizes. The shares are <b>illustrative</b>, chosen to be uneven as real distributions are; they are not survey estimates.</p>
+<div class="widget">
+  <div class="wtitle">How many people end up in each category?</div>
+  <div class="controls">
+    <label>Sample size: <b id="nLab">1,500</b> <input type="range" id="nIn" min="200" max="20000" step="100" value="1500"></label>
+    <label>Measure <select id="mIn"><option value="2">Degree / no degree (2)</option><option value="5">NVQ levels (5)</option><option value="9" selected>CASMIN (9)</option></select></label>
+  </div>
+  <div class="readout" id="sRead"></div>
+  <table id="sTab"></table>
+</div>
+
+<h2 id="scale"><span class="num">6</span>Scaled measures</h2>
+<p>Scaling turns qualifications into a single metric score, using other information such as income or marriage patterns to rank them. Scales avoid sparse categories and awkward interactions, and they can adjust for credential inflation by scoring each qualification <em>within its cohort</em>. Their drawbacks: education has many dimensions and a scale squeezes them into one; it needs extra data; and few studies use scales for education, so they are less validated. If you use one, publish your documentation.</p>
+<div class="widget">
+  <div class="wtitle">Same qualification, different position (illustrative)</div>
+  <div class="controls"><label>Highest qualification <select id="cQ">
+    <option value="0">Level 1 or below</option><option value="1">Level 2 (e.g. O level / GCSE)</option><option value="2">Level 3 (e.g. A level)</option><option value="3">Level 4</option><option value="4" selected>Level 5 (e.g. degree)</option>
+  </select></label></div>
+  <div class="pair" id="cPair"></div>
+  <div class="readout" id="cRead"></div>
+  <p class="small muted">Cohort distributions are invented for illustration. They follow the chapter’s description of change (most leaving at 16 in the 1970s; around half going to university by the 2000s) but are not estimates. The score is the qualification’s mid-point percentile rank in its own cohort.</p>
+</div>
+
+<h2 id="decide"><span class="num">7</span>Choosing a measure</h2>
+<div class="widget guide">
+  <fieldset><legend>Where is the comparison?</legend>
+    <label><input type="radio" name="d1" value="one" checked> One country</label><label><input type="radio" name="d1" value="cross"> Several countries</label></fieldset>
+  <fieldset><legend>Over time?</legend>
+    <label><input type="radio" name="d2" value="cs" checked> One time point</label><label><input type="radio" name="d2" value="long"> Several cohorts or decades</label></fieldset>
+  <fieldset><legend>What does the survey record?</legend>
+    <label><input type="radio" name="d3" value="quals" checked> Detailed qualifications</label><label><input type="radio" name="d3" value="years"> Only years of education</label></fieldset>
+  <fieldset><legend>Sample size</legend>
+    <label><input type="radio" name="d4" value="big" checked> Large</label><label><input type="radio" name="d4" value="small"> Small</label></fieldset>
+  <div class="answer" id="dOut"></div>
+</div>
+
+<h2 id="check"><span class="num">8</span>Check yourself</h2>
+<div class="guide" id="quiz"></div>
+<div class="answer" id="quizOut"></div>
+
+<h2 id="reading"><span class="num">9</span>Reading</h2>
+<ul>
+  <li>The chapter: <a href="https://www.sciencedirect.com/science/chapter/referencework/abs/pii/B9780443266294002562">Measuring educational attainment</a> (doi: 10.1016/B978-0-443-26629-4.00256-2)</li>
+  <li>Companion chapter: <a href="guide-measuring-social-class.html">Measuring social class: an interactive guide</a></li>
+  <li>Connelly, R., Gayle, V. and Lambert, P.S. (2016) A review of educational attainment measures for social survey research. <em>Methodological Innovations</em>, 9.</li>
+  <li>Schneider, S.L. (2011) on measuring educational attainment across countries; UNESCO (2012) <em>International Standard Classification of Education: ISCED 2011</em>.</li>
+</ul>
+<footer>Scott Oatley. Everything on this page runs in your browser; no data are sent anywhere.</footer>
+</main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+
+// Section 1: years scenarios. Each: two people with years and NVQ level.
+const YS = {
+  retake: { a: ["Finished school, then college", 8, 3, "Completed course"], b: ["Same school and college, but repeated the first college year", 9, 3, "Completed the same course"],
+    msg: "Years say B has more education. Qualifications say they achieved exactly the same thing." },
+  nations: { a: ["Bachelor’s degree in England", 3, 5, "Typical three-year degree"], b: ["Bachelor’s degree in Scotland", 4, 5, "Typical four-year degree"],
+    msg: "Years make the Scottish graduate look more educated. Both hold a first degree at the same level." },
+  appr: { a: ["University degree", 3, 5, "Three-year degree"], b: ["Higher apprenticeship", 4, 4, "Within the 8 months to 6 years range"],
+    msg: "Years rank the apprentice higher; the qualification framework ranks the graduate higher. The two measures disagree about who is more educated." }
+};
+function years() {
+  const s = YS[$("ySc").value];
+  const card = (p, tag) => '<div class="card"><h4>' + tag + ": " + p[0] + '</h4><p class="small muted">' + p[3] + '</p><p>Years: <span class="bar" style="width:' + p[1] * 30 + 'px"></span> <b>' + p[1] + '</b></p><p>NVQ level: <span class="bar alt" style="width:' + p[2] * 48 + 'px"></span> <b>' + p[2] + "</b></p></div>";
+  $("yPair").innerHTML = card(s.a, "A") + card(s.b, "B");
+  $("yRead").innerHTML = s.msg;
+}
+$("ySc").addEventListener("change", years); years();
+
+// Section 3: NVQ table from chapter Table 1 (England): [qualification, level, route].
+const NVQ = [
+  ["PhD", 5, "Academic"], ["Master’s degree", 5, "Academic"], ["Integrated Master’s", 5, "Academic"], ["Bachelor’s degree", 5, "Academic"], ["Foundation degree", 5, "Academic"],
+  ["Postgraduate Diploma", 5, "Vocational"], ["Graduate Diploma", 5, "Vocational"], ["Degree apprenticeship / NVQ 5", 5, "Applied"],
+  ["Diploma in Higher Education", 4, "Academic"], ["HNC", 4, "Vocational"], ["HND", 4, "Vocational"], ["Higher apprenticeship / NVQ 4", 4, "Applied"],
+  ["A levels (grades A–E)", 3, "Academic"], ["AS level", 3, "Academic"], ["International Baccalaureate", 3, "Academic"],
+  ["T levels", 3, "Vocational"], ["BTEC Diploma", 3, "Vocational"], ["City and Guilds Part 3", 3, "Vocational"], ["ONC", 3, "Vocational"], ["OND", 3, "Vocational"], ["Advanced apprenticeship / NVQ 3", 3, "Applied"],
+  ["O level", 2, "Academic"], ["GCSE grades 4–9 / A*–C", 2, "Academic"], ["CSE grade 1", 2, "Academic"], ["City and Guilds Part 2", 2, "Vocational"], ["BTEC First Diploma", 2, "Vocational"], ["Intermediate apprenticeship / NVQ 2", 2, "Applied"],
+  ["CSE below grade 1", 1, "Academic"], ["GCSE grades 1–3 / D–G", 1, "Academic"], ["City and Guilds Part 1", 1, "Vocational"], ["BTEC First Certificate", 1, "Vocational"], ["Traineeship / NVQ 1", 1, "Applied"]
+];
+const opts = NVQ.map((q, i) => '<option value="' + i + '">' + q[0] + "</option>").join("");
+$("qA").innerHTML = opts; $("qB").innerHTML = opts;
+$("qA").value = NVQ.findIndex(q => q[0] === "O level"); $("qB").value = NVQ.findIndex(q => q[0].startsWith("GCSE grades 4"));
+function nvq() {
+  const a = NVQ[$("qA").value], b = NVQ[$("qB").value];
+  const card = (q, tag) => '<div class="card"><h4>' + tag + ": " + q[0] + '</h4><p>Level <b>' + q[1] + "</b>, " + q[2].toLowerCase() + ' route</p><p><span class="bar alt" style="width:' + q[1] * 48 + 'px"></span></p></div>';
+  $("qPair").innerHTML = card(a, "A") + card(b, "B");
+  $("qRead").innerHTML = a[1] === b[1] ? "Same level: the framework treats these as equivalent attainment" + (a[2] !== b[2] ? ", even though the routes differ." : ".") : (a[1] > b[1] ? "A" : "B") + " is " + Math.abs(a[1] - b[1]) + " level" + (Math.abs(a[1] - b[1]) > 1 ? "s" : "") + " higher.";
+}
+$("qA").addEventListener("change", nvq); $("qB").addEventListener("change", nvq); nvq();
+
+// Section 5: sparsity with illustrative shares.
+const SHARES = {
+  "2": [["No degree", 70], ["Degree", 30]],
+  "5": [["Level 1", 12], ["Level 2", 30], ["Level 3", 24], ["Level 4", 9], ["Level 5", 25]],
+  "9": [["1a", 3], ["1b", 10], ["1c", 22], ["2a", 18], ["2b", 6], ["2c_gen", 9], ["2c_voc", 4], ["3a", 9], ["3b", 19]]
+};
+function sparse() {
+  const n = +$("nIn").value, sh = SHARES[$("mIn").value];
+  $("nLab").textContent = n.toLocaleString();
+  let min = Infinity, h = '<thead><tr><th>Category</th><th class="n">Illustrative share %</th><th class="n">Expected n</th><th></th></tr></thead><tbody>';
+  sh.forEach(s => { const k = n * s[1] / 100; min = Math.min(min, k); const warn = k < 50; h += "<tr><td>" + s[0] + '</td><td class="n">' + s[1] + '</td><td class="n' + (warn ? " bad" : "") + '">' + Math.round(k).toLocaleString() + '</td><td><span class="bar' + (warn ? " warn" : "") + '" style="width:' + Math.min(220, k / 8) + 'px"></span></td></tr>'; });
+  $("sTab").innerHTML = h + "</tbody>";
+  $("sRead").innerHTML = "Smallest category: <b>" + Math.round(min).toLocaleString() + "</b> people. Categories under 50 are marked red; estimates for them, and any interactions with them, will be imprecise.";
+}
+$("nIn").addEventListener("input", sparse); $("mIn").addEventListener("change", sparse); sparse();
+
+// Section 6: credential inflation. Illustrative cohort shares for levels 1-5.
+const COH = { old: ["1970s school leavers", [30, 30, 20, 8, 12]], young: ["2000s school leavers", [8, 17, 20, 5, 50]] };
+function pct(sh, i) { let below = 0; for (let k = 0; k < i; k++) below += sh[k]; return below + sh[i] / 2; }
+function cohorts() {
+  const i = +$("cQ").value;
+  const card = c => { const p = pct(c[1], i); return '<div class="card"><h4>' + c[0] + '</h4><p class="small">' + c[1].map((s, k) => "L" + (k + 1) + " " + s + "%").join(" · ") + '</p><p>Position of this qualification: <b>' + p.toFixed(0) + 'th</b> percentile</p><p><span class="bar alt" style="width:' + p * 2.2 + 'px"></span></p></div>'; };
+  $("cPair").innerHTML = card(COH.old) + card(COH.young);
+  const d = pct(COH.old[1], i) - pct(COH.young[1], i);
+  $("cRead").innerHTML = "A categorical measure gives both cohorts the same value. A cohort-scaled score puts the older person <b>" + Math.abs(d).toFixed(0) + " percentile points " + (d >= 0 ? "higher" : "lower") + "</b>.";
+}
+$("cQ").addEventListener("change", cohorts); cohorts();
+
+// Section 7: decision guide.
+function decide() {
+  const v = n => document.querySelector('input[name="' + n + '"]:checked').value;
+  const r = [];
+  if (v("d3") === "years") r.push("Only years are available. Use them with care and defend the choice explicitly; check whether the problems in section 1 apply to your population.");
+  else {
+    if (v("d1") === "one") r.push("Use the country’s <b>National Qualification Framework</b> (in England, NVQ levels) rather than a raw list of qualifications.");
+    else r.push("Use <b>CASMIN</b> (preferred for modelling, strongest within Europe) and/or <b>ISCED</b>, and run a <b>sensitivity analysis</b> with more than one measure.");
+    if (v("d2") === "long") r.push("Over long periods, a framework handles changing qualifications (O levels and GCSEs at the same level). Consider a cohort-specific <b>scaled measure</b> to deal with credential inflation.");
+  }
+  if (v("d4") === "small") r.push("With a small sample, check category sizes (section 5). Collapse only if you must, and say how you did it.");
+  $("dOut").innerHTML = '<ul class="recs">' + r.map(x => "<li>" + x + "</li>").join("") + "</ul>";
+}
+document.querySelectorAll('input[name^="d"]').forEach(i => i.addEventListener("change", decide)); decide();
+
+// Section 8: quiz.
+const Q = [
+  ["Two people complete the same college course, but one repeats a year. What does years of education wrongly suggest?", ["They have the same attainment", "The one who repeated has more education", "Neither has a qualification"], 1, "Years confuse time spent with what was achieved."],
+  ["Why can an O level and a GCSE be compared on the NVQ scale?", ["They were taken at the same time", "The framework places both at level 2", "They have the same grades"], 1, "Frameworks are built to be consistent across changing qualifications."],
+  ["Which schema is preferred for formal cross-national modelling?", ["ISCED", "CASMIN", "Raw highest qualification"], 1, "CASMIN is favoured for modelling; ISCED is more common in international reports."],
+  ["What can a cohort-scaled measure do that categorical measures cannot?", ["Remove the need for qualification data", "Adjust for credential inflation between cohorts", "Guarantee one dimension of education"], 1, "Scores are relative to each cohort, so the same qualification can score differently over time."]
+];
+$("quiz").innerHTML = Q.map((q, i) => "<fieldset><legend>" + (i + 1) + ". " + q[0] + "</legend>" + q[1].map((o, j) => '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + o + "</label>").join("") + "</fieldset>").join("") + '<button id="qBtn">Check answers</button>';
+$("qBtn").onclick = () => {
+  let right = 0, out = "";
+  Q.forEach((q, i) => { const c = document.querySelector('input[name="q' + i + '"]:checked'); const ok = c && +c.value === q[2]; if (ok) right++; out += "<p><b>" + (i + 1) + ".</b> " + (ok ? '<span class="good">Correct.</span> ' : '<span class="bad">Not quite.</span> ') + q[3] + "</p>"; });
+  $("quizOut").innerHTML = "<p><b>" + right + " of " + Q.length + " correct.</b></p>" + out;
+};
+</script>
+</body>
+</html>

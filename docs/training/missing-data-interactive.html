@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handling missing data: an interactive guide | Scott Oatley</title>
+<meta name="description" content="Interactive training material on missing data mechanisms, complete records analysis, FIML and multiple imputation, with live simulations in the browser.">
+<style>
+  :root { --ink:#111; --grey:#6a6a6a; --rule:#d9d9d9; --light:#f5f5f5; --red:#c0392b; --teal:#2e7d6b; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; font-family: Arial, Helvetica, sans-serif; color:var(--ink); background:#fff; line-height:1.55; font-size:17px; }
+  a { color:#1f5fa8; }
+  .wrap { display:grid; grid-template-columns: 230px minmax(0, 860px); gap:48px; max-width:1180px; margin:0 auto; padding:40px 24px 80px; }
+  nav { position:sticky; top:24px; align-self:start; font-size:14px; }
+  nav ol { list-style:none; padding:0; margin:0; counter-reset:s; }
+  nav li { margin:0 0 6px; }
+  nav a { color:var(--grey); text-decoration:none; }
+  nav a:hover, nav a.on { color:var(--ink); }
+  nav .navhead { font-weight:bold; color:var(--ink); margin-bottom:10px; }
+  main { min-width:0; }
+  header h1 { font-size:34px; line-height:1.2; margin:0 0 6px; }
+  header .sub { color:var(--grey); font-size:19px; margin:0 0 18px; }
+  h2 { font-size:26px; margin:64px 0 12px; padding-top:8px; border-top:1px solid var(--ink); }
+  h2 .num { color:var(--grey); font-weight:normal; margin-right:10px; }
+  h3 { font-size:19px; margin:28px 0 8px; }
+  p { margin:0 0 14px; }
+  .muted { color:var(--grey); }
+  .small { font-size:14px; }
+  .bad { color:var(--red); }
+  .good { color:var(--teal); }
+  code, pre { font-family: "Courier New", Courier, monospace; }
+  pre { background:var(--light); border:1px solid #e3e3e3; padding:14px 16px; overflow-x:auto; font-size:14px; line-height:1.45; margin:0 0 16px; }
+  table { border-collapse:collapse; width:100%; margin:6px 0 18px; font-size:15px; }
+  th, td { text-align:left; padding:6px 10px; vertical-align:top; }
+  thead th { border-top:1.5px solid var(--ink); border-bottom:1px solid var(--ink); }
+  tbody tr:last-child td { border-bottom:1.5px solid var(--ink); }
+  tbody td { border-bottom:1px solid #eee; }
+  td.n, th.n { text-align:right; font-variant-numeric: tabular-nums; }
+  .model { font-size:18px; margin:4px 0 16px; }
+  .widget { border:1px solid var(--rule); padding:18px 18px 10px; margin:18px 0 22px; }
+  .widget .wtitle { font-weight:bold; margin-bottom:10px; }
+  .controls { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:flex-end; margin-bottom:14px; font-size:15px; }
+  .controls label { display:flex; flex-direction:column; gap:4px; color:var(--grey); }
+  .controls label.inline { flex-direction:row; align-items:center; gap:6px; color:var(--ink); }
+  select, button, input[type=range] { font:inherit; font-size:15px; }
+  select { padding:4px 6px; border:1px solid #bbb; background:#fff; }
+  button { padding:6px 14px; border:1px solid var(--ink); background:var(--ink); color:#fff; cursor:pointer; }
+  button.ghost { background:#fff; color:var(--ink); }
+  button:disabled { opacity:.5; cursor:wait; }
+  .progress { height:4px; background:#eee; margin:-6px 0 12px; }
+  .progress > div { height:100%; width:0; background:var(--ink); transition:width .1s; }
+  .plots { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .plots.one { grid-template-columns:1fr; }
+  svg { width:100%; height:auto; display:block; font-family: Arial, Helvetica, sans-serif; }
+  svg text { fill:#333; }
+  .readout { font-size:16px; margin:6px 0 10px; }
+  .try { font-size:15px; margin:10px 0 6px; }
+  .try b { display:block; margin-bottom:4px; }
+  .try ul { margin:0; padding-left:20px; }
+  .legend { font-size:13px; color:var(--grey); margin:4px 0 8px; display:flex; gap:16px; flex-wrap:wrap; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; margin-right:6px; vertical-align:-1px; background:var(--c); border-radius:50%; }
+  .legend span.hollow::before { background:#fff; border:1.5px solid var(--red); }
+  details { border-bottom:1px solid #eee; padding:10px 0; }
+  details summary { cursor:pointer; }
+  details p { margin:8px 0 0; }
+  .guide label { display:block; margin:4px 0; }
+  .guide fieldset { border:none; padding:0; margin:0 0 14px; }
+  .guide legend { font-weight:bold; margin-bottom:6px; }
+  .answer { border-top:1px solid var(--ink); padding-top:12px; margin-top:6px; min-height:60px; }
+  .refs p { padding-left:24px; text-indent:-24px; font-size:15px; margin-bottom:8px; }
+  footer { margin-top:64px; padding-top:16px; border-top:1px solid var(--rule); font-size:14px; color:var(--grey); }
+  @media (max-width: 900px) { table { display:block; overflow-x:auto; } .widget { padding:12px 10px 6px; } .wrap { grid-template-columns:1fr; } nav { display:none; } .plots { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents">
+  <div class="navhead">Contents</div>
+  <ol>
+    <li><a href="#start">Start here</a></li>
+    <li><a href="#mechanisms">1. Mechanisms</a></li>
+    <li><a href="#testing">2. What you can test</a></li>
+    <li><a href="#criteria">3. Three criteria</a></li>
+    <li><a href="#methods">4. Methods on one sample</a></li>
+    <li><a href="#lab">5. Repeated-sampling lab</a></li>
+    <li><a href="#meanimp">6. Why mean imputation fails</a></li>
+    <li><a href="#fiml">7. FIML</a></li>
+    <li><a href="#mi">8. Inside multiple imputation</a></li>
+    <li><a href="#aux">9. Auxiliaries and m</a></li>
+    <li><a href="#evidence">10. Published results</a></li>
+    <li><a href="#decide">11. Decision guide</a></li>
+    <li><a href="#check">12. Check yourself</a></li>
+    <li><a href="#code">13. Code and reading</a></li>
+  </ol>
+</nav>
+<main>
+<header id="start">
+  <h1>Handling missing data: an interactive guide</h1>
+  <p class="sub">Mechanisms, methods and evidence, with simulations you can run in your browser</p>
+  <p>This page goes with the SGSSS Winter School session <i>Handling missing data</i> (10 December 2026). It covers the same ground as the slides, in order: what causes missing data, what you can and can't test, how to judge a method, and how complete records analysis, FIML and multiple imputation behave in practice.</p>
+  <p>Every simulation on this page runs live in your browser. It uses the design from Oatley, Gayle and Connelly (forthcoming), so you can check the claims for yourself rather than taking them on trust. Every dataset is generated from the same model:</p>
+  <p class="model"><b>y</b> = 500 + 250&thinsp;x<sub>1</sub> + 400&thinsp;x<sub>2</sub> + 375&thinsp;x<sub>3</sub> + &epsilon;</p>
+  <p>The three covariates are correlated (r between 0.30 and 0.40), R&sup2; is 0.65, and <b>only x<sub>2</sub> has missing values</b>. Because we made the data, we know the true coefficients. That is what lets us see whether a method gets them right.</p>
+  <p class="muted small">Slides, Stata .do files, R scripts and datasets for every part are on the <a href="index.html">training page</a>; direct links are in <a href="#code">section 13</a>.</p>
+</header>
+
+<!-- ====================================================== 1 -->
+<h2 id="mechanisms"><span class="num">1</span>Missing data and its mechanisms</h2>
+<p>Missing values on their own cost you precision. Whether they also bias your results depends on <i>why</i> the values are missing. Rubin (1976) distinguishes three mechanisms:</p>
+<table>
+  <thead><tr><th>Mechanism</th><th>The chance a value is missing depends on</th><th>Example (an income question)</th></tr></thead>
+  <tbody>
+    <tr><td><b>MCAR</b> (missing completely at random)</td><td>Nothing: it is unrelated to any data</td><td>A server fault loses a random batch of responses</td></tr>
+    <tr><td><b>MAR</b> (missing at random)</td><td>Only things you have observed</td><td>Older people skip the question, and age is recorded</td></tr>
+    <tr><td><b>MNAR</b> (missing not at random)</td><td>The missing values themselves, beyond anything observed</td><td>High earners withhold income because it is high</td></tr>
+  </tbody>
+</table>
+<p>There is an important split inside MAR. If a <b>covariate</b> in your model drives the missingness, dropping incomplete cases selects on that covariate. The relationship between y and the x's is left intact, so a complete records analysis is still unbiased. If the <b>outcome</b> drives the missingness, dropping cases selects on y and distorts the relationship you are trying to estimate. Both are &ldquo;MAR&rdquo;, but they have opposite consequences.</p>
+
+<div class="widget" id="w-mech">
+  <div class="wtitle">Explore a mechanism</div>
+  <div class="controls">
+    <label>Mechanism <select id="mech-sel"></select></label>
+    <label>Share missing <select id="mech-rate"></select></label>
+    <button id="mech-new">Draw a new sample</button>
+  </div>
+  <div class="legend"><span style="--c:#555">x<sub>2</sub> observed</span><span class="hollow">x<sub>2</sub> missing (we can see it because we simulated it)</span></div>
+  <div class="plots"><div id="mech-p1"></div><div id="mech-p2"></div></div>
+  <div class="readout" id="mech-read"></div>
+  <div class="try"><b>Things to try</b><ul>
+    <li>With <i>driven by x<sub>1</sub></i>, the missing points pile up at high x<sub>1</sub> in the left panel. The complete records estimate of the x<sub>2</sub> coefficient still lands close to 400.</li>
+    <li>Switch to <i>driven by y</i>. The missing points now sit at high y in the right panel, and the complete records estimate drops below 400.</li>
+    <li>Switch to MNAR. Neither panel shows a clear pattern, because the missingness depends on a part of x<sub>2</sub> that nothing else predicts. Yet the estimate is badly off.</li>
+  </ul></div>
+</div>
+
+<!-- ====================================================== 2 -->
+<h2 id="testing"><span class="num">2</span>What the data can and can&rsquo;t tell you</h2>
+<p>The standard diagnostics compare people with and without a missing value on the variables you <i>can</i> see: t-tests, chi-squared tests, a logistic regression of a missingness indicator, or Little&rsquo;s MCAR test (<code>mcartest</code> in Stata, <code>mcar_test()</code> in R). If the groups differ, the data are not MCAR.</p>
+<p>What no test can do is compare them on the values that are missing. The table below uses the sample from section 1. The last row is only possible because this is a simulation.</p>
+<div class="widget" id="w-test">
+  <div class="wtitle">Comparing cases with x<sub>2</sub> observed and x<sub>2</sub> missing (current sample)</div>
+  <div id="test-table"></div>
+  <div class="try"><b>Things to try</b><ul>
+    <li>Under MCAR nothing differs, and that's correct.</li>
+    <li>Under either MAR mechanism the observed variables differ, so you can reject MCAR.</li>
+    <li>Under MNAR the observed variables barely differ, so the diagnostics look reassuring, but the true x<sub>2</sub> values of the missing cases are very different. This is why MAR versus MNAR has to be argued from what you know about the data, not tested.</li>
+  </ul></div>
+</div>
+<p>How much missing data is too much? Rules of thumb (5%, 10%) don&rsquo;t tell you whether results are biased. The mechanism decides whether a method is valid; the proportion missing decides how much precision you lose. You can check this in the lab in section 5: complete records analysis is unbiased at 90% missing when x<sub>1</sub> drives the missingness, and biased at 50% when y does.</p>
+
+<!-- ====================================================== 3 -->
+<h2 id="criteria"><span class="num">3</span>Three ways to judge a method</h2>
+<p>&ldquo;Does this method work?&rdquo; is really three separate questions. Methods fail them in every combination, so keep them apart.</p>
+<table>
+  <thead><tr><th>Criterion</th><th>Question</th><th>Measured by</th></tr></thead>
+  <tbody>
+    <tr><td><b>Accuracy</b></td><td>Over many samples, is the average estimate equal to the true value?</td><td>Absolute percentage bias</td></tr>
+    <tr><td><b>Efficiency</b></td><td>Among accurate methods, how much do the estimates vary from sample to sample?</td><td>Empirical standard error</td></tr>
+    <tr><td><b>Calibration</b></td><td>Do the standard errors the method reports match how much its estimates actually vary?</td><td>Relative error in the SE; coverage of 95% intervals</td></tr>
+  </tbody>
+</table>
+<p>Bias matters most because it doesn&rsquo;t shrink as the sample grows: a bigger sample just homes in on the wrong value with more confidence. Efficiency has a useful interpretation: if one method&rsquo;s sampling variance is half another&rsquo;s, it gets as much out of the data as the other would from twice as many cases.</p>
+<p>A single dataset can&rsquo;t show you any of this, because you only get one estimate. Section 4 shows what one sample looks like; section 5 repeats the experiment hundreds of times so you can see all three criteria.</p>
+
+<!-- ====================================================== 4 -->
+<h2 id="methods"><span class="num">4</span>Nine methods on one sample</h2>
+<p>These are the nine methods compared in the paper, grouped by when they are valid:</p>
+<table>
+  <thead><tr><th>Group</th><th>Methods</th><th>Valid when</th></tr></thead>
+  <tbody>
+    <tr><td class="bad"><b>Inadequate</b></td><td>Mean imputation; regression imputation (filling in predicted values with no added noise); missing-indicator (dummy) method</td><td>Almost never in real data</td></tr>
+    <tr><td><b>Conditionally valid</b></td><td>Complete records analysis (listwise deletion); inverse probability weighting (IPW)</td><td>Missingness unrelated to y given x (deletion); correct model for who is missing (IPW)</td></tr>
+    <tr><td><b>Gold standard</b></td><td>Full information maximum likelihood (FIML); multiple imputation (MI), with or without auxiliary variables</td><td>Data are MAR</td></tr>
+  </tbody>
+</table>
+<div class="widget" id="w-methods">
+  <div class="wtitle">Estimates and 95% intervals from every method, using the sample from section 1</div>
+  <div class="controls">
+    <button id="meth-run">Fit all methods to the current sample</button>
+    <span class="muted small">Change the mechanism or draw a new sample in section 1, then refit.</span>
+  </div>
+  <div id="meth-plot"></div>
+  <p class="muted small">Dashed lines mark the true values. FIML standard errors here come from 200 bootstrap samples; MI uses m = 20.</p>
+  <div class="try"><b>Things to try</b><ul>
+    <li>Look at the x<sub>1</sub> panel. x<sub>1</sub> has no missing values, yet mean imputation and the missing-indicator method move its coefficient a long way. Filling in one variable distorts its correlations with the others.</li>
+    <li>Compare the width of the complete records interval with FIML and MI. Under covariate-driven MAR they all centre in the same place, but FIML and MI are narrower.</li>
+    <li>One sample can mislead. Draw a few new samples and refit, then go to section 5.</li>
+  </ul></div>
+</div>
+
+<!-- ====================================================== 5 -->
+<h2 id="lab"><span class="num">5</span>Repeated-sampling lab</h2>
+<p>This is the simulation study in miniature. Pick a mechanism and a missingness rate, then generate hundreds of datasets, apply every method to each, and see how the estimates behave across samples. The table reports the three criteria; the plots show the full spread of estimates.</p>
+<div class="widget" id="w-lab">
+  <div class="controls">
+    <label>Mechanism <select id="lab-mech"></select></label>
+    <label>Share missing <select id="lab-rate"></select></label>
+    <label>Replications <select id="lab-reps"><option>100</option><option selected>200</option><option>500</option><option>1000</option></select></label>
+    <label>Sample size <select id="lab-n"><option>500</option><option selected>1000</option></select></label>
+    <label>Imputations (m) <select id="lab-m"><option>5</option><option selected>10</option><option>20</option></select></label>
+    <label>Coefficient <select id="lab-coef"><option value="1" selected>x2 (true 400)</option><option value="0">x1 (true 250)</option><option value="2">x3 (true 375)</option></select></label>
+    <button id="lab-run">Run</button>
+  </div>
+  <div class="progress"><div id="lab-prog"></div></div>
+  <div id="lab-table"><p class="muted">Press Run. 200 replications take a few seconds.</p></div>
+  <div id="lab-strip"></div>
+  <div class="controls" style="margin-top:8px"><label>Show intervals for <select id="lab-ladder-m"></select></label></div>
+  <div id="lab-ladder"></div>
+  <p class="muted small">Bias, SE error and coverage are red when they go past roughly what simulation noise allows (bias over 2%, SE error beyond &plusmn;10%, coverage below 0.92). FIML's bootstrap standard errors are too slow for the lab, so its SE error and coverage are left blank. In the paper they were well calibrated.</p>
+  <div class="try"><b>Things to try</b><ul>
+    <li><i>Driven by x<sub>1</sub>, 50%:</i> every principled method is unbiased with coverage near 0.95. Ad hoc methods are biased, and regression imputation&rsquo;s intervals almost never contain the truth.</li>
+    <li><i>Driven by y, 50%:</i> complete records analysis becomes biased with coverage around 0.6, while its SE error stays near zero. Nothing in its own output warns you.</li>
+    <li><i>MNAR:</i> every method fails. Auxiliary variables reduce the bias but can't remove it.</li>
+    <li>Switch the coefficient to x<sub>1</sub> to see how far the damage from ad hoc methods spreads.</li>
+  </ul></div>
+</div>
+
+<!-- ====================================================== 6 -->
+<h2 id="meanimp"><span class="num">6</span>Why mean imputation fails</h2>
+<p>Mean imputation sets every missing x<sub>2</sub> to the same value. With a single predictor the attenuation happens to cancel out, so it can look harmless. With correlated covariates, every imputed case sits on a flat line in the x<sub>2</sub>&ndash;x<sub>1</sub> relationship. The regression then shares out the explained variance wrongly among the covariates, and <i>every</i> coefficient is biased, including those on fully observed variables.</p>
+<p>The only setting where mean imputation is harmless for regression coefficients is when the covariates are uncorrelated, which real data almost never are. Simulation studies that use independent covariates therefore understate its damage.</p>
+<div class="widget" id="w-corr">
+  <div class="wtitle">Bias as the correlation between x<sub>1</sub> and x<sub>2</sub> increases (50% missing, driven by x<sub>1</sub>)</div>
+  <div class="controls"><label>Replications per point <select id="corr-reps"><option>50</option><option selected>100</option><option>200</option></select></label><button id="corr-run">Run</button></div>
+  <div class="progress"><div id="corr-prog"></div></div>
+  <div class="legend"><span style="--c:#d1495b">Mean imputation</span><span style="--c:#5b6c8f">Complete records analysis</span></div>
+  <div class="plots"><div id="corr-p1"></div><div id="corr-p2"></div></div>
+  <p class="muted small">Only the x<sub>1</sub>&ndash;x<sub>2</sub> correlation changes here. x<sub>2</sub> is still correlated with x<sub>3</sub> (r = 0.35), so mean imputation stays somewhat biased even at zero. It is only harmless when x<sub>2</sub> is uncorrelated with <i>every</i> other covariate. Complete records analysis stays unbiased throughout; any wobble in its line is simulation noise, which is largest at high correlations.</p>
+</div>
+
+<!-- ====================================================== 7 -->
+<h2 id="fiml"><span class="num">7</span>Full information maximum likelihood</h2>
+<p>FIML neither deletes nor fills in anything. Each case contributes to the likelihood whatever it has observed. A complete case contributes the joint density of y, x<sub>1</sub>, x<sub>2</sub> and x<sub>3</sub>. A case missing x<sub>2</sub> contributes the joint density of y, x<sub>1</sub> and x<sub>3</sub>, with x<sub>2</sub> integrated out. Because the means and covariances are shared across both kinds of case, the partial records still inform every parameter.</p>
+<p>FIML assumes MAR and multivariate normality. Two practical points matter:</p>
+<ul>
+  <li><b>The covariates must be part of the likelihood.</b> In R&rsquo;s lavaan the default <code>fixed.x = TRUE</code> drops cases with missing covariates, which turns it back into a complete records analysis. Set <code>fixed.x = FALSE</code> and check the N. Stata&rsquo;s <code>method(mlmv)</code> does this for you.</li>
+  <li>Binary and ordinal covariates are treated as normal. Software built for categorical variables (Mplus, Latent GOLD) handles them properly.</li>
+</ul>
+<pre>* Stata
+sem (y &lt;- x1 x2 x3), method(mlmv)
+
+# R
+fit &lt;- lavaan::sem('y ~ x1 + x2 + x3', data = dat, missing = "fiml", fixed.x = FALSE)</pre>
+
+<!-- ====================================================== 8 -->
+<h2 id="mi"><span class="num">8</span>Inside multiple imputation</h2>
+<p>Multiple imputation repairs the two flaws of regression imputation. Each missing value gets a predicted value <i>plus random noise</i>, drawn using regression parameters that are themselves uncertain. This is repeated <i>m</i> times. You analyse each completed dataset and combine the results with Rubin&rsquo;s rules:</p>
+<table>
+  <thead><tr><th>Quantity</th><th>Formula</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>Pooled estimate</td><td>Q&#772; = (1/m) &Sigma; Q&#770;<sub>j</sub></td><td>The average across imputations</td></tr>
+    <tr><td>Within-imputation variance</td><td>W&#772; = (1/m) &Sigma; W&#770;<sub>j</sub></td><td>Ordinary sampling variance</td></tr>
+    <tr><td>Between-imputation variance</td><td>B = &Sigma; (Q&#770;<sub>j</sub> &minus; Q&#772;)&sup2; / (m &minus; 1)</td><td>Uncertainty due to the missing data</td></tr>
+    <tr><td>Total variance</td><td>T = W&#772; + (1 + 1/m) B</td><td>What the pooled standard error is based on</td></tr>
+  </tbody>
+</table>
+<div class="widget" id="w-mi">
+  <div class="wtitle">Imputing the sample from section 1</div>
+  <div class="controls">
+    <label class="inline">m = <span id="mi-mval" style="min-width:1.6em;display:inline-block">10</span><input type="range" id="mi-m" min="2" max="60" value="10"></label>
+    <label class="inline"><input type="checkbox" id="mi-aux"> Use the 8 auxiliary variables</label>
+    <button id="mi-run">Impute again</button>
+  </div>
+  <div class="legend"><span style="--c:#3c8dbc">imputed values</span><span style="--c:#111">true value (known only because this is simulated)</span></div>
+  <div class="plots"><div id="mi-p1"></div><div id="mi-p2"></div></div>
+  <div id="mi-table"></div>
+  <div class="try"><b>Things to try</b><ul>
+    <li>In the left panel each row is one missing case. The imputations scatter around the truth rather than sitting on it, and that scatter is what carries the uncertainty.</li>
+    <li>Tick <i>Use the auxiliary variables</i>. The imputations tighten around the true values, B shrinks, and FMI (the fraction of missing information) falls.</li>
+    <li>Raise m. The pooled estimate stabilises, but FMI and the standard error barely change. More imputations reduce simulation noise; they don't add information.</li>
+  </ul></div>
+</div>
+<p>Build the imputation model carefully:</p>
+<ul>
+  <li><b>Include every analysis variable, including the outcome.</b> Leaving y out draws x<sub>2</sub> as if it had nothing to do with y, which pulls its coefficient towards zero.</li>
+  <li>Use the right model for each variable type: regression or predictive mean matching for continuous, logit, ologit or mlogit for categorical.</li>
+  <li>Impute interactions and squared terms as &ldquo;just another variable&rdquo; in linear models (von Hippel, 2009).</li>
+  <li>Only impute variables that have missing values; register the rest as regular.</li>
+</ul>
+
+<!-- ====================================================== 9 -->
+<h2 id="aux"><span class="num">9</span>Auxiliary variables and the number of imputations</h2>
+<p>An auxiliary variable is one that isn&rsquo;t in your analysis model but predicts the missing values, or whether they are missing. Earlier waves, linked administrative data and related survey items are typical sources. An auxiliary only helps where your analysis variable is missing, so it must be observed in those cases.</p>
+<div class="widget" id="w-aux">
+  <div class="wtitle">How much precision do auxiliaries and extra imputations buy? (driven by x<sub>1</sub>)</div>
+  <div class="controls">
+    <label>Share missing <select id="aux-rate"><option value="0.5">50%</option><option value="0.75">75%</option><option value="0.9" selected>90%</option></select></label>
+    <label>Replications <select id="aux-reps"><option>100</option><option selected>200</option><option>400</option></select></label>
+    <button id="aux-run">Run</button>
+  </div>
+  <div class="progress"><div id="aux-prog"></div></div>
+  <div id="aux-plot"></div>
+  <p class="muted small">Effective sample size relative to complete records analysis = (empirical SE of deletion / empirical SE of the method)&sup2;, for the x<sub>2</sub> coefficient. With a few hundred replications expect &plusmn;0.2 of simulation noise.</p>
+</div>
+<p>In the paper (1,000 replications, 90% missing), auxiliaries raised MI&rsquo;s effective sample size from 1.48 to 2.09 times that of deletion. Going from 10 to 100 imputations added only a little more, at about nine times the run time. Common guidance on <i>m</i>: at least the percentage of incomplete cases (White, Royston and Wood, 2011), or von Hippel&rsquo;s (2020) two-stage rule based on FMI. Below about 50% missing, m = 10 and m = 100 were indistinguishable.</p>
+
+<!-- ====================================================== 10 -->
+<h2 id="evidence"><span class="num">10</span>Published results</h2>
+<p>These are the full-scale results from the paper (1,000 replications, n = 1,000). Your runs in the lab should land close to them.</p>
+<h3>Covariate-driven MAR, 50% missing: coefficient on x<sub>2</sub></h3>
+<div id="ev-t4"></div>
+<h3>Precision as missingness rises</h3>
+<div id="ev-t5"></div>
+<h3>Outcome-driven MAR and MNAR, 50% missing</h3>
+<div id="ev-t6"></div>
+<p class="muted small">Source: Oatley, Gayle and Connelly (forthcoming), Tables 4&ndash;6.</p>
+
+<!-- ====================================================== 11 -->
+<h2 id="decide"><span class="num">11</span>A decision guide</h2>
+<div class="widget guide" id="w-guide">
+  <fieldset><legend>Given the covariates in your model, could the chance of a value being missing be related to the outcome?</legend>
+    <label><input type="radio" name="q1" value="no"> Plausibly not</label>
+    <label><input type="radio" name="q1" value="yes"> Yes, or I can&rsquo;t rule it out</label>
+  </fieldset>
+  <fieldset><legend>Could it depend on the missing values themselves, in ways nothing you observe captures?</legend>
+    <label><input type="radio" name="q2" value="no"> Unlikely</label>
+    <label><input type="radio" name="q2" value="yes"> Quite possibly</label>
+  </fieldset>
+  <div class="answer" id="guide-out"><span class="muted">Answer both questions.</span></div>
+</div>
+<p>Whatever the answers, don&rsquo;t use mean, mode or median imputation, regression imputation or missing-indicator methods to estimate effects.</p>
+
+<!-- ====================================================== 12 -->
+<h2 id="check"><span class="num">12</span>Check yourself</h2>
+<h3>Which mechanism is this?</h3>
+<details><summary>A fieldwork tablet crashes on random days and loses those interviews.</summary><p><b>MCAR.</b> Deletion is unbiased; you only lose precision.</p></details>
+<details><summary>Older respondents skip a wellbeing item more often. Age is in the model, and wellbeing is a covariate.</summary><p><b>MAR, covariate-driven.</b> Deletion is unbiased. FIML or MI would be more precise.</p></details>
+<details><summary>In a model of GCSE attainment, parental education is missing more often for pupils with low attainment.</summary><p><b>MAR, but outcome-driven.</b> Deletion is biased. Use FIML, MI or IPW, with attainment in the imputation model.</p></details>
+<details><summary>People with high debts are less likely to report them, and nothing you observe predicts this.</summary><p><b>MNAR.</b> No standard method is guaranteed. Use auxiliaries, sensitivity analysis, and say so in the write-up.</p></details>
+<h3>Which method would you use?</h3>
+<details><summary>40% missing on parental income; missingness is predicted by region and school type, both in your model.</summary><p>Complete records analysis is valid. MI or FIML with auxiliaries would be more precise.</p></details>
+<details><summary>25% missing on a wellbeing covariate; pupils with poor attendance (your outcome) skip it more.</summary><p>FIML or MI, with attendance in the imputation model.</p></details>
+<details><summary>Self-reported drinking is missing more often for heavy drinkers, and nothing observed predicts it well.</summary><p>MI with auxiliaries, plus sensitivity analysis and an honest write-up.</p></details>
+
+<!-- ====================================================== 13 -->
+<h2 id="code"><span class="num">13</span>Code and reading</h2>
+<h3>Session files</h3>
+<table>
+  <thead><tr><th>Session</th><th>Stata</th><th>R</th></tr></thead>
+  <tbody>
+    <tr><td>1. Diagnosing missing data (sections 1&ndash;2)</td><td><a href="session%20one.do">session one.do</a></td><td><a href="session%20one.R">session one.R</a></td></tr>
+    <tr><td>2. Deletion, single imputation and missing indicators (sections 4&ndash;6)</td><td><a href="session%20two.do">session two.do</a></td><td><a href="session%20two.R">session two.R</a></td></tr>
+    <tr><td>3. FIML (section 7)</td><td><a href="session%20three.do">session three.do</a></td><td><a href="session%20three.R">session three.R</a></td></tr>
+    <tr><td>4. Multiple imputation (sections 8&ndash;9)</td><td><a href="session%20four.do">session four.do</a></td><td><a href="session%20four.R">session four.R</a></td></tr>
+  </tbody>
+</table>
+<p class="small">Datasets for session 1: <a href="datasetone.dta">datasetone.dta</a>, <a href="datasettwo.dta">datasettwo.dta</a>, <a href="datasetthree.dta">datasetthree.dta</a>.</p>
+<h3>Multiple imputation in Stata</h3>
+<pre>mi set mlong
+mi register imputed age gender education income
+mi register regular aux1 aux2
+mi impute chained (regress) age income ///
+                  (logit)   gender     ///
+                  (ologit)  education  ///
+                  = aux1 aux2, add(20) rseed(12345)
+mi estimate: regress income age i.gender i.education
+mi estimate, vartable dftable      // RVI, FMI</pre>
+<h3>Multiple imputation in R</h3>
+<pre>library(mice)
+meth <- make.method(df)
+meth[c("age", "income")] <- "pmm"
+meth["gender"]    <- "logreg"
+meth["education"] <- "polr"
+meth[c("aux1", "aux2")] <- ""          # predictors only
+pred <- quickpred(df, minpuc = 0.2)    # keep the outcome in
+imp  <- mice(df, m = 20, method = meth, predictorMatrix = pred, seed = 123)
+summary(pool(with(imp, lm(income ~ age + gender + education))))</pre>
+<h3>What to report</h3>
+<ul>
+  <li>The amount and pattern of missing data on each variable</li>
+  <li>Your argument for the mechanism, and the diagnostics you ran</li>
+  <li>The method, and why it suits that mechanism</li>
+  <li>For MI: the software and command, the imputation model (variables, auxiliaries, model for each variable type), m, the iterations and the seed</li>
+  <li>Convergence checks, FMI, and a comparison with complete records analysis</li>
+</ul>
+<h3>Reading</h3>
+<div class="refs">
+  <p>Carpenter, J.R. and Kenward, M.G. (2012) <i>Multiple Imputation and its Application</i>. Wiley.</p>
+  <p>Collins, L.M., Schafer, J.L. and Kam, C.-M. (2001) A comparison of inclusive and restrictive strategies in modern missing data procedures. <i>Psychological Methods</i>, 6(4), 330&ndash;351.</p>
+  <p>Enders, C.K. (2010) <i>Applied Missing Data Analysis</i>. Guilford.</p>
+  <p>Little, R.J.A. (1992) Regression with missing X&rsquo;s: a review. <i>Journal of the American Statistical Association</i>, 87(420), 1227&ndash;1237.</p>
+  <p>Little, R.J.A. and Rubin, D.B. (2019) <i>Statistical Analysis with Missing Data</i>, 3rd edn. Wiley.</p>
+  <p>Madley-Dowd, P. et al. (2019) The proportion of missing data should not be used to guide decisions on multiple imputation. <i>Journal of Clinical Epidemiology</i>, 110, 63&ndash;73.</p>
+  <p>Morris, T.P., White, I.R. and Crowther, M.J. (2019) Using simulation studies to evaluate statistical methods. <i>Statistics in Medicine</i>, 38(11), 2074&ndash;2102.</p>
+  <p>Oatley, S., Gayle, V. and Connelly, R. (forthcoming) A simulation study comparing missing data handling strategies: accuracy, efficiency and calibration under MCAR, MAR and MNAR.</p>
+  <p>Rubin, D.B. (1976) Inference and missing data. <i>Biometrika</i>, 63(3), 581&ndash;592.</p>
+  <p>Seaman, S.R. and White, I.R. (2013) Review of inverse probability weighting for dealing with missing data. <i>Statistical Methods in Medical Research</i>, 22(3), 278&ndash;295.</p>
+  <p>von Hippel, P.T. (2009) How to impute interactions, squares, and other transformed variables. <i>Sociological Methodology</i>, 39(1), 265&ndash;291.</p>
+  <p>White, I.R. and Carlin, J.B. (2010) Bias and efficiency of multiple imputation compared with complete-case analysis for missing covariate values. <i>Statistics in Medicine</i>, 29(28), 2920&ndash;2931.</p>
+  <p>White, I.R., Royston, P. and Wood, A.M. (2011) Multiple imputation using chained equations: issues and guidance for practice. <i>Statistics in Medicine</i>, 30(4), 377&ndash;399.</p>
+</div>
+<footer>Scott Oatley, UCL Centre for Education Policy and Equalising Opportunities. All simulations run locally in your browser; no data are sent anywhere.</footer>
+</main>
+</div>
+
+<script>
+/* ===== Missing-data simulation engine =====
+   Data-generating process, mechanisms and estimators follow
+   Oatley, Gayle and Connelly (forthcoming), Appendix A. */
+const MD = (function () {
+  // ---------- random numbers ----------
+  function rng(seed) {
+    let a = seed >>> 0, spare = null;
+    const u = () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const norm = () => {
+      if (spare !== null) { const s = spare; spare = null; return s; }
+      let x, y, r; do { x = 2 * u() - 1; y = 2 * u() - 1; r = x * x + y * y; } while (r >= 1 || r === 0);
+      const f = Math.sqrt(-2 * Math.log(r) / r); spare = y * f; return x * f;
+    };
+    const gamma = (k) => { // Marsaglia–Tsang, k >= 1
+      const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
+      for (;;) { let x, v; do { x = norm(); v = 1 + c * x; } while (v <= 0); v = v * v * v; const uu = u();
+        if (uu < 1 - 0.0331 * x * x * x * x) return d * v; if (Math.log(uu) < 0.5 * x * x + d * (1 - v + Math.log(v))) return d * v; }
+    };
+    return { u, norm, chisq: (df) => 2 * gamma(df / 2) };
+  }
+
+  // ---------- small linear algebra ----------
+  function inv(A) { // Gauss-Jordan, returns inverse of square matrix (array of arrays)
+    const n = A.length, M = A.map((r, i) => r.concat(Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))));
+    for (let c = 0; c < n; c++) {
+      let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+      [M[c], M[p]] = [M[p], M[c]]; const d = M[c][c]; if (Math.abs(d) < 1e-300) throw new Error("singular");
+      for (let j = 0; j < 2 * n; j++) M[c][j] /= d;
+      for (let r = 0; r < n; r++) if (r !== c) { const f = M[r][c]; if (f) for (let j = 0; j < 2 * n; j++) M[r][j] -= f * M[c][j]; }
+    }
+    return M.map((r) => r.slice(n));
+  }
+  function chol(A) {
+    const n = A.length, L = A.map(() => new Array(n).fill(0));
+    for (let i = 0; i < n; i++) for (let j = 0; j <= i; j++) {
+      let s = A[i][j]; for (let k = 0; k < j; k++) s -= L[i][k] * L[j][k];
+      L[i][j] = i === j ? Math.sqrt(Math.max(s, 1e-300)) : s / L[j][j];
+    }
+    return L;
+  }
+  const mean = (v) => v.reduce((a, b) => a + b, 0) / v.length;
+  const sd = (v) => { const m = mean(v); return Math.sqrt(v.reduce((a, b) => a + (b - m) * (b - m), 0) / (v.length - 1)); };
+  const zs = (v) => { const m = mean(v), s = sd(v); return v.map((x) => (x - m) / s); };
+  const expit = (x) => 1 / (1 + Math.exp(-x));
+
+  // OLS / WLS. cols: array of predictor arrays (no intercept); rows: index array to use.
+  // Returns b (intercept first), se, resid, XtXinv, rss, df. robust => HC1 sandwich.
+  function ols(yv, cols, rows, w, robust) {
+    const p = cols.length + 1, XtX = Array.from({ length: p }, () => new Array(p).fill(0)), Xty = new Array(p).fill(0);
+    const x = new Array(p); x[0] = 1;
+    for (const i of rows) {
+      for (let k = 1; k < p; k++) x[k] = cols[k - 1][i];
+      const wi = w ? w[i] : 1;
+      for (let a = 0; a < p; a++) { Xty[a] += wi * x[a] * yv[i]; for (let b = 0; b <= a; b++) XtX[a][b] += wi * x[a] * x[b]; }
+    }
+    for (let a = 0; a < p; a++) for (let b = a + 1; b < p; b++) XtX[a][b] = XtX[b][a];
+    const XtXinv = inv(XtX), b = XtXinv.map((r) => r.reduce((s, v, j) => s + v * Xty[j], 0));
+    let rss = 0; const n = rows.length;
+    const meat = robust ? Array.from({ length: p }, () => new Array(p).fill(0)) : null;
+    for (const i of rows) {
+      let f = b[0]; for (let k = 1; k < p; k++) f += b[k] * cols[k - 1][i];
+      const e = yv[i] - f, wi = w ? w[i] : 1; rss += wi * e * e;
+      if (robust) { for (let k = 1; k < p; k++) x[k] = cols[k - 1][i]; const s2 = wi * wi * e * e; for (let a = 0; a < p; a++) for (let c = 0; c < p; c++) meat[a][c] += s2 * x[a] * x[c]; }
+    }
+    const df = n - p; let V;
+    if (robust) { const t = XtXinv.map((r) => meat[0].map((_, c) => r.reduce((s, v, k) => s + v * meat[k][c], 0))); V = t.map((r) => XtXinv[0].map((_, c) => r.reduce((s, v, k) => s + v * XtXinv[k][c], 0))).map((r) => r.map((v) => v * n / df)); }
+    else { const s2 = rss / df; V = XtXinv.map((r) => r.map((v) => v * s2)); }
+    return { b, se: V.map((r, i) => Math.sqrt(r[i])), XtXinv, rss, df, n };
+  }
+  // logistic regression by IRLS; returns fitted probabilities for all rows
+  function logit(r, cols, n) {
+    const p = cols.length + 1; let b = new Array(p).fill(0); const all = [...Array(n).keys()];
+    // standardise predictors for stability
+    const S = cols.map((c) => { const m = mean(c), s = sd(c); return c.map((v) => (v - m) / s); });
+    for (let it = 0; it < 25; it++) {
+      const XtWX = Array.from({ length: p }, () => new Array(p).fill(0)), g = new Array(p).fill(0), x = new Array(p); x[0] = 1;
+      for (const i of all) {
+        let eta = b[0]; for (let k = 1; k < p; k++) { x[k] = S[k - 1][i]; eta += b[k] * x[k]; }
+        const mu = expit(eta), wv = Math.max(mu * (1 - mu), 1e-10);
+        for (let a = 0; a < p; a++) { g[a] += x[a] * (r[i] - mu); for (let c = 0; c < p; c++) XtWX[a][c] += wv * x[a] * x[c]; }
+      }
+      const step = inv(XtWX).map((row) => row.reduce((s, v, j) => s + v * g[j], 0));
+      b = b.map((v, i) => v + step[i]); if (Math.max(...step.map(Math.abs)) < 1e-8) break;
+    }
+    return all.map((i) => { let eta = b[0]; for (let k = 1; k < p; k++) eta += b[k] * S[k - 1][i]; return expit(eta); });
+  }
+  // inverse t at 0.975 (Cornish–Fisher expansion)
+  function t975(df) {
+    if (!isFinite(df) || df > 1e6) return 1.959964; df = Math.max(df, 3);
+    const z = 1.959964, z3 = z ** 3, z5 = z ** 5, z7 = z ** 7;
+    return z + (z3 + z) / (4 * df) + (5 * z5 + 16 * z3 + 3 * z) / (96 * df * df) + (3 * z7 + 19 * z5 + 17 * z3 - 15 * z) / (384 * df ** 3);
+  }
+
+  // ---------- data-generating process ----------
+  const TRUE = { b0: 500, b1: 250, b2: 400, b3: 375 }, SIGMA = 16246;
+  const ALPHA = { 1: { 0.1: -2.56486, 0.25: -1.31561, 0.5: -0.00076, 0.75: 1.31402, 0.9: 2.56320 },
+                  2: { 0.1: -3.41839, 0.25: -1.78396, 0.5: -0.00137, 0.75: 1.78086, 0.9: 3.41454 } };
+  const MECH = {
+    mcar: "MCAR", mar_cov: "MAR: driven by x₁ (a covariate)", mar_multi: "MAR: driven by x₁ and x₃",
+    mar_out: "MAR: driven by y (the outcome)", mnar: "MNAR: driven by the unobserved part of x₂",
+  };
+  const AUXR = [0.8, 0.7, 0.6, 0.5, 0.4, 0.3];
+
+  function generate(o, R) {
+    const n = o.n || 1000, r12 = o.r12 === undefined ? 0.40 : o.r12;
+    const L = chol([[1, r12, 0.30], [r12, 1, 0.35], [0.30, 0.35, 1]]);
+    const x1 = new Array(n), x2 = new Array(n), x3 = new Array(n), y = new Array(n), eps = new Array(n);
+    for (let i = 0; i < n; i++) {
+      const e0 = R.norm(), e1 = R.norm(), e2 = R.norm();
+      const u0 = L[0][0] * e0, u1 = L[1][0] * e0 + L[1][1] * e1, u2 = L[2][0] * e0 + L[2][1] * e1 + L[2][2] * e2;
+      x1[i] = 40 + 12 * u0; x2[i] = 200 + 50 * u1; x3[i] = 150 + 5 * u2;
+      eps[i] = SIGMA * R.norm(); y[i] = TRUE.b0 + TRUE.b1 * x1[i] + TRUE.b2 * x2[i] + TRUE.b3 * x3[i] + eps[i];
+    }
+    // missingness driver
+    const mech = o.mech || "mar_cov", rate = o.rate || 0.5, strength = mech === "mnar" ? 2 : (o.strength || 1);
+    let driver = null;
+    if (mech === "mar_cov") driver = zs(x1);
+    else if (mech === "mar_out") driver = zs(y);
+    else if (mech === "mar_multi") { const a = zs(x1), b = zs(x3); driver = zs(a.map((v, i) => v + b[i])); }
+    else if (mech === "mnar") { const all = [...Array(n).keys()], f = ols(x2, [y, x1, x3], all); driver = zs(x2.map((v, i) => v - (f.b[0] + f.b[1] * y[i] + f.b[2] * x1[i] + f.b[3] * x3[i]))); }
+    const miss = new Array(n);
+    for (let i = 0; i < n; i++) miss[i] = mech === "mcar" ? R.u() < rate : R.u() < expit(ALPHA[strength][rate] + strength * driver[i]);
+    // auxiliaries, built from the true x2 before deletion
+    const zx2 = zs(x2), aux = AUXR.map((r) => zx2.map((v) => r * v + Math.sqrt(1 - r * r) * R.norm()));
+    const d7 = (mech === "mcar" || mech === "mnar") ? zs(y) : driver;
+    aux.push(d7.map((v) => 0.5 * v + Math.sqrt(0.75) * R.norm()));
+    aux.push(x2.map(() => R.norm()));
+    return { n, x1, x2, x3, y, eps, miss, aux, mech, rate };
+  }
+
+  // ---------- estimators: return { b:[b1,b2,b3], se:[...], lo:[...], hi:[...] } ----------
+  const pick = (f, q) => { const b = [f.b[1], f.b[2], f.b[3]], se = [f.se[1], f.se[2], f.se[3]]; q = q || 1.959964; return { b, se, lo: b.map((v, i) => v - q * se[i]), hi: b.map((v, i) => v + q * se[i]) }; };
+  const all = (d) => [...Array(d.n).keys()];
+  const obs = (d) => all(d).filter((i) => !d.miss[i]);
+
+  const METHODS = {
+    full: { label: "Complete data (no missingness)", short: "Complete data", fit: (d) => pick(ols(d.y, [d.x1, d.x2, d.x3], all(d))) },
+    cra: { label: "Complete records analysis", short: "Complete records", fit: (d) => pick(ols(d.y, [d.x1, d.x2, d.x3], obs(d))) },
+    mean: { label: "Mean imputation", short: "Mean imputation", fit: (d) => { const o = obs(d), m = mean(o.map((i) => d.x2[i])); const x2 = d.x2.map((v, i) => (d.miss[i] ? m : v)); return pick(ols(d.y, [d.x1, x2, d.x3], all(d))); } },
+    reg: { label: "Regression imputation", short: "Regression imp.", fit: (d) => { const f = ols(d.x2, [d.y, d.x1, d.x3], obs(d)); const x2 = d.x2.map((v, i) => (d.miss[i] ? f.b[0] + f.b[1] * d.y[i] + f.b[2] * d.x1[i] + f.b[3] * d.x3[i] : v)); return pick(ols(d.y, [d.x1, x2, d.x3], all(d))); } },
+    ind: { label: "Missing-indicator method", short: "Missing indicator", fit: (d) => { const x2 = d.x2.map((v, i) => (d.miss[i] ? 0 : v)), M = d.miss.map((m) => (m ? 1 : 0)); return pick(ols(d.y, [d.x1, x2, d.x3, M], all(d))); } },
+    ipw: { label: "Inverse probability weighting", short: "IPW", fit: (d) => { const r = d.miss.map((m) => (m ? 0 : 1)), p = logit(r, [d.y, d.x1, d.x3], d.n), w = p.map((v) => 1 / Math.max(v, 0.01)); return pick(ols(d.y, [d.x1, d.x2, d.x3], obs(d), w, true)); } },
+    fiml: { label: "FIML (maximum likelihood)", short: "FIML", fit: (d, R) => fimlFit(d, R) },
+    mi: { label: "Multiple imputation, no auxiliaries", short: "MI", fit: (d, R, o) => miFit(d, R, Object.assign({ aux: false }, o)).res },
+    miaux: { label: "Multiple imputation with auxiliaries", short: "MI + aux", fit: (d, R, o) => miFit(d, R, Object.assign({ aux: true }, o)).res },
+  };
+
+  // FIML for one incomplete variable: exact ML under multivariate normality (monotone pattern).
+  function fimlPoint(d, rows) {
+    const idx = rows || all(d), N = idx.length;
+    const W = [d.y, d.x1, d.x3], mu = W.map((v) => idx.reduce((s, i) => s + v[i], 0) / N);
+    const S = W.map((a, j) => W.map((b, k) => idx.reduce((s, i) => s + (a[i] - mu[j]) * (b[i] - mu[k]), 0) / N));
+    const cc = idx.filter((i) => !d.miss[i]), f = ols(d.x2, W, cc), g = [f.b[1], f.b[2], f.b[3]], s2e = f.rss / cc.length;
+    const mu2 = f.b[0] + g.reduce((s, v, j) => s + v * mu[j], 0), S2W = W.map((_, k) => g.reduce((s, v, j) => s + v * S[j][k], 0));
+    const S22 = s2e + g.reduce((s, v, j) => s + v * S2W[j], 0);
+    // order: y, x1, x2, x3
+    const Sxx = [[S[1][1], S2W[1], S[1][2]], [S2W[1], S22, S2W[2]], [S[2][1], S2W[2], S[2][2]]], Sxy = [S[1][0], S2W[0], S[2][0]];
+    const Si = inv(Sxx); return Si.map((r) => r.reduce((s, v, j) => s + v * Sxy[j], 0));
+  }
+  function fimlFit(d, R, o) {
+    const b = fimlPoint(d), B = (o && o.boot) || 0;
+    if (!B) return { b, se: [NaN, NaN, NaN], lo: [NaN, NaN, NaN], hi: [NaN, NaN, NaN] };
+    const reps = []; for (let k = 0; k < B; k++) { const rows = Array.from({ length: d.n }, () => Math.floor(R.u() * d.n)); try { reps.push(fimlPoint(d, rows)); } catch (e) { /* skip */ } }
+    const se = [0, 1, 2].map((j) => sd(reps.map((r) => r[j])));
+    return { b, se, lo: b.map((v, j) => v - 1.959964 * se[j]), hi: b.map((v, j) => v + 1.959964 * se[j]) };
+  }
+
+  // Multiple imputation: Bayesian normal linear regression imputation of x2, Rubin's rules.
+  function miFit(d, R, o) {
+    const m = o.m || 10, preds = [d.y, d.x1, d.x3].concat(o.aux ? d.aux : []), cc = obs(d), mis = all(d).filter((i) => d.miss[i]);
+    const f = ols(d.x2, preds, cc), p = f.b.length, Lc = chol(f.XtXinv), dfr = f.df;
+    const Q = [], U = [], imps = [];
+    const x2 = d.x2.slice();
+    for (let j = 0; j < m; j++) {
+      const s2 = f.rss / R.chisq(dfr), s = Math.sqrt(s2), z = Array.from({ length: p }, () => R.norm());
+      const bs = f.b.map((v, a) => v + s * Lc[a].reduce((acc, l, k) => acc + l * z[k], 0));
+      const draw = [];
+      for (const i of mis) { let mu = bs[0]; for (let k = 1; k < p; k++) mu += bs[k] * preds[k - 1][i]; x2[i] = mu + s * R.norm(); draw.push(x2[i]); }
+      imps.push(draw);
+      const g = ols(d.y, [d.x1, x2, d.x3], all(d)); Q.push([g.b[1], g.b[2], g.b[3]]); U.push([g.se[1] ** 2, g.se[2] ** 2, g.se[3] ** 2]);
+    }
+    const pool = [0, 1, 2].map((k) => {
+      const qb = mean(Q.map((q) => q[k])), wb = mean(U.map((u) => u[k])), B = Q.reduce((s, q) => s + (q[k] - qb) ** 2, 0) / (m - 1);
+      const T = wb + (1 + 1 / m) * B, rvi = (1 + 1 / m) * B / wb, df = (m - 1) * (1 + 1 / rvi) ** 2;
+      const fmi = (rvi + 2 / (df + 3)) / (rvi + 1);
+      return { qb, wb, B, T, rvi, df, fmi, se: Math.sqrt(T), q: t975(df) };
+    });
+    const res = { b: pool.map((r) => r.qb), se: pool.map((r) => r.se), lo: pool.map((r) => r.qb - r.q * r.se), hi: pool.map((r) => r.qb + r.q * r.se) };
+    return { res, pool, Q, U, imps, mis };
+  }
+
+  // ---------- Monte Carlo ----------
+  // Runs reps in chunks; onProgress(frac); returns per-method arrays of {b,lo,hi,se}
+  function monteCarlo(o, onProgress, onDone) {
+    const R = rng(o.seed || 1234), reps = o.reps || 200, out = {}; o.methods.forEach((k) => (out[k] = []));
+    let r = 0; let cancelled = false;
+    const step = () => {
+      if (cancelled) return;
+      const t0 = performance.now();
+      while (r < reps && performance.now() - t0 < 40) {
+        const d = generate(o, R);
+        for (const k of o.methods) { try { out[k].push(METHODS[k].fit(d, R, { m: o.m })); } catch (e) { /* skip failed rep */ } }
+        r++;
+      }
+      onProgress && onProgress(r / reps);
+      if (r < reps) setTimeout(step, 0); else onDone(summarise(out));
+    };
+    setTimeout(step, 0);
+    return { cancel: () => { cancelled = true; } };
+  }
+  function summarise(out) {
+    const truth = [TRUE.b1, TRUE.b2, TRUE.b3], S = {};
+    for (const k in out) {
+      const rs = out[k]; S[k] = { raw: rs, coef: [0, 1, 2].map((j) => {
+        const est = rs.map((r) => r.b[j]), m = mean(est), emp = sd(est), ses = rs.map((r) => r.se[j]).filter((v) => isFinite(v));
+        const mod = ses.length ? Math.sqrt(mean(ses.map((s) => s * s))) : NaN;
+        const covN = rs.filter((r) => isFinite(r.lo[j])), cov = covN.length ? covN.filter((r) => r.lo[j] <= truth[j] && truth[j] <= r.hi[j]).length / covN.length : NaN;
+        return { mean: m, apb: 100 * Math.abs(m - truth[j]) / truth[j], emp, mod, relerr: 100 * (mod / emp - 1), cov, n: rs.length };
+      }) };
+    }
+    return S;
+  }
+
+  return { rng, generate, METHODS, MECH, TRUE, ALPHA, ols, mean, sd, miFit, fimlFit, monteCarlo, summarise, expit };
+})();
+if (typeof module !== "undefined") module.exports = MD;
+
+</script>
+<script>
+(function () {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const TRUE = [250, 400, 375];
+  const COL = { full: "#9aa5b8", cra: "#5b6c8f", ipw: "#d98e2b", fiml: "#2b3a55", mi: "#3c8dbc", miaux: "#2e7d6b", mean: "#d1495b", reg: "#8e2c3a", ind: "#e58f9b" };
+  const ORDER = ["full", "cra", "ipw", "fiml", "mi", "miaux", "mean", "reg", "ind"];
+  const RATES = [["0.1", "10%"], ["0.25", "25%"], ["0.5", "50%"], ["0.75", "75%"], ["0.9", "90%"]];
+  const fmt = (v, d) => (isFinite(v) ? v.toFixed(d) : "–");
+  const sgn = (v, d) => (isFinite(v) ? (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d) : "–");
+
+  function fillSelect(sel, opts, val) { sel.innerHTML = opts.map(([v, l]) => `<option value="${v}"${v === val ? " selected" : ""}>${l}</option>`).join(""); }
+  const MECHOPTS = Object.keys(MD.MECH).map((k) => [k, MD.MECH[k]]);
+
+  // ---------------- tiny SVG chart kit ----------------
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent, text) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text !== undefined) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+  function niceTicks(lo, hi, n) {
+    const span = hi - lo || 1, step0 = span / (n || 5), mag = Math.pow(10, Math.floor(Math.log10(step0))), r = step0 / mag;
+    const step = (r < 1.5 ? 1 : r < 3 ? 2 : r < 7 ? 5 : 10) * mag, out = [];
+    for (let v = Math.ceil(lo / step) * step; v <= hi + step * 1e-9; v += step) out.push(+v.toFixed(10));
+    return out;
+  }
+  function tickLabel(v) { const a = Math.abs(v); if (a >= 10000) return (v / 1000).toFixed(0) + "k"; if (a >= 1000) return v.toLocaleString("en-GB"); return String(+v.toFixed(3)); }
+  function frame(container, o) {
+    container.innerHTML = "";
+    const W = o.w || 420, H = o.h || 300, m = Object.assign({ t: 28, r: 14, b: 44, l: 56 }, o.m || {});
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": o.title || "chart" }, container);
+    const sx = (v) => m.l + ((v - o.x[0]) / (o.x[1] - o.x[0])) * (W - m.l - m.r);
+    const sy = (v) => H - m.b - ((v - o.y[0]) / (o.y[1] - o.y[0])) * (H - m.t - m.b);
+    if (o.title) el("text", { x: m.l, y: 16, "font-size": 13, "font-weight": "bold" }, svg, o.title);
+    const g = el("g", {}, svg);
+    if (!o.noYAxis) {
+      niceTicks(o.y[0], o.y[1], o.yTicks || 5).forEach((t) => {
+        el("line", { x1: m.l, x2: W - m.r, y1: sy(t), y2: sy(t), stroke: "#ececec" }, g);
+        el("text", { x: m.l - 6, y: sy(t) + 4, "font-size": 11, "text-anchor": "end" }, g, (o.yFmt || tickLabel)(t));
+      });
+    }
+    if (!o.noXAxis) {
+      el("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, stroke: "#999" }, g);
+      (o.xTickVals || niceTicks(o.x[0], o.x[1], o.xTicks || 5)).forEach((t) => {
+        el("line", { x1: sx(t), x2: sx(t), y1: H - m.b, y2: H - m.b + 4, stroke: "#999" }, g);
+        el("text", { x: sx(t), y: H - m.b + 17, "font-size": 11, "text-anchor": "middle" }, g, (o.xFmt || tickLabel)(t));
+      });
+    }
+    if (o.xlab) el("text", { x: (m.l + W - m.r) / 2, y: H - 6, "font-size": 12, "text-anchor": "middle", fill: "#555" }, svg, o.xlab);
+    if (o.ylab) el("text", { x: 14, y: (m.t + H - m.b) / 2, "font-size": 12, "text-anchor": "middle", fill: "#555", transform: `rotate(-90 14 ${(m.t + H - m.b) / 2})` }, svg, o.ylab);
+    return { svg, g: el("g", {}, svg), sx, sy, W, H, m };
+  }
+  const range = (v, pad) => { let lo = Infinity, hi = -Infinity; for (const x of v) { if (x < lo) lo = x; if (x > hi) hi = x; } const p = (hi - lo) * (pad || 0.05); return [lo - p, hi + p]; };
+
+  // ---------------- shared sample ----------------
+  const state = { mech: "mar_cov", rate: 0.5, seed: 11, data: null };
+  function drawSample() { state.data = MD.generate({ mech: state.mech, rate: state.rate, n: 1000 }, MD.rng(state.seed)); }
+
+  // ---------------- 1. mechanism explorer ----------------
+  function renderMech() {
+    const d = state.data, idx = [...Array(d.n).keys()];
+    const panel = (cont, xs, ys, xlab, ylab, title) => {
+      const f = frame(cont, { x: range(xs), y: range(ys), xlab, ylab, title, w: 420, h: 320 });
+      idx.filter((i) => !d.miss[i]).forEach((i) => el("circle", { cx: f.sx(xs[i]), cy: f.sy(ys[i]), r: 2.2, fill: "#555", "fill-opacity": 0.45 }, f.g));
+      idx.filter((i) => d.miss[i]).forEach((i) => el("circle", { cx: f.sx(xs[i]), cy: f.sy(ys[i]), r: 2.6, fill: "none", stroke: "#c0392b", "stroke-width": 1.1 }, f.g));
+    };
+    panel($("mech-p1"), d.x1, d.x2, "x₁", "x₂", "x₂ against x₁");
+    panel($("mech-p2"), d.x2, d.y, "x₂", "y", "y against x₂");
+    const cra = MD.METHODS.cra.fit(d), full = MD.METHODS.full.fit(d), pm = 100 * d.miss.filter(Boolean).length / d.n;
+    const off = cra.b[1] - 400;
+    $("mech-read").innerHTML = `${pm.toFixed(1)}% of x<sub>2</sub> is missing in this sample. ` +
+      `Coefficient on x<sub>2</sub> (true value 400): with no missing data it is <b>${full.b[1].toFixed(1)}</b>; from a complete records analysis it is ` +
+      `<b class="${Math.abs(cra.b[1] - full.b[1]) > 2.5 * cra.se[1] ? "bad" : ""}">${cra.b[1].toFixed(1)}</b> (95% CI ${cra.lo[1].toFixed(0)} to ${cra.hi[1].toFixed(0)}).` +
+      ` <span class="muted">One sample can be off by chance; section 5 repeats this many times.</span>`;
+    void off;
+  }
+
+  // ---------------- 2. testing table ----------------
+  function renderTest() {
+    const d = state.data, mi = [], ob = [];
+    d.miss.forEach((m, i) => (m ? mi : ob).push(i));
+    const row = (name, v, hidden) => {
+      const a = ob.map((i) => v[i]), b = mi.map((i) => v[i]), ma = MD.mean(a), mb = MD.mean(b), sa = MD.sd(a), sb = MD.sd(b);
+      const t = (mb - ma) / Math.sqrt(sa * sa / a.length + sb * sb / b.length), pooled = MD.sd(v), dz = (mb - ma) / pooled;
+      const flag = Math.abs(t) > 1.96;
+      return `<tr${hidden ? ' class="muted"' : ""}><td>${name}</td><td class="n">${tickLabel(+ma.toFixed(1))}</td><td class="n">${tickLabel(+mb.toFixed(1))}</td><td class="n">${sgn(dz, 2)}</td><td class="n${flag ? (hidden ? " bad" : "") : ""}"><b>${sgn(t, 1)}</b></td><td>${flag ? "differs" : "no clear difference"}</td></tr>`;
+    };
+    $("test-table").innerHTML = `<table><thead><tr><th>Variable</th><th class="n">Mean, x<sub>2</sub> observed</th><th class="n">Mean, x<sub>2</sub> missing</th><th class="n">Difference (SDs)</th><th class="n">t</th><th></th></tr></thead><tbody>` +
+      row("y", d.y) + row("x₁", d.x1) + row("x₃", d.x3) +
+      row("x₂, the true values (impossible in real data)", d.x2, true) + `</tbody></table>`;
+  }
+
+  // ---------------- 4. methods on one sample ----------------
+  function renderMethods() {
+    const d = state.data, R = MD.rng(state.seed * 7 + 3), res = {};
+    for (const k of ORDER) res[k] = k === "fiml" ? MD.fimlFit(d, R, { boot: 200 }) : MD.METHODS[k].fit(d, R, { m: 20 });
+    const cont = $("meth-plot"); cont.innerHTML = "";
+    const wrap = document.createElement("div"); wrap.className = "plots"; wrap.style.gridTemplateColumns = "1.45fr 1fr 1fr"; cont.appendChild(wrap);
+    [1, 0, 2].forEach((j, p) => {
+      const div = document.createElement("div"); wrap.appendChild(div);
+      const lo = Math.min(TRUE[j], ...ORDER.map((k) => res[k].lo[j])), hi = Math.max(TRUE[j], ...ORDER.map((k) => res[k].hi[j]));
+      const pad = (hi - lo) * 0.08, ml = p === 0 ? 150 : 14, H = 330;
+      const f = frame(div, { x: [lo - pad, hi + pad], y: [0, ORDER.length], noYAxis: true, w: p === 0 ? 400 : 260, h: H, m: { l: ml, r: 12, t: 28, b: 40 }, title: ["x₁", "x₂", "x₃"][j] + " (true " + TRUE[j] + ")", xTicks: 4 });
+      el("line", { x1: f.sx(TRUE[j]), x2: f.sx(TRUE[j]), y1: f.m.t, y2: H - f.m.b, stroke: "#111", "stroke-dasharray": "4 3" }, f.g);
+      ORDER.forEach((k, i) => {
+        const yy = f.sy(ORDER.length - i - 0.5), r = res[k];
+        if (p === 0) el("text", { x: ml - 8, y: yy + 4, "font-size": 12, "text-anchor": "end" }, f.g, MD.METHODS[k].short);
+        if (isFinite(r.lo[j])) el("line", { x1: f.sx(r.lo[j]), x2: f.sx(r.hi[j]), y1: yy, y2: yy, stroke: COL[k], "stroke-width": 2 }, f.g);
+        el("circle", { cx: f.sx(r.b[j]), cy: yy, r: 4, fill: COL[k] }, f.g);
+      });
+    });
+  }
+
+  // ---------------- 5. repeated-sampling lab ----------------
+  let labJob = null, labRes = null, labCfg = null;
+  function runLab() {
+    if (labJob) labJob.cancel();
+    const cfg = { mech: $("lab-mech").value, rate: +$("lab-rate").value, reps: +$("lab-reps").value, n: +$("lab-n").value, m: +$("lab-m").value, seed: Math.floor(Math.random() * 1e9), methods: ORDER };
+    $("lab-run").disabled = true; $("lab-prog").style.width = "0%";
+    labJob = MD.monteCarlo(cfg, (fr) => ($("lab-prog").style.width = (100 * fr).toFixed(0) + "%"), (S) => { labRes = S; labCfg = cfg; $("lab-run").disabled = false; renderLab(); });
+  }
+  function renderLab() {
+    if (!labRes) return;
+    const j = +$("lab-coef").value, truth = TRUE[j];
+    let h = `<table><thead><tr><th>Method</th><th class="n">Mean estimate</th><th class="n">Bias (%)</th><th class="n">Empirical SE</th><th class="n">Model SE</th><th class="n">SE error (%)</th><th class="n">Coverage</th></tr></thead><tbody>`;
+    for (const k of ORDER) {
+      const c = labRes[k].coef[j];
+      h += `<tr><td><span style="color:${COL[k]}">●</span> ${MD.METHODS[k].label}</td><td class="n">${fmt(c.mean, 1)}</td><td class="n${c.apb > 2 ? " bad" : ""}">${fmt(c.apb, 2)}</td><td class="n">${fmt(c.emp, 2)}</td><td class="n">${fmt(c.mod, 2)}</td><td class="n${Math.abs(c.relerr) > 10 ? " bad" : ""}">${sgn(c.relerr, 1)}</td><td class="n${c.cov < 0.92 ? " bad" : ""}">${fmt(c.cov, 3)}</td></tr>`;
+    }
+    h += `</tbody></table><p class="muted small">${labCfg.reps} replications of n = ${labCfg.n}, ${MD.MECH[labCfg.mech]}, ${Math.round(labCfg.rate * 100)}% missing, true value ${truth}. Coverage should be close to 0.95 (with 200 replications, anything from about 0.92 to 0.98 is consistent with that).</p>`;
+    $("lab-table").innerHTML = h;
+    // strip plot of all estimates
+    const all = []; ORDER.forEach((k) => labRes[k].raw.forEach((r) => all.push(r.b[j])));
+    let [lo, hi] = range(all.concat([truth]), 0.04);
+    const H = 34 * ORDER.length + 70, f = frame($("lab-strip"), { x: [lo, hi], y: [0, ORDER.length], noYAxis: true, w: 860, h: H, m: { l: 150, r: 16, t: 30, b: 44 }, title: "Every estimate from every replication", xlab: "Estimated coefficient (dashed line = true value)" });
+    const R = MD.rng(5);
+    ORDER.forEach((k, i) => {
+      const yc = f.sy(ORDER.length - i - 0.5);
+      el("text", { x: 142, y: yc + 4, "font-size": 12, "text-anchor": "end" }, f.g, MD.METHODS[k].short);
+      labRes[k].raw.forEach((r) => el("circle", { cx: f.sx(r.b[j]), cy: yc + (R.u() - 0.5) * 20, r: 1.8, fill: COL[k], "fill-opacity": 0.5 }, f.g));
+      const c = labRes[k].coef[j]; el("line", { x1: f.sx(c.mean), x2: f.sx(c.mean), y1: yc - 13, y2: yc + 13, stroke: "#111", "stroke-width": 2 }, f.g);
+    });
+    el("line", { x1: f.sx(truth), x2: f.sx(truth), y1: f.m.t, y2: H - f.m.b, stroke: "#111", "stroke-dasharray": "4 3" }, f.g);
+    renderLadder();
+  }
+  function renderLadder() {
+    if (!labRes) return;
+    const j = +$("lab-coef").value, truth = TRUE[j], k = $("lab-ladder-m").value, rs = labRes[k].raw.slice(0, 100);
+    const cont = $("lab-ladder");
+    if (!rs.length || !isFinite(rs[0].lo[j])) { cont.innerHTML = `<p class="muted">No standard errors for this method in the lab (see note below).</p>`; return; }
+    const lo = Math.min(truth, ...rs.map((r) => r.lo[j])), hi = Math.max(truth, ...rs.map((r) => r.hi[j])), pad = (hi - lo) * 0.05;
+    const H = 360, f = frame(cont, { x: [lo - pad, hi + pad], y: [0, rs.length], noYAxis: true, w: 860, h: H, m: { l: 16, r: 16, t: 30, b: 44 }, title: `95% intervals from the first ${rs.length} replications: ${MD.METHODS[k].label}`, xlab: "Red intervals miss the true value (dashed line)" });
+    let missN = 0;
+    rs.forEach((r, i) => { const miss = r.lo[j] > truth || r.hi[j] < truth; if (miss) missN++; const yy = f.sy(rs.length - i - 0.5); el("line", { x1: f.sx(r.lo[j]), x2: f.sx(r.hi[j]), y1: yy, y2: yy, stroke: miss ? "#c0392b" : "#9aa5b8", "stroke-width": 1.6 }, f.g); el("circle", { cx: f.sx(r.b[j]), cy: yy, r: 1.4, fill: "#111" }, f.g); });
+    el("line", { x1: f.sx(truth), x2: f.sx(truth), y1: f.m.t, y2: H - f.m.b, stroke: "#111", "stroke-dasharray": "4 3" }, f.g);
+    el("text", { x: f.W - 16, y: 16, "font-size": 12, "text-anchor": "end" }, f.svg, `${missN} of ${rs.length} miss`);
+  }
+
+  // ---------------- 6. mean imputation vs correlation ----------------
+  function runCorr() {
+    const reps = +$("corr-reps").value, rs = [0, 0.2, 0.4, 0.6, 0.8], R = MD.rng(Math.floor(Math.random() * 1e9));
+    const est = { mean: rs.map(() => [[], []]), cra: rs.map(() => [[], []]) };
+    let ri = 0, k = 0; $("corr-run").disabled = true;
+    const step = () => {
+      const t0 = performance.now();
+      while (ri < rs.length && performance.now() - t0 < 40) {
+        const d = MD.generate({ mech: "mar_cov", rate: 0.5, n: 500, r12: rs[ri] }, R);
+        for (const m of ["mean", "cra"]) { const f = MD.METHODS[m].fit(d); est[m][ri][0].push(f.b[1]); est[m][ri][1].push(f.b[0]); }
+        if (++k >= reps) { k = 0; ri++; }
+      }
+      $("corr-prog").style.width = (100 * (ri * reps + k) / (rs.length * reps)).toFixed(0) + "%";
+      if (ri < rs.length) setTimeout(step, 0); else { $("corr-run").disabled = false; drawCorr(rs, est); }
+    };
+    setTimeout(step, 0);
+  }
+  function drawCorr(rs, est) {
+    [[0, "x₂ (the imputed variable)", 400, "corr-p1"], [1, "x₁ (no missing values)", 250, "corr-p2"]].forEach(([c, name, truth, id]) => {
+      const ser = ["mean", "cra"].map((m) => rs.map((_, i) => 100 * Math.abs(MD.mean(est[m][i][c]) - truth) / truth));
+      const ymax = Math.max(5, ...ser.flat()) * 1.12;
+      const f = frame($(id), { x: [-0.05, 0.85], y: [0, ymax], xTickVals: rs, xlab: "Correlation between x₁ and x₂", ylab: "Absolute % bias", title: "Bias in the coefficient on " + name, w: 420, h: 300 });
+      ser.forEach((s, si) => {
+        const col = si === 0 ? COL.mean : COL.cra;
+        el("polyline", { points: s.map((v, i) => `${f.sx(rs[i])},${f.sy(v)}`).join(" "), fill: "none", stroke: col, "stroke-width": 2.5 }, f.g);
+        s.forEach((v, i) => { el("circle", { cx: f.sx(rs[i]), cy: f.sy(v), r: 3.5, fill: col }, f.g); el("text", { x: f.sx(rs[i]), y: f.sy(v) - 8, "font-size": 11, "text-anchor": "middle", fill: col }, f.g, v.toFixed(1)); });
+      });
+    });
+  }
+
+  // ---------------- 8. inside MI ----------------
+  function renderMI() {
+    const d = state.data, m = +$("mi-m").value, aux = $("mi-aux").checked;
+    $("mi-mval").textContent = m;
+    const out = MD.miFit(d, MD.rng(Math.floor(Math.random() * 1e9)), { m, aux });
+    // left: imputations for first 12 missing cases
+    const K = Math.min(12, out.mis.length), vals = [];
+    for (let c = 0; c < K; c++) { vals.push(d.x2[out.mis[c]]); out.imps.forEach((im) => vals.push(im[c])); }
+    const f = frame($("mi-p1"), { x: range(vals), y: [0, K], noYAxis: true, w: 420, h: 330, m: { l: 70, r: 14, t: 28, b: 44 }, title: `Imputed values for ${K} of the missing cases`, xlab: "x₂" });
+    for (let c = 0; c < K; c++) {
+      const yy = f.sy(K - c - 0.5);
+      el("text", { x: 62, y: yy + 4, "font-size": 11, "text-anchor": "end" }, f.g, "case " + (out.mis[c] + 1));
+      out.imps.forEach((im) => el("circle", { cx: f.sx(im[c]), cy: yy, r: 3, fill: "#3c8dbc", "fill-opacity": 0.55 }, f.g));
+      el("line", { x1: f.sx(d.x2[out.mis[c]]), x2: f.sx(d.x2[out.mis[c]]), y1: yy - 8, y2: yy + 8, stroke: "#111", "stroke-width": 2.5 }, f.g);
+    }
+    // right: per-imputation estimates of beta2 with within-imputation CIs
+    const Q = out.Q.map((q) => q[1]), se = out.U.map((u) => Math.sqrt(u[1])), P = out.pool[1], show = Math.min(m, 30);
+    const lo = Math.min(...Q.slice(0, show).map((q, i) => q - 1.96 * se[i]), P.qb - P.q * P.se, 400), hi = Math.max(...Q.slice(0, show).map((q, i) => q + 1.96 * se[i]), P.qb + P.q * P.se, 400), pad = (hi - lo) * 0.06;
+    const g = frame($("mi-p2"), { x: [lo - pad, hi + pad], y: [0, show + 2], noYAxis: true, w: 420, h: 330, m: { l: 70, r: 14, t: 28, b: 44 }, title: "Estimate of the x₂ coefficient in each imputed dataset", xlab: "Coefficient on x₂ (dashed line = true value 400)" });
+    for (let i = 0; i < show; i++) { const yy = g.sy(show + 2 - i - 0.5); el("line", { x1: g.sx(Q[i] - 1.96 * se[i]), x2: g.sx(Q[i] + 1.96 * se[i]), y1: yy, y2: yy, stroke: "#9aa5b8", "stroke-width": 1.4 }, g.g); el("circle", { cx: g.sx(Q[i]), cy: yy, r: 2.6, fill: "#3c8dbc" }, g.g); }
+    const yp = g.sy(0.8); el("line", { x1: g.sx(P.qb - P.q * P.se), x2: g.sx(P.qb + P.q * P.se), y1: yp, y2: yp, stroke: "#111", "stroke-width": 3 }, g.g); el("circle", { cx: g.sx(P.qb), cy: yp, r: 4, fill: "#111" }, g.g);
+    el("text", { x: 62, y: yp + 4, "font-size": 11, "text-anchor": "end", "font-weight": "bold" }, g.g, "pooled");
+    el("text", { x: 62, y: g.sy(show + 2 - 0.5) + 4, "font-size": 11, "text-anchor": "end" }, g.g, "imputation 1");
+    el("line", { x1: g.sx(400), x2: g.sx(400), y1: g.m.t, y2: g.H - g.m.b, stroke: "#111", "stroke-dasharray": "4 3" }, g.g);
+    const cols = [1, 0, 2];
+    $("mi-table").innerHTML = `<table><thead><tr><th>Rubin&rsquo;s rules (m = ${m}${aux ? ", with auxiliaries" : ""})</th>${cols.map((c) => `<th class="n">x${["₁", "₂", "₃"][c]}</th>`).join("")}</tr></thead><tbody>` +
+      [["Pooled estimate Q&#772;", (p) => fmt(p.qb, 1)], ["Within-imputation variance W&#772;", (p) => fmt(p.wb, 1)], ["Between-imputation variance B", (p) => fmt(p.B, 1)], ["Total variance T", (p) => fmt(p.T, 1)], ["Pooled standard error &radic;T", (p) => fmt(p.se, 2)], ["RVI: relative increase in variance", (p) => fmt(p.rvi, 3)], ["FMI: fraction of missing information", (p) => fmt(p.fmi, 3)], ["Degrees of freedom", (p) => (p.df > 1e5 ? "&gt; 100,000" : fmt(p.df, 0))]]
+        .map(([l, fn]) => `<tr><td>${l}</td>${cols.map((c) => `<td class="n">${fn(out.pool[c])}</td>`).join("")}</tr>`).join("") + `</tbody></table>`;
+  }
+
+  // ---------------- 9. auxiliaries and m ----------------
+  function runAux() {
+    const rate = +$("aux-rate").value, reps = +$("aux-reps").value, R = MD.rng(Math.floor(Math.random() * 1e9));
+    const keys = [["cra", "Complete records", (d) => MD.METHODS.cra.fit(d)], ["mi10", "MI, no auxiliaries, m = 10", (d) => MD.miFit(d, R, { m: 10 }).res], ["aux10", "MI + auxiliaries, m = 10", (d) => MD.miFit(d, R, { m: 10, aux: true }).res], ["aux50", "MI + auxiliaries, m = 50", (d) => MD.miFit(d, R, { m: 50, aux: true }).res]];
+    const est = {}; keys.forEach(([k]) => (est[k] = []));
+    let r = 0; $("aux-run").disabled = true;
+    const step = () => {
+      const t0 = performance.now();
+      while (r < reps && performance.now() - t0 < 40) { const d = MD.generate({ mech: "mar_cov", rate, n: 1000 }, R); keys.forEach(([k, , fn]) => est[k].push(fn(d).b[1])); r++; }
+      $("aux-prog").style.width = (100 * r / reps).toFixed(0) + "%";
+      if (r < reps) setTimeout(step, 0); else {
+        $("aux-run").disabled = false;
+        const base = MD.sd(est.cra), re = keys.map(([k, l]) => [l, (base / MD.sd(est[k])) ** 2]);
+        const f = frame($("aux-plot"), { x: [0, Math.max(2.8, ...re.map((x) => x[1])) * 1.1], y: [0, re.length], noYAxis: true, w: 860, h: 230, m: { l: 220, r: 30, t: 30, b: 44 }, title: `Effective sample size relative to complete records analysis, ${Math.round(rate * 100)}% missing`, xlab: "Times the effective sample size of deletion" });
+        re.forEach(([l, v], i) => { const yy = f.sy(re.length - i - 0.5); el("text", { x: 212, y: yy + 4, "font-size": 12, "text-anchor": "end" }, f.g, l); el("rect", { x: f.sx(0), y: yy - 11, width: f.sx(v) - f.sx(0), height: 22, fill: i === 0 ? "#9aa5b8" : "#2e7d6b" }, f.g); el("text", { x: f.sx(v) + 6, y: yy + 4, "font-size": 12 }, f.g, v.toFixed(2) + "×"); });
+      }
+    };
+    setTimeout(step, 0);
+  }
+
+  // ---------------- 10. published results ----------------
+  function renderEvidence() {
+    const t4 = [["Complete data (benchmark)", 0.07, 1.96, 0.95, 11.44], ["Complete records analysis", 0.07, 2.67, 0.962, 16.12], ["Inverse probability weighting", 0.14, 0.38, 0.947, 18.48], ["FIML", 0.2, 2.06, 0.947, 14.01], ["MI, no auxiliaries (m = 10)", 0.22, -1.12, 0.948, 14.87], ["MI, auxiliaries (m = 10)", 0.37, -2.07, 0.948, 13.86], ["MI, auxiliaries (m = 100)", 0.29, -1.4, 0.945, 13.71], ["Mean imputation", 11.92, 21.95, 0.287, 16.38], ["Regression imputation", 29.94, -30.34, 0.0, 15.4], ["Missing-indicator method", 10.81, 22.58, 0.406, 16.36]];
+    $("ev-t4").innerHTML = `<table><thead><tr><th>Method</th><th class="n">Bias (%)</th><th class="n">SE error (%)</th><th class="n">Coverage</th><th class="n">Empirical SE</th></tr></thead><tbody>` + t4.map((r, i) => { const bad = i >= 7; return `<tr><td>${r[0]}</td><td class="n${bad ? " bad" : ""}">${r[1].toFixed(2)}</td><td class="n${bad ? " bad" : ""}">${sgn(r[2], 2)}</td><td class="n${bad ? " bad" : ""}">${r[3].toFixed(3)}</td><td class="n">${r[4].toFixed(2)}</td></tr>`; }).join("") + `</tbody></table><p class="muted small">Mean imputation also biased the coefficient on x<sub>1</sub>, which has no missing data, by 141%; the missing-indicator method by 120%.</p>`;
+    const rates = [10, 25, 50, 75, 90], t5 = { ipw: [11.77, 13.39, 18.48, 29.70, 51.28], cra: [11.65, 12.82, 16.12, 23.01, 36.01], mi: [11.73, 12.70, 14.87, 18.68, 29.59], fiml: [11.46, 12.20, 14.01, 18.72, 27.73], miaux: [12.21, 12.52, 13.71, 16.37, 23.34], full: [11.44, 11.44, 11.44, 11.44, 11.44] };
+    const names = { ipw: "IPW", cra: "Complete records", mi: "MI, no auxiliaries", fiml: "FIML", miaux: "MI + auxiliaries (m = 100)", full: "No missing data" };
+    const f = frame($("ev-t5"), { x: [5, 95], y: [0, 55], xTickVals: rates, xFmt: (v) => v + "%", xlab: "Share of x₂ missing (covariate-driven MAR)", ylab: "Empirical SE of x₂ coefficient", title: "Lower is better: spread of estimates across 1,000 replications", w: 860, h: 340, m: { r: 200 } });
+    Object.keys(t5).forEach((k, i) => { const s = t5[k]; el("polyline", { points: s.map((v, j) => `${f.sx(rates[j])},${f.sy(v)}`).join(" "), fill: "none", stroke: COL[k], "stroke-width": 2.5 }, f.g); s.forEach((v, j) => el("circle", { cx: f.sx(rates[j]), cy: f.sy(v), r: 3, fill: COL[k] }, f.g)); el("text", { x: f.W - 190, y: 50 + i * 20, "font-size": 12, fill: COL[k] }, f.svg, "● " + names[k]); });
+    const t6 = [["Complete records", 0.609, 0.001], ["IPW", 0.926, 0.002], ["FIML", 0.945, 0.0], ["MI, no aux", 0.938, 0.0], ["MI + aux (m=10)", 0.938, 0.019], ["MI + aux (m=100)", 0.954, 0.024]];
+    const g = frame($("ev-t6"), { x: [0, t6.length], y: [0, 1.05], noXAxis: true, ylab: "Coverage of 95% intervals", title: "Coverage (target 0.95): outcome-driven MAR in teal, MNAR in red", w: 860, h: 300, m: { b: 50 } });
+    el("line", { x1: g.sx(0), x2: g.sx(t6.length), y1: g.sy(0.95), y2: g.sy(0.95), stroke: "#111", "stroke-dasharray": "4 3" }, g.g);
+    t6.forEach((r, i) => { const bw = (g.sx(1) - g.sx(0)) * 0.32; [[r[1], "#2e7d6b", -1], [r[2], "#d1495b", 0]].forEach(([v, c, o]) => { el("rect", { x: g.sx(i + 0.5) + o * bw, y: g.sy(v), width: bw, height: g.sy(0) - g.sy(v), fill: c }, g.g); el("text", { x: g.sx(i + 0.5) + o * bw + bw / 2, y: g.sy(v) - 4, "font-size": 11, "text-anchor": "middle" }, g.g, v.toFixed(2)); }); el("text", { x: g.sx(i + 0.5), y: g.H - g.m.b + 18, "font-size": 12, "text-anchor": "middle" }, g.g, r[0]); });
+    el("line", { x1: g.sx(0), x2: g.sx(t6.length), y1: g.sy(0), y2: g.sy(0), stroke: "#999" }, g.g);
+  }
+
+  // ---------------- 11. decision guide ----------------
+  function renderGuide() {
+    const q1 = document.querySelector('input[name="q1"]:checked'), q2 = document.querySelector('input[name="q2"]:checked'), out = $("guide-out");
+    if (!q1 || !q2) { out.innerHTML = '<span class="muted">Answer both questions.</span>'; return; }
+    if (q2.value === "yes") out.innerHTML = "<b>No standard method is guaranteed to be unbiased.</b> Use multiple imputation with as many good auxiliary variables as you can find; they recover the part of the missing information that observed data can predict. Then run a sensitivity analysis (delta adjustment or pattern-mixture models) and say clearly in the write-up what remains uncertain.";
+    else if (q1.value === "no") out.innerHTML = "<b>Complete records analysis is unbiased here.</b> FIML or multiple imputation with auxiliary variables will be more precise, which matters most when a lot of data are missing. Report your argument for why missingness is unrelated to the outcome.";
+    else out.innerHTML = "<b>Use FIML or multiple imputation</b>, with the outcome and good auxiliary variables in the imputation model. Inverse probability weighting is also valid but much less precise. Don't rely on complete records analysis: it is likely to be biased, and its output won't warn you.";
+  }
+
+  // ---------------- wiring ----------------
+  function refreshSample() { drawSample(); renderMech(); renderTest(); $("meth-plot").innerHTML = '<p class="muted">Press the button to fit the methods to the new sample.</p>'; renderMI(); }
+  function init() {
+    fillSelect($("mech-sel"), MECHOPTS, "mar_cov"); fillSelect($("mech-rate"), RATES, "0.5");
+    fillSelect($("lab-mech"), MECHOPTS, "mar_cov"); fillSelect($("lab-rate"), RATES, "0.5");
+    fillSelect($("lab-ladder-m"), ORDER.filter((k) => k !== "fiml").map((k) => [k, MD.METHODS[k].label]), "cra");
+    $("mech-sel").onchange = () => { state.mech = $("mech-sel").value; refreshSample(); };
+    $("mech-rate").onchange = () => { state.rate = +$("mech-rate").value; refreshSample(); };
+    $("mech-new").onclick = () => { state.seed = Math.floor(Math.random() * 1e9); refreshSample(); };
+    $("meth-run").onclick = () => { $("meth-run").disabled = true; setTimeout(() => { renderMethods(); $("meth-run").disabled = false; }, 20); };
+    $("lab-run").onclick = runLab; $("lab-coef").onchange = renderLab; $("lab-ladder-m").onchange = renderLadder;
+    $("corr-run").onclick = runCorr; $("aux-run").onclick = runAux;
+    $("mi-m").oninput = () => ($("mi-mval").textContent = $("mi-m").value); $("mi-m").onchange = renderMI; $("mi-aux").onchange = renderMI; $("mi-run").onclick = renderMI;
+    document.querySelectorAll('#w-guide input').forEach((i) => (i.onchange = renderGuide));
+    refreshSample(); renderMethods(); renderEvidence();
+    // highlight current section in the contents
+    const links = [...document.querySelectorAll("nav a")], secs = links.map((a) => document.querySelector(a.getAttribute("href")));
+    const onScroll = () => { let cur = 0; secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < 120) cur = i; }); links.forEach((a, i) => a.classList.toggle("on", i === cur)); };
+    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  }
+  document.addEventListener("DOMContentLoaded", init);
+})();
+
+</script>
+</body>
+</html>

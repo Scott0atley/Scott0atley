@@ -103,10 +103,12 @@
   // Start the drawing animation, then highlight one trajectory at a time.
   if (!still) {
     setTimeout(() => paths.forEach(p => p.style.strokeDashoffset = 0), 60);
+    // Fallback: if the browser has not run the drawing animation (for example in a background tab), show the lines anyway.
+    setTimeout(() => paths.forEach(p => { p.style.transition = "none"; p.style.strokeDashoffset = 0; }), 4000);
     setInterval(() => {
       paths.forEach(p => p.classList.remove("hi"));
       paths[Math.floor(Math.random() * paths.length)].classList.add("hi");
-    }, 1800);
+    }, 2800);
   }
 })();
 </script>

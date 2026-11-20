@@ -70,16 +70,16 @@
 body { font-family: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif; background: #f8f9f6; }
 h1, h2, h3, header h1 { font-family: "Bricolage Grotesque", "Arial Black", sans-serif; letter-spacing: -.01em; }
 svg { font-family: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif; }
-.gh { border-bottom: 2px solid #0e1116; background: #eef0eb; position: sticky; top: 0; z-index: 10; }
+.gh { border-bottom: 1px solid #0e1116; background: #f1f1ec; position: sticky; top: 0; z-index: 10; }
 .gh-in { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; align-items: stretch; gap: 0 22px; min-height: 60px; flex-wrap: wrap; }
 .gh-brand { display: flex; flex-direction: column; justify-content: center; color: #0e1116; text-decoration: none; margin-right: auto; padding: 8px 0; }
-.gh-brand b { font-family: "Bricolage Grotesque", "Arial Black", sans-serif; font-weight: 800; font-size: 21px; line-height: 1; }
+.gh-brand b { font-family: "Bricolage Grotesque", "Arial Black", sans-serif; font-weight: 700; font-size: 21px; line-height: 1; }
 .gh-brand span { font-family: "JetBrains Mono", monospace; font-size: 11px; color: #59606b; margin-top: 4px; letter-spacing: .08em; text-transform: uppercase; }
 .gh-menu { display: flex; align-items: stretch; counter-reset: nav; }
 .gh-menu a { counter-increment: nav; display: flex; align-items: center; padding: 0 12px; font-family: "JetBrains Mono", monospace; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #0e1116; text-decoration: none; border-left: 1px solid #c9cdc4; }
-.gh-menu a::before { content: "0" counter(nav); color: #2340ff; margin-right: 8px; }
+.gh-menu a::before { content: "0" counter(nav); color: #59606b; margin-right: 8px; }
 .gh-menu a:hover { background: #f8f9f6; }
-.gh-menu a.on { background: #ffd23f; }
+.gh-menu a.on { background: #f2dc8c; }
 .gh-menu a.on::before { color: #0e1116; }
 nav[aria-label="Contents"] { top: 84px; }
 .back { font-family: "JetBrains Mono", monospace; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 18px; display: inline-block; }

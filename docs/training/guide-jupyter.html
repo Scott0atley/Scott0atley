@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jupyter for social research: an interactive guide | Scott Oatley</title>
+<meta name="description" content="Interactive companion to the workshop Jupyter Notebook: Improving Workflow for Social Science Research. Installation, connecting Stata, cells and kernels, Markdown and keyboard shortcuts.">
+<link rel="stylesheet" href="../papers/guide.css">
+<style>
+  .back { font-size:14px; margin-bottom:18px; display:inline-block; }
+  .nb { border:1px solid var(--rule); padding:10px; background:#fafafa; }
+  .cell { border:1px solid #ddd; background:#fff; margin:6px 0; padding:6px 8px; font-family:"Courier New", Courier, monospace; font-size:14px; white-space:pre-wrap; min-height:22px; }
+  .cell.md { font-family:Arial, Helvetica, sans-serif; }
+  .cell.sel { border-left:5px solid #1f5fa8; }
+  .cell.sel.cmd { border-left-color:#1f5fa8; background:#eef4fb; }
+  .cell.sel.edit { border-left-color:var(--teal); }
+  .cell .tag { float:right; font-size:11px; color:var(--grey); font-family:Arial, sans-serif; }
+  .mode { font-size:14px; margin:4px 0 8px; }
+  .side { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  textarea { width:100%; font-family:"Courier New", Courier, monospace; font-size:14px; min-height:160px; padding:8px; border:1px solid #bbb; }
+  .rendered h1, .rendered h2, .rendered h3 { margin:6px 0; border:none; padding:0; }
+  .rendered { border:1px solid var(--rule); padding:8px 12px; min-height:160px; }
+  .out { border-left:3px solid var(--teal); padding:6px 10px; font-family:"Courier New", Courier, monospace; font-size:14px; white-space:pre-wrap; margin:4px 0 8px; }
+  .out.err { border-left-color:var(--red); color:var(--red); }
+  @media (max-width:900px) { .side { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents">
+  <div class="navhead">Contents</div>
+  <ol>
+    <li><a href="#start">Start here</a></li>
+    <li><a href="#install">1. Installing</a></li>
+    <li><a href="#stata">2. Connecting Stata</a></li>
+    <li><a href="#cells">3. Kernels and cells</a></li>
+    <li><a href="#magic">4. The %%stata rule</a></li>
+    <li><a href="#markdown">5. Markdown</a></li>
+    <li><a href="#keys">6. Keyboard shortcuts</a></li>
+    <li><a href="#check">7. Check yourself</a></li>
+    <li><a href="#files">8. Workshop files</a></li>
+  </ol>
+</nav>
+<main>
+<a class="back" href="index.html">&larr; Back to Training</a>
+<header id="start">
+  <h1>Jupyter for social research: an interactive guide</h1>
+  <p class="sub">Code, results and explanation in one document, with Stata running inside it</p>
+  <p class="muted small">Companion to the workshop <em>Jupyter Notebook: Improving Workflow for Social Science Research</em>, Edinburgh, October 2023.</p>
+  <p>A do-file holds code and short comments; results live elsewhere, in a log or the Results window. A Jupyter Notebook keeps code, output, formatted explanation, equations and references together, runs cells in any order, and supports more than 40 languages, including Stata, R and Python. That makes it easier for someone else to follow your work, and for you to return to it.</p>
+</header>
+
+<h2 id="install"><span class="num">1</span>Installing Jupyter</h2>
+<p>Jupyter needs Python (version 3.3 or later). There are two routes. Choose yours to see the steps.</p>
+<div class="widget">
+  <div class="controls">
+    <label>Route <select id="route"><option value="conda">Anaconda</option><option value="pip">pip (preferred on macOS)</option></select></label>
+  </div>
+  <ol id="steps"></ol>
+  <p class="small muted">On a very old macOS that cannot be updated, Jupyter may fail with “Segmentation Fault 11”. The fix is <code>pip install pyobjc-core pyobjc-framework-cocoa --force-reinstall</code>.</p>
+</div>
+<p>Jupyter opens in your web browser at an address containing <code>localhost</code>. That is not a website: the notebook is being served from your own computer, so your data stay on your machine.</p>
+
+<h2 id="stata"><span class="num">2</span>Connecting Stata (Stata 17 or later)</h2>
+<p>First install the bridge in a terminal: <code>pip install --upgrade --user stata_setup</code>. Then, in the first cell of a notebook, point it at your Stata installation. Fill in your details to build that cell.</p>
+<div class="widget">
+  <div class="controls">
+    <label>Operating system <select id="os"><option value="win">Windows</option><option value="mac">macOS</option></select></label>
+    <label>Stata version <select id="ver"><option>17</option><option selected>18</option><option>19</option></select></label>
+    <label>Edition <select id="ed"><option value="be">BE</option><option value="se" selected>SE (most university licences)</option><option value="mp">MP</option></select></label>
+  </div>
+<pre id="setup"></pre>
+  <p class="small">Not sure where Stata is installed? In Stata, type <code>display c(sysdir_stata)</code> and paste the folder it shows. On macOS, check the folder name in Applications, as recent versions are often installed as plain “Stata”.</p>
+</div>
+
+<h2 id="cells"><span class="num">3</span>Kernels and cells</h2>
+<p>Two terms matter:</p>
+<ul>
+  <li>A <b>kernel</b> is the engine that runs the notebook’s code. One notebook has one kernel.</li>
+  <li>A <b>cell</b> is a box in the notebook. <b>Code cells</b> hold code and show its output underneath. <b>Markdown cells</b> hold formatted text: the explanation that a do-file comment cannot carry.</li>
+</ul>
+<p>Every notebook is saved as an <code>.ipynb</code> file. Jupyter also saves a checkpoint every 120 seconds, which you can return to with File → Revert to Checkpoint.</p>
+
+<h2 id="magic"><span class="num">4</span>The %%stata rule</h2>
+<p>Because a notebook can mix languages, each cell runs in Python unless told otherwise. A cell meant for Stata must start with <code>%%stata</code>. Run the cells below to see what happens with and without it.</p>
+<div class="widget">
+  <div class="wtitle">Run each cell</div>
+  <div class="cell" id="c1">use "ncds_occupation_coding.dta", clear</div><button class="ghost" data-run="1">Run ▶</button><div id="o1"></div>
+  <div class="cell" id="c2">%%stata
+use "ncds_occupation_coding.dta", clear</div><button class="ghost" data-run="2">Run ▶</button><div id="o2"></div>
+  <p class="small muted">Outputs are illustrative of what Jupyter shows; no code is actually run.</p>
+</div>
+
+<h2 id="markdown"><span class="num">5</span>Markdown: explaining what you did and why</h2>
+<p>The workshop’s example is a study of how parental social class affects young people’s employment in the NCDS. It needs datasets merged across sweeps and an ID variable renamed because its capitalisation differs between files. Done silently in a do-file, that is confusing for anyone reading it. A Markdown cell explains it properly. Edit the text on the left; the right shows how the cell renders.</p>
+<div class="widget">
+  <div class="side">
+    <textarea id="mdIn"># Parental class and youth employment
+
+The NCDS stores **parental social class** and *employment histories* in different sweeps, so we:
+
+1. merge the sweeps on the person identifier
+2. rename `NCDSID` to `ncdsid`, because capitalisation differs between files
+3. keep cohort members with both measures
+
+> Sweep files are from the UK Data Service.</textarea>
+    <div class="rendered" id="mdOut"></div>
+  </div>
+  <p class="small">Supported here: <code>#</code> headings, <code>**bold**</code>, <code>*italic*</code>, <code>`code`</code>, numbered and bulleted lists, and <code>&gt;</code> quotes. Jupyter also supports tables, links, images and LaTeX equations.</p>
+</div>
+
+<h2 id="keys"><span class="num">6</span>Keyboard shortcuts</h2>
+<p>A notebook has two modes. In <b>edit mode</b> you type into a cell. In <b>command mode</b> single keys act on whole cells. Press <kbd>Esc</kbd> for command mode and <kbd>Enter</kbd> to go back to editing. Click the practice notebook, then try the keys.</p>
+<div class="widget">
+  <div class="mode" id="modeLab"></div>
+  <div class="nb" id="nb" tabindex="0"></div>
+  <table class="small">
+    <thead><tr><th>Key (command mode)</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>↑ / ↓</td><td>Move between cells</td></tr>
+      <tr><td>A / B</td><td>Insert a cell above / below</td></tr>
+      <tr><td>M / Y</td><td>Make the cell Markdown / code</td></tr>
+      <tr><td>D then D</td><td>Delete the cell</td></tr>
+      <tr><td>Z</td><td>Undo the last deletion</td></tr>
+      <tr><td>Enter / Esc</td><td>Edit mode / command mode</td></tr>
+    </tbody>
+  </table>
+  <div class="readout" id="keyLog"></div>
+</div>
+
+<h2 id="check"><span class="num">7</span>Check yourself</h2>
+<div class="guide" id="quiz"></div>
+<div class="answer" id="quizOut"></div>
+
+<h2 id="files"><span class="num">8</span>Workshop files</h2>
+<ul>
+  <li><a href="jupytertrainingblog.pdf">Training materials (PDF)</a> and <a href="Jupyter.pptx">slides</a></li>
+  <li>Notebooks made this way: the <a href="Handling_Missing_Data_SO_12052025_V1.html">missing data comparison notebook</a> and the <a href="Missing_Simulation_SO_04032025_V1.html">missing data simulation notebook</a></li>
+</ul>
+<footer>Scott Oatley. Everything on this page runs in your browser; nothing you type is sent anywhere.</footer>
+</main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// Section 1: install steps.
+const STEPS = {
+  conda: ["Download the latest Anaconda from the Anaconda website.", "Install it: choose “Just Me”, install to your main drive, and register Anaconda as your default Python.", "Open Anaconda Navigator from the Start menu.", "Click Install under Jupyter Notebook, then Launch.", "Pin the Jupyter icon to your taskbar to save time next time."],
+  pip: ["Open a terminal and check Python: <code>python --version</code>", "Update pip: <code>pip3 install --upgrade pip</code>", "Install Jupyter: <code>python -m pip install jupyter</code>", "Launch it: <code>jupyter notebook</code>"]
+};
+function steps() { $("steps").innerHTML = STEPS[$("route").value].map(s => "<li>" + s + "</li>").join(""); }
+$("route").addEventListener("change", steps); steps();
+
+// Section 2: stata_setup builder.
+function setup() {
+  const v = $("ver").value, ed = $("ed").value;
+  const path = $("os").value === "win" ? "C:/Program Files/Stata" + v : "/Applications/Stata" + v;
+  $("setup").textContent = "import stata_setup\nstata_setup.config(\"" + path + "\", \"" + ed + "\")";
+}
+["os","ver","ed"].forEach(id => $(id).addEventListener("change", setup)); setup();
+
+// Section 4: run cells.
+document.querySelectorAll("[data-run]").forEach(b => b.onclick = () => {
+  const n = b.dataset.run;
+  $("o" + n).innerHTML = n === "1"
+    ? '<div class="out err">  Cell In[1], line 1\n    use "ncds_occupation_coding.dta", clear\n        ^\nSyntaxError: invalid syntax</div><p class="small">Without <code>%%stata</code> the cell is read as Python, which does not know <code>use</code>.</p>'
+    : '<div class="out">. use "ncds_occupation_coding.dta", clear</div><p class="small">With <code>%%stata</code> the cell is sent to Stata and its output appears directly under the code.</p>';
+});
+
+// Section 5: small Markdown renderer.
+function inline(s) { return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/\*([^*]+)\*/g, "<i>$1</i>"); }
+function md() {
+  const lines = $("mdIn").value.split("\n"); let h = "", list = null;
+  const close = () => { if (list) { h += "</" + list + ">"; list = null; } };
+  lines.forEach(l => {
+    let m;
+    if ((m = l.match(/^(#{1,3})\s+(.*)/))) { close(); h += "<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">"; }
+    else if ((m = l.match(/^\d+\.\s+(.*)/))) { if (list !== "ol") { close(); h += "<ol>"; list = "ol"; } h += "<li>" + inline(m[1]) + "</li>"; }
+    else if ((m = l.match(/^[-*]\s+(.*)/))) { if (list !== "ul") { close(); h += "<ul>"; list = "ul"; } h += "<li>" + inline(m[1]) + "</li>"; }
+    else if ((m = l.match(/^>\s?(.*)/))) { close(); h += '<blockquote class="muted">' + inline(m[1]) + "</blockquote>"; }
+    else if (l.trim() === "") { close(); }
+    else { close(); h += "<p>" + inline(l) + "</p>"; }
+  });
+  close(); $("mdOut").innerHTML = h;
+}
+$("mdIn").addEventListener("input", md); md();
+
+// Section 6: shortcut practice notebook.
+let cells = [["code", "%%stata\nsysuse auto, clear"], ["md", "## Describe the data"], ["code", "%%stata\nsummarize price mpg"]];
+let sel = 0, mode = "cmd", lastD = 0, deleted = null;
+function drawNb() {
+  $("nb").innerHTML = cells.map((c, i) => '<div class="cell ' + (c[0] === "md" ? "md" : "") + (i === sel ? " sel " + mode : "") + '"><span class="tag">' + (c[0] === "md" ? "Markdown" : "Code") + "</span>" + esc(c[1]) + "</div>").join("");
+  $("modeLab").innerHTML = "Mode: <b>" + (mode === "cmd" ? "command (blue)" : "edit (green)") + "</b> · " + cells.length + " cells";
+}
+$("nb").addEventListener("keydown", e => {
+  const k = e.key; let msg = "";
+  if (mode === "edit") { if (k === "Escape") { mode = "cmd"; msg = "Esc: command mode"; } else return; }
+  else if (k === "Enter") { mode = "edit"; msg = "Enter: edit mode"; }
+  else if (k === "ArrowUp") { sel = Math.max(0, sel - 1); msg = "Up"; }
+  else if (k === "ArrowDown") { sel = Math.min(cells.length - 1, sel + 1); msg = "Down"; }
+  else if (k === "a" || k === "A") { cells.splice(sel, 0, ["code", ""]); msg = "A: new cell above"; }
+  else if (k === "b" || k === "B") { cells.splice(sel + 1, 0, ["code", ""]); sel++; msg = "B: new cell below"; }
+  else if (k === "m" || k === "M") { cells[sel][0] = "md"; msg = "M: Markdown cell"; }
+  else if (k === "y" || k === "Y") { cells[sel][0] = "code"; msg = "Y: code cell"; }
+  else if (k === "d" || k === "D") {
+    if (Date.now() - lastD < 800 && cells.length > 1) { deleted = [sel, cells.splice(sel, 1)[0]]; sel = Math.min(sel, cells.length - 1); msg = "D D: cell deleted"; lastD = 0; }
+    else { lastD = Date.now(); msg = "D: press D again to delete"; }
+  }
+  else if (k === "z" || k === "Z") { if (deleted) { cells.splice(deleted[0], 0, deleted[1]); sel = deleted[0]; deleted = null; msg = "Z: deletion undone"; } else msg = "Z: nothing to undo"; }
+  else return;
+  e.preventDefault(); $("keyLog").textContent = msg; drawNb();
+});
+$("nb").addEventListener("click", () => $("nb").focus());
+drawNb();
+
+// Section 7: quiz.
+const Q = [
+  ["A cell contains Stata code but no %%stata line. What happens?", ["Stata runs it anyway", "It is run as Python and fails", "It is treated as Markdown"], 1, "Each cell runs in the notebook's default language unless told otherwise."],
+  ["What is a kernel?", ["A single cell", "The engine that runs the notebook's code", "A saved checkpoint"], 1, "One notebook has one kernel, which runs code from many cells."],
+  ["Where does a notebook at a localhost address run?", ["On Jupyter's servers", "On your own computer", "On the UK Data Service"], 1, "localhost means your own machine, so your data stay with you."],
+  ["In command mode, which keys delete the selected cell?", ["Delete", "D then D", "X then X"], 1, "Press D twice; Z undoes the deletion."]
+];
+$("quiz").innerHTML = Q.map((q, i) => "<fieldset><legend>" + (i + 1) + ". " + esc(q[0]) + "</legend>" + q[1].map((o, j) => '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + esc(o) + "</label>").join("") + "</fieldset>").join("") + '<button id="qBtn">Check answers</button>';
+$("qBtn").onclick = () => {
+  let right = 0, out = "";
+  Q.forEach((q, i) => { const c = document.querySelector('input[name="q' + i + '"]:checked'); const ok = c && +c.value === q[2]; if (ok) right++; out += "<p><b>" + (i + 1) + ".</b> " + (ok ? '<span class="good">Correct.</span> ' : '<span class="bad">Not quite.</span> ') + q[3] + "</p>"; });
+  $("quizOut").innerHTML = "<p><b>" + right + " of " + Q.length + " correct.</b></p>" + out;
+};
+</script>
+</body>
+</html>

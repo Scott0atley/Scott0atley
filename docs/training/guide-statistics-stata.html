@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistics with Stata: an interactive guide | Scott Oatley</title>
+<meta name="description" content="Interactive companion to the Introduction to Statistics in Stata materials: sampling distributions, confidence intervals, hypothesis tests and power, regression, confounding, interactions and logistic regression, with the matching Stata commands.">
+<link rel="stylesheet" href="../papers/guide.css">
+<style>
+  .back { font-size:14px; margin-bottom:18px; display:inline-block; }
+  .stata { font-family:"Courier New", Courier, monospace; font-size:14px; background:var(--light); border:1px solid #e3e3e3; padding:8px 12px; margin:8px 0; white-space:pre-wrap; }
+  .stata::before { content:"Stata"; display:block; font-family:Arial, sans-serif; font-size:11px; color:var(--grey); margin-bottom:2px; }
+  .controls input[type=range] { width:160px; }
+  .kv { display:flex; flex-wrap:wrap; gap:8px 26px; font-size:16px; margin:6px 0 10px; }
+  .kv b { font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents">
+  <div class="navhead">Contents</div>
+  <ol>
+    <li><a href="#start">Start here</a></li>
+    <li><a href="#sampling">1. Sampling distributions</a></li>
+    <li><a href="#ci">2. Confidence intervals</a></li>
+    <li><a href="#tests">3. Tests, errors and power</a></li>
+    <li><a href="#regression">4. Correlation and regression</a></li>
+    <li><a href="#confounding">5. Confounding</a></li>
+    <li><a href="#interaction">6. Interactions</a></li>
+    <li><a href="#logit">7. Logistic regression</a></li>
+    <li><a href="#check">8. Check yourself</a></li>
+    <li><a href="#files">9. Course files</a></li>
+  </ol>
+</nav>
+<main>
+<a class="back" href="index.html">&larr; Back to Training</a>
+<header id="start">
+  <h1>Statistics with Stata: an interactive guide</h1>
+  <p class="sub">The core ideas of the course as simulations you can change, each with the Stata command that does it</p>
+  <p class="muted small">Companion to <em>Introduction to Statistics in Stata</em> (Quantitative Statistics, Advanced Quantitative Statistics and the Getting Started with Stata do-files).</p>
+  <p>Statistics is about learning from a sample about a population we cannot see in full. The simulations below create a population whose true values we know, draw samples from it, and show how the statistics behave. That is how you build intuition for standard errors, confidence intervals, p-values and model coefficients. Every simulation runs in your browser; press a button again for a fresh draw.</p>
+</header>
+
+<h2 id="sampling"><span class="num">1</span>Sampling distributions and the central limit theorem</h2>
+<p>A sample mean varies from sample to sample. Its spread across repeated samples is the <b>standard error</b>, σ/√n. The <b>central limit theorem</b> says that sample means are close to normally distributed once n is moderately large, even when the population is not normal.</p>
+<div class="widget">
+  <div class="wtitle">Draw 2,000 samples and plot their means</div>
+  <div class="controls">
+    <label>Population <select id="sPop"><option value="normal">Normal</option><option value="skew">Right-skewed</option><option value="uniform">Uniform</option></select></label>
+    <label>Sample size n: <b id="sNl">5</b> <input type="range" id="sN" min="2" max="200" value="5"></label>
+    <button id="sGo">Draw samples</button>
+  </div>
+  <div class="plots"><div id="sPopPlot"></div><div id="sMeanPlot"></div></div>
+  <div class="kv" id="sOut"></div>
+  <p class="try"><b>Try this</b>Choose the skewed population with n = 2, then n = 50. The means become symmetric and their spread shrinks by √n.</p>
+</div>
+<div class="stata">ci mean height</div>
+
+<h2 id="ci"><span class="num">2</span>Confidence intervals</h2>
+<p>A 95% confidence interval is built by a method that captures the true mean in 95% of samples. Any single interval either contains it or does not; the 95% describes the method, not one interval.</p>
+<div class="widget">
+  <div class="wtitle">100 samples of heights (true mean 167.2 cm, SD 9.6)</div>
+  <div class="controls">
+    <label>Sample size n: <b id="cNl">30</b> <input type="range" id="cN" min="5" max="500" value="30"></label>
+    <label>Confidence <select id="cLev"><option value="0.9">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select></label>
+    <button id="cGo">Draw 100 samples</button>
+  </div>
+  <div class="readout" id="cOut"></div>
+  <div id="cPlot"></div>
+  <p class="try"><b>Try this</b>Raise n: intervals get narrower but coverage stays near the level. Raise the level: intervals get wider.</p>
+</div>
+<div class="stata">ci mean height, level(95)</div>
+
+<h2 id="tests"><span class="num">3</span>Hypothesis tests, errors and power</h2>
+<p>A significance test asks how surprising the data would be if there were no difference. Two errors are possible: a <b>Type I error</b> (finding a difference that is not there, with probability α) and a <b>Type II error</b> (missing one that is). <b>Power</b> is the chance of detecting a real difference.</p>
+<div class="widget">
+  <div class="wtitle">1,000 two-group t-tests</div>
+  <div class="controls">
+    <label>True difference (in SDs): <b id="tDl">0.3</b> <input type="range" id="tD" min="0" max="1" step="0.05" value="0.3"></label>
+    <label>n per group: <b id="tNl">50</b> <input type="range" id="tN" min="5" max="300" value="50"></label>
+    <label>α <select id="tA"><option>0.10</option><option selected>0.05</option><option>0.01</option></select></label>
+    <button id="tGo">Run 1,000 studies</button>
+  </div>
+  <div class="kv" id="tOut"></div>
+  <div id="tPlot"></div>
+  <p class="try"><b>Try this</b>Set the difference to 0: about α of tests are still “significant”. Those are Type I errors. Then find the n per group that gives 80% power for a difference of 0.3 SD.</p>
+</div>
+<div class="stata">ttest height, by(sex)</div>
+<p>Statistical significance is not practical importance. With a very large sample a tiny, unimportant difference can have a minute p-value; report the size of the difference and its confidence interval as well.</p>
+
+<h2 id="regression"><span class="num">4</span>Correlation and regression</h2>
+<p>A correlation measures the strength of a linear association. Linear regression estimates how much the outcome changes for each one-unit change in a predictor, and R² is the share of variation in the outcome that the model accounts for.</p>
+<div class="widget">
+  <div class="wtitle">Simulated sample</div>
+  <div class="controls">
+    <label>True correlation: <b id="rRl">0.5</b> <input type="range" id="rR" min="-0.95" max="0.95" step="0.05" value="0.5"></label>
+    <label>n: <b id="rNl">100</b> <input type="range" id="rN" min="10" max="1000" value="100"></label>
+    <button id="rGo">New sample</button>
+  </div>
+  <div class="kv" id="rOut"></div>
+  <div class="plots one"><div id="rPlot"></div></div>
+</div>
+<div class="stata">corr height weight
+regress height weight</div>
+
+<h2 id="confounding"><span class="num">5</span>Confounding</h2>
+<p>A <b>confounder</b> Z affects both the predictor X and the outcome Y. Leave it out and the coefficient on X picks up part of Z’s effect. Including Z in the model recovers the true effect, if Z is measured well.</p>
+<div class="widget">
+  <div class="wtitle">Y = β·X + 1·Z + error, with X partly caused by Z</div>
+  <div class="controls">
+    <label>True effect of X (β): <b id="fBl">0.0</b> <input type="range" id="fB" min="-1" max="1" step="0.1" value="0"></label>
+    <label>How strongly Z drives X: <b id="fGl">0.8</b> <input type="range" id="fG" min="0" max="1.5" step="0.1" value="0.8"></label>
+    <button id="fGo">New sample (n = 2,000)</button>
+  </div>
+  <table><thead><tr><th>Model</th><th class="n">Coefficient on X</th><th>Stata</th></tr></thead><tbody id="fTab"></tbody></table>
+  <p class="try"><b>Try this</b>With β = 0, X has no effect at all, yet the model without Z finds one. Set Z’s influence to 0 and the bias disappears.</p>
+</div>
+<p>The course also covers <b>suppression</b>, where leaving out a variable hides an effect because two paths of opposite sign cancel out, and <b>mediation</b>, where Z lies on the path from X to Y. Controlling for a mediator removes part of the effect you want to measure, so the causal ordering matters.</p>
+
+<h2 id="interaction"><span class="num">6</span>Interactions</h2>
+<p>An <b>interaction</b> lets the effect of one variable depend on another. Here the effect of X on Y differs between two groups.</p>
+<div class="widget">
+  <div class="wtitle">Y = 1·X + interaction·X·Group + error</div>
+  <div class="controls">
+    <label>Interaction: <b id="iIl">0.8</b> <input type="range" id="iI" min="-1.5" max="1.5" step="0.1" value="0.8"></label>
+    <button id="iGo">New sample</button>
+  </div>
+  <div class="kv" id="iOut"></div>
+  <div class="plots one"><div id="iPlot"></div></div>
+</div>
+<div class="stata">regress y c.x##i.group
+margins group, dydx(x)</div>
+
+<h2 id="logit"><span class="num">7</span>Logistic regression: odds ratios and marginal effects</h2>
+<p>For a yes/no outcome, logistic regression models the log-odds. Its coefficient is often reported as an <b>odds ratio</b>. An odds ratio does not say how much the probability changes: that depends on the baseline probability. The <b>average marginal effect</b> reports the change in probability directly.</p>
+<div class="widget">
+  <div class="wtitle">Same odds ratio, different change in probability</div>
+  <div class="controls">
+    <label>Odds ratio for the group: <b id="lORl">2.0</b> <input type="range" id="lOR" min="0.2" max="6" step="0.1" value="2"></label>
+    <label>Baseline probability: <b id="lPl">0.10</b> <input type="range" id="lP" min="0.01" max="0.95" step="0.01" value="0.1"></label>
+  </div>
+  <div class="kv" id="lOut"></div>
+  <div class="plots one"><div id="lPlot"></div></div>
+  <p class="try"><b>Try this</b>Keep the odds ratio at 2 and move the baseline from 0.05 to 0.5. The odds ratio never changes, but the change in probability grows from about 4 to about 17 percentage points.</p>
+</div>
+<div class="stata">logit obese i.sex i.racen age
+logit, or
+margins, dydx(*)</div>
+
+<h2 id="check"><span class="num">8</span>Check yourself</h2>
+<div class="guide" id="quiz"></div>
+<div class="answer" id="quizOut"></div>
+
+<h2 id="files"><span class="num">9</span>Course files</h2>
+<ul>
+  <li><a href="QuantitativeStatistics.pdf">Quantitative Statistics (PDF)</a>: sampling, distributions, probability, estimation, tests, contingency tables, correlation, t-tests, ANOVA, regression diagnostics</li>
+  <li><a href="AdvancedQuantitativeStatistics.pdf">Advanced Quantitative Statistics (PDF)</a>: confounding, mediation and moderation; logistic, ordinal and multinomial models; fixed and random effects; multilevel models; instrumental variables; regression discontinuity; count models</li>
+  <li>Do-files: <a href="GettingStartedwithStata1.do">#1 Stata basics</a>, <a href="GettingStartedwithStata2.do">#2 statistics and regression</a>, <a href="GettingStartedwithStata3.do">#3 interactions, logistic and other models</a>; <a href="teachingset.dta">example dataset</a></li>
+</ul>
+<footer>Scott Oatley. All simulations run locally in your browser; no data are sent anywhere.</footer>
+</main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+
+// Random numbers.
+function randn() { let u = 0, v = 0; while (u === 0) u = Math.random(); v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+function draw(pop) { if (pop === "normal") return 50 + 10 * randn(); if (pop === "uniform") return 50 + (Math.random() - 0.5) * 10 * Math.sqrt(12); return 40 - 10 * Math.log(Math.random()); }
+const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+const sd = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1)); };
+
+// Student t distribution (two-sided p-value) via the regularised incomplete beta function.
+function lgamma(x) { const c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5]; let y = x, t = x + 5.5; t -= (x + 0.5) * Math.log(t); let s = 1.000000000190015; for (let j = 0; j < 6; j++) s += c[j] / ++y; return -t + Math.log(2.5066282746310005 * s / x); }
+function betacf(a, b, x) { let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap; if (Math.abs(d) < 1e-30) d = 1e-30; d = 1 / d; let h = d; for (let m = 1; m <= 200; m++) { const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2)); d = 1 + aa * d; if (Math.abs(d) < 1e-30) d = 1e-30; c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; d = 1 / d; h *= d * c; aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2)); d = 1 + aa * d; if (Math.abs(d) < 1e-30) d = 1e-30; c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; d = 1 / d; const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-7) break; } return h; }
+function ibeta(a, b, x) { if (x <= 0) return 0; if (x >= 1) return 1; const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x)); return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b; }
+function tp(t, df) { return ibeta(df / 2, 0.5, df / (df + t * t)); }
+function tcrit(conf, df) { let lo = 0, hi = 50; for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (tp(mid, df) > 1 - conf) lo = mid; else hi = mid; } return (lo + hi) / 2; }
+
+// Small SVG plotting helpers.
+const W = 420, H = 220, PAD = 34;
+function scale(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+function axes(xs, ys, xlab, ylab, xmin, xmax) {
+  let s = '<line x1="' + PAD + '" y1="' + (H - PAD) + '" x2="' + (W - 8) + '" y2="' + (H - PAD) + '" stroke="#999"/>';
+  [0, 0.5, 1].forEach(f => { const v = xmin + f * (xmax - xmin); s += '<text x="' + xs(v) + '" y="' + (H - PAD + 14) + '" font-size="11" text-anchor="middle">' + (Math.abs(v) < 10 ? v.toFixed(1) : v.toFixed(0)) + "</text>"; });
+  s += '<text x="' + (W / 2) + '" y="' + (H - 4) + '" font-size="11" text-anchor="middle">' + xlab + "</text>";
+  if (ylab) s += '<text x="10" y="' + (H / 2) + '" font-size="11" transform="rotate(-90 10 ' + (H / 2) + ')" text-anchor="middle">' + ylab + "</text>";
+  return s;
+}
+function hist(vals, lo, hi, bins, title, color) {
+  const counts = new Array(bins).fill(0), w = (hi - lo) / bins;
+  vals.forEach(v => { const b = Math.floor((v - lo) / w); if (b >= 0 && b < bins) counts[b]++; });
+  const mx = Math.max(...counts, 1), xs = scale(lo, hi, PAD, W - 8), ys = scale(0, mx, H - PAD, 16);
+  let s = '<svg viewBox="0 0 ' + W + " " + H + '"><text x="' + PAD + '" y="11" font-size="12" font-weight="bold">' + title + "</text>";
+  counts.forEach((c, i) => { s += '<rect x="' + xs(lo + i * w) + '" y="' + ys(c) + '" width="' + Math.max(1, xs(lo + w) - xs(lo) - 1) + '" height="' + (H - PAD - ys(c)) + '" fill="' + (color || "#111") + '"/>'; });
+  return s + axes(xs, ys, "", "", lo, hi) + "</svg>";
+}
+
+// Section 1: sampling distribution.
+function sampling() {
+  const pop = $("sPop").value, n = +$("sN").value; $("sNl").textContent = n;
+  const popVals = Array.from({length: 5000}, () => draw(pop));
+  const means = Array.from({length: 2000}, () => { let s = 0; for (let i = 0; i < n; i++) s += draw(pop); return s / n; });
+  $("sPopPlot").innerHTML = hist(popVals, 10, 100, 45, "Population (one draw per person)", "#999");
+  $("sMeanPlot").innerHTML = hist(means, 10, 100, 45, "Means of 2,000 samples of size " + n);
+  $("sOut").innerHTML = "Population SD: <b>10.0</b> SD of sample means: <b>" + sd(means).toFixed(2) + "</b> σ/√n: <b>" + (10 / Math.sqrt(n)).toFixed(2) + "</b>";
+}
+$("sGo").onclick = sampling; $("sPop").addEventListener("change", sampling); $("sN").addEventListener("change", sampling); $("sN").addEventListener("input", () => $("sNl").textContent = $("sN").value); sampling();
+
+// Section 2: confidence intervals.
+function cis() {
+  const n = +$("cN").value, lev = +$("cLev").value, mu = 167.2, sig = 9.6; $("cNl").textContent = n;
+  const tc = tcrit(lev, n - 1); let hits = 0;
+  const ints = Array.from({length: 100}, () => { const x = Array.from({length: n}, () => mu + sig * randn()); const m = mean(x), se = sd(x) / Math.sqrt(n); const lo = m - tc * se, hi = m + tc * se; const hit = lo <= mu && mu <= hi; if (hit) hits++; return [lo, hi, hit]; });
+  const h = 300, xs = scale(mu - 12, mu + 12, PAD, W - 8);
+  let s = '<svg viewBox="0 0 ' + W + " " + h + '"><line x1="' + xs(mu) + '" y1="4" x2="' + xs(mu) + '" y2="' + (h - 20) + '" stroke="#2e7d6b" stroke-width="2"/>';
+  ints.forEach((iv, i) => { const y = 6 + i * 2.7; s += '<line x1="' + xs(Math.max(mu - 12, iv[0])) + '" x2="' + xs(Math.min(mu + 12, iv[1])) + '" y1="' + y + '" y2="' + y + '" stroke="' + (iv[2] ? "#111" : "#c0392b") + '" stroke-width="1.6"/>'; });
+  [mu - 10, mu, mu + 10].forEach(v => s += '<text x="' + xs(v) + '" y="' + (h - 6) + '" font-size="11" text-anchor="middle">' + v.toFixed(1) + "</text>");
+  $("cPlot").innerHTML = s + "</svg>";
+  $("cOut").innerHTML = "<b>" + hits + "</b> of 100 intervals contain the true mean (green line). Misses are red. Expected about " + Math.round(lev * 100) + ".";
+}
+$("cGo").onclick = cis; $("cLev").addEventListener("change", cis); $("cN").addEventListener("change", cis); $("cN").addEventListener("input", () => $("cNl").textContent = $("cN").value); cis();
+
+// Section 3: tests and power.
+function tests() {
+  const d = +$("tD").value, n = +$("tN").value, a = +$("tA").value; $("tDl").textContent = d.toFixed(2); $("tNl").textContent = n;
+  const ps = [];
+  for (let k = 0; k < 1000; k++) {
+    let s1 = 0, s2 = 0, q1 = 0, q2 = 0;
+    for (let i = 0; i < n; i++) { const x = randn(), y = d + randn(); s1 += x; s2 += y; q1 += x * x; q2 += y * y; }
+    const m1 = s1 / n, m2 = s2 / n, v1 = (q1 - n * m1 * m1) / (n - 1), v2 = (q2 - n * m2 * m2) / (n - 1);
+    const t = (m2 - m1) / Math.sqrt((v1 + v2) / n); ps.push(tp(Math.abs(t), 2 * n - 2));
+  }
+  const sig = ps.filter(p => p < a).length / 10;
+  $("tOut").innerHTML = (d === 0 ? "Type I error rate" : "Power") + ": <b>" + sig.toFixed(1) + "%</b>" + (d === 0 ? " (expected " + (a * 100) + "%)" : " Type II error rate: <b>" + (100 - sig).toFixed(1) + "%</b>");
+  $("tPlot").innerHTML = hist(ps, 0, 1, 40, "p-values from 1,000 studies (α = " + a + " cut-off at left)", "#111");
+}
+$("tGo").onclick = tests; ["tD","tN","tA"].forEach(id => $(id).addEventListener("change", tests));
+$("tD").addEventListener("input", () => $("tDl").textContent = (+$("tD").value).toFixed(2)); $("tN").addEventListener("input", () => $("tNl").textContent = $("tN").value); tests();
+
+// Section 4: regression.
+function ols(x, y) { const mx = mean(x), my = mean(y); let sxy = 0, sxx = 0, syy = 0; x.forEach((v, i) => { sxy += (v - mx) * (y[i] - my); sxx += (v - mx) ** 2; syy += (y[i] - my) ** 2; }); const b = sxy / sxx; return {b, a: my - b * mx, r: sxy / Math.sqrt(sxx * syy)}; }
+function scatter(groups, lines, xlab, ylab) {
+  const all = groups.flatMap(g => g.pts); const xv = all.map(p => p[0]), yv = all.map(p => p[1]);
+  const x0 = Math.min(...xv), x1 = Math.max(...xv), y0 = Math.min(...yv), y1 = Math.max(...yv);
+  const xs = scale(x0, x1, PAD, W - 8), ys = scale(y0, y1, H - PAD, 10);
+  let s = '<svg viewBox="0 0 ' + W + " " + H + '">';
+  groups.forEach(g => g.pts.slice(0, 600).forEach(p => s += '<circle cx="' + xs(p[0]).toFixed(1) + '" cy="' + ys(p[1]).toFixed(1) + '" r="2.2" fill="' + g.c + '" fill-opacity="0.45"/>'));
+  lines.forEach(l => s += '<line x1="' + xs(x0) + '" y1="' + ys(l.a + l.b * x0) + '" x2="' + xs(x1) + '" y2="' + ys(l.a + l.b * x1) + '" stroke="' + l.c + '" stroke-width="2.5"/>');
+  return s + axes(xs, ys, xlab, ylab, x0, x1) + "</svg>";
+}
+function regression() {
+  const r = +$("rR").value, n = +$("rN").value; $("rRl").textContent = r.toFixed(2); $("rNl").textContent = n;
+  const x = [], y = []; for (let i = 0; i < n; i++) { const a = randn(); x.push(a); y.push(r * a + Math.sqrt(1 - r * r) * randn()); }
+  const f = ols(x, y);
+  $("rOut").innerHTML = "Sample r: <b>" + f.r.toFixed(3) + "</b> Slope: <b>" + f.b.toFixed(3) + "</b> R²: <b>" + (f.r * f.r).toFixed(3) + "</b>";
+  $("rPlot").innerHTML = scatter([{pts: x.map((v, i) => [v, y[i]]), c: "#111"}], [{a: f.a, b: f.b, c: "#c0392b"}], "x (standardised)", "y");
+}
+$("rGo").onclick = regression; ["rR","rN"].forEach(id => $(id).addEventListener("change", regression));
+$("rR").addEventListener("input", () => $("rRl").textContent = (+$("rR").value).toFixed(2)); $("rN").addEventListener("input", () => $("rNl").textContent = $("rN").value); regression();
+
+// Section 5: confounding.
+function confound() {
+  const b = +$("fB").value, g = +$("fG").value; $("fBl").textContent = b.toFixed(1); $("fGl").textContent = g.toFixed(1);
+  const n = 2000, X = [], Y = [], Z = [];
+  for (let i = 0; i < n; i++) { const z = randn(), x = g * z + randn(); X.push(x); Z.push(z); Y.push(b * x + 1 * z + randn()); }
+  const naive = ols(X, Y).b;
+  // Two-predictor OLS via partialling out Z (Frisch-Waugh).
+  const rx = ols(Z, X), ry = ols(Z, Y);
+  const ex = X.map((v, i) => v - rx.a - rx.b * Z[i]), ey = Y.map((v, i) => v - ry.a - ry.b * Z[i]);
+  const adj = ols(ex, ey).b;
+  $("fTab").innerHTML = '<tr><td>Without Z</td><td class="n' + (Math.abs(naive - b) > 0.1 ? " bad" : "") + '">' + naive.toFixed(3) + '</td><td><code>regress y x</code></td></tr><tr><td>With Z</td><td class="n good">' + adj.toFixed(3) + '</td><td><code>regress y x z</code></td></tr><tr><td>True β</td><td class="n">' + b.toFixed(3) + "</td><td></td></tr>";
+}
+$("fGo").onclick = confound; ["fB","fG"].forEach(id => { $(id).addEventListener("change", confound); $(id).addEventListener("input", () => { $("fBl").textContent = (+$("fB").value).toFixed(1); $("fGl").textContent = (+$("fG").value).toFixed(1); }); }); confound();
+
+// Section 6: interaction.
+function interaction() {
+  const it = +$("iI").value; $("iIl").textContent = it.toFixed(1);
+  const g0 = [], g1 = [];
+  for (let i = 0; i < 300; i++) { const x = randn(); g0.push([x, 1 * x + randn() * 0.8]); const x2 = randn(); g1.push([x2, (1 + it) * x2 + randn() * 0.8]); }
+  const f0 = ols(g0.map(p => p[0]), g0.map(p => p[1])), f1 = ols(g1.map(p => p[0]), g1.map(p => p[1]));
+  $("iOut").innerHTML = 'Slope in group 0: <b>' + f0.b.toFixed(2) + '</b> Slope in group 1: <b>' + f1.b.toFixed(2) + '</b> Estimated interaction: <b>' + (f1.b - f0.b).toFixed(2) + "</b>";
+  $("iPlot").innerHTML = scatter([{pts: g0, c: "#111"}, {pts: g1, c: "#2e7d6b"}], [{a: f0.a, b: f0.b, c: "#111"}, {a: f1.a, b: f1.b, c: "#2e7d6b"}], "x (black = group 0, green = group 1)", "y");
+}
+$("iGo").onclick = interaction; $("iI").addEventListener("change", interaction); $("iI").addEventListener("input", () => $("iIl").textContent = (+$("iI").value).toFixed(1)); interaction();
+
+// Section 7: logistic.
+function logit() {
+  const OR = +$("lOR").value, p0 = +$("lP").value; $("lORl").textContent = OR.toFixed(1); $("lPl").textContent = p0.toFixed(2);
+  const odds0 = p0 / (1 - p0), odds1 = odds0 * OR, p1 = odds1 / (1 + odds1);
+  $("lOut").innerHTML = "Log-odds coefficient: <b>" + Math.log(OR).toFixed(3) + "</b> Odds ratio: <b>" + OR.toFixed(2) + "</b> Probability: <b>" + p0.toFixed(3) + " → " + p1.toFixed(3) + "</b> Marginal effect: <b>" + (100 * (p1 - p0) >= 0 ? "+" : "") + (100 * (p1 - p0)).toFixed(1) + " points</b>";
+  // Curve of the change in probability across baselines for this odds ratio.
+  const xs = scale(0, 1, PAD, W - 8), ys = scale(-0.5, 0.5, H - PAD, 10);
+  let path = ""; for (let i = 1; i < 100; i++) { const b = i / 100, o = b / (1 - b) * OR, d = o / (1 + o) - b; path += (i === 1 ? "M" : "L") + xs(b).toFixed(1) + " " + ys(d).toFixed(1); }
+  let s = '<svg viewBox="0 0 ' + W + " " + H + '"><text x="' + PAD + '" y="11" font-size="12" font-weight="bold">Change in probability for OR = ' + OR.toFixed(1) + ' at each baseline</text>';
+  s += '<line x1="' + PAD + '" x2="' + (W - 8) + '" y1="' + ys(0) + '" y2="' + ys(0) + '" stroke="#ccc"/><path d="' + path + '" fill="none" stroke="#111" stroke-width="2"/>';
+  s += '<circle cx="' + xs(p0) + '" cy="' + ys(p1 - p0) + '" r="5" fill="#c0392b"/>';
+  [-0.4, -0.2, 0.2, 0.4].forEach(v => s += '<text x="' + (PAD - 4) + '" y="' + (ys(v) + 4) + '" font-size="10" text-anchor="end">' + (v > 0 ? "+" : "") + Math.round(v * 100) + "</text>");
+  $("lPlot").innerHTML = s + axes(xs, ys, "baseline probability", "change (points)", 0, 1) + "</svg>";
+}
+["lOR","lP"].forEach(id => $(id).addEventListener("input", logit)); logit();
+
+// Section 8: quiz.
+const Q = [
+  ["The standard error of a mean from n = 100 with SD 20 is…", ["20", "2", "0.2"], 1, "SE = SD / √n = 20 / 10 = 2."],
+  ["What does 95% refer to in a 95% confidence interval?", ["The chance this interval contains the mean", "The share of intervals built this way that contain the true mean", "The share of the data inside the interval"], 1, "It is a property of the method over repeated samples."],
+  ["If there is truly no difference and α = 0.05, roughly what share of tests are significant?", ["0%", "5%", "50%"], 1, "Those significant results are Type I errors."],
+  ["Leaving out a confounder that raises both X and Y will usually…", ["Bias the coefficient on X upwards", "Leave it unchanged", "Make it exactly zero"], 0, "X picks up part of the confounder's effect."],
+  ["An odds ratio of 2 always means the probability…", ["Doubles", "Rises by a fixed number of points", "Rises, by an amount that depends on the baseline"], 2, "Report marginal effects to show the change in probability."]
+];
+$("quiz").innerHTML = Q.map((q, i) => "<fieldset><legend>" + (i + 1) + ". " + q[0] + "</legend>" + q[1].map((o, j) => '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + o + "</label>").join("") + "</fieldset>").join("") + '<button id="qBtn">Check answers</button>';
+$("qBtn").onclick = () => {
+  let right = 0, out = "";
+  Q.forEach((q, i) => { const c = document.querySelector('input[name="q' + i + '"]:checked'); const ok = c && +c.value === q[2]; if (ok) right++; out += "<p><b>" + (i + 1) + ".</b> " + (ok ? '<span class="good">Correct.</span> ' : '<span class="bad">Not quite.</span> ') + q[3] + "</p>"; });
+  $("quizOut").innerHTML = "<p><b>" + right + " of " + Q.length + " correct.</b></p>" + out;
+};
+</script>
+</body>
+</html>

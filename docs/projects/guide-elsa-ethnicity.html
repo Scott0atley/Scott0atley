@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ethnicity in ELSA: an interactive guide | Scott Oatley</title>
+<meta name="description" content="Interactive guide to the report Detailed Roadmap of Ethnicity Data Collection in the English Longitudinal Study of Ageing: which waves record what, carrying values forward and back, gains in sample size, and which waves to use.">
+<link rel="stylesheet" href="../papers/guide.css">
+<style>
+  .back { font-size:14px; margin-bottom:18px; display:inline-block; }
+  .wavegrid td, .wavegrid th { text-align:center; padding:6px 4px; }
+  .wavegrid td.y { background:#111; color:#fff; cursor:pointer; }
+  .wavegrid td.h { background:#999; color:#fff; cursor:pointer; }
+  .wavegrid td.r { background:#2e7d6b; color:#fff; cursor:pointer; }
+  .wavegrid td.n { color:#bbb; }
+  .wavegrid td.on { outline:3px solid var(--red); }
+  .person td { text-align:center; padding:6px 4px; min-width:34px; }
+  .person td.miss { color:#bbb; }
+  .person td.fwd { background:#e3efe9; }
+  .person td.bwd { background:#f6e7d8; }
+  .bar { height:16px; display:inline-block; vertical-align:middle; background:var(--ink); }
+  .bar.g { background:var(--teal); }
+  .kv { display:flex; flex-wrap:wrap; gap:8px 26px; font-size:16px; margin:6px 0 10px; }
+  ul.recs li { margin-bottom:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents">
+  <div class="navhead">Contents</div>
+  <ol>
+    <li><a href="#start">Start here</a></li>
+    <li><a href="#map">1. What each wave records</a></li>
+    <li><a href="#impute">2. Carrying values forward and back</a></li>
+    <li><a href="#gain">3. What it adds</a></li>
+    <li><a href="#fixed">4. Is ethnicity fixed?</a></li>
+    <li><a href="#trend">5. Ethnic minority share by wave</a></li>
+    <li><a href="#choose">6. Which waves to use</a></li>
+    <li><a href="#check">7. Check yourself</a></li>
+    <li><a href="#report">8. The report</a></li>
+  </ol>
+</nav>
+<main>
+<a class="back" href="index.html">&larr; Back to Projects</a>
+<header id="start">
+  <h1>Ethnicity in ELSA: an interactive guide</h1>
+  <p class="sub">How to build consistent ethnicity measures across twelve waves of the English Longitudinal Study of Ageing</p>
+  <p class="muted small">Based on Oatley, S. (2025) <em>ELSA and Ethnicity: Detailed Roadmap of Ethnicity Data Collection in the English Longitudinal Study of Ageing (ELSA)</em>.</p>
+  <p>Ethnic inequalities in later life are under-studied, mainly because most surveys have too few older ethnic minority respondents to analyse. ELSA asks about ethnicity at every wave, but the questions, variable names and level of detail change from wave to wave. The public data hold only a White / Non-White split, and early values were fed forward from the Health Survey for England. The report builds two consistent measures, a <b>dichotomised</b> one and a <b>detailed</b> one, and tests where each has enough cases to use.</p>
+  <p class="small muted">Detailed ethnicity is available to the ELSA team; the deposited UK Data Service files contain only the White / Non-White variable. Wave 11 figures use internal interim data.</p>
+</header>
+
+<h2 id="map"><span class="num">1</span>What each wave records</h2>
+<p>Click a cell to see the variable, its categories and how many people answered.</p>
+<div class="widget">
+  <div style="overflow-x:auto"><table class="wavegrid" id="grid"></table></div>
+  <p class="small"><span style="background:#999;color:#fff;padding:1px 6px">HSE</span> fed from the Health Survey for England · <span style="background:#111;color:#fff;padding:1px 6px">ELSA</span> collected by ELSA · <span style="background:#2e7d6b;color:#fff;padding:1px 6px">detailed</span> detailed categories</p>
+  <div class="readout" id="cell"></div>
+</div>
+
+<h2 id="impute"><span class="num">2</span>Carrying values forward and back</h2>
+<p>About 90% of ELSA members take part in more than one wave (only 10.57% appear just once). If ethnicity does not change, a value recorded at one wave can fill gaps at others:</p>
+<ul>
+  <li><b>LOCF</b> (last observation carried forward) fills a gap with the person’s most recent earlier answer;</li>
+  <li><b>LOCB</b> (last observation carried backward) fills a gap with their next later answer.</li>
+</ul>
+<p>The dichotomised measure uses LOCF; the detailed measure uses both. The detailed measure then borrows “White” from the dichotomised measure, the one category the two share. Step through an example person.</p>
+<div class="widget">
+  <div class="wtitle">One person’s detailed ethnicity across waves</div>
+  <div class="controls">
+    <label>Example <select id="pEx"><option value="a">Joins at wave 3, detailed answer at wave 6</option><option value="b">Answers “White” on the binary question only</option><option value="c">Leaves after wave 5</option></select></label>
+    <label class="inline"><input type="checkbox" id="pF"> LOCF</label>
+    <label class="inline"><input type="checkbox" id="pB"> LOCB</label>
+    <label class="inline"><input type="checkbox" id="pW"> borrow “White”</label>
+  </div>
+  <div style="overflow-x:auto"><table class="person" id="pTab"></table></div>
+  <div class="readout" id="pOut"></div>
+</div>
+
+<h2 id="gain"><span class="num">3</span>What it adds</h2>
+<p>Across all waves there are 132,294 person-wave observations. These are the counts with a usable ethnicity value at each step.</p>
+<div class="widget">
+  <div class="controls"><label>Measure <select id="gM"><option value="d">Dichotomised (White / Non-White)</option><option value="x">Detailed (five groups)</option></select></label></div>
+  <table id="gTab"></table>
+</div>
+
+<h2 id="fixed"><span class="num">4</span>Is ethnicity fixed?</h2>
+<p>Carrying answers across waves assumes a person’s ethnicity does not change. The report checks this by counting “identity switchers”: people whose recorded ethnicity differs between waves.</p>
+<table>
+  <thead><tr><th>Measure</th><th class="n">Observations</th><th class="n">Switcher observations</th><th class="n">Individuals</th></tr></thead>
+  <tbody>
+    <tr><td>Dichotomised</td><td class="n">132,128</td><td class="n">566</td><td class="n">74</td></tr>
+    <tr><td>Detailed</td><td class="n">129,373</td><td class="n">268</td><td class="n">43</td></tr>
+  </tbody>
+</table>
+<p>Of the 268 detailed switcher observations, 108 move between White and an ethnic minority group and 160 move between minority groups. Against more than 129,000 observations, switching is rare: ELSA members very largely report their ethnicity consistently, which supports the assumption.</p>
+
+<h2 id="trend"><span class="num">5</span>Ethnic minority share by wave</h2>
+<p>The share of Non-White respondents (dichotomised measure, after carrying values across waves) rises from wave 8 and reaches its highest level at wave 11. That follows ELSA’s efforts to boost ethnic minority numbers, including the wave 10 refreshment sample aged 50–93 and a revised ethnicity question matching the census.</p>
+<div class="widget">
+  <div class="controls"><label>Show <select id="tShow"><option value="pct">Percent Non-White</option><option value="n">Number Non-White</option></select></label></div>
+  <div id="tPlot"></div>
+  <p class="small muted">Wave 0 is HSE-based data for a much larger sample (26,787).</p>
+</div>
+
+<h2 id="choose"><span class="num">6</span>Which waves to use</h2>
+<p>The report sets a working threshold: a detailed measure is usable once every ethnic minority group exceeds 0.25% of valid responses in a wave, which happens from wave 4. Describe your analysis to get the report’s advice.</p>
+<div class="widget guide">
+  <fieldset><legend>Design</legend>
+    <label><input type="radio" name="c1" value="cs" checked> Cross-sectional</label><label><input type="radio" name="c1" value="long"> Longitudinal</label></fieldset>
+  <fieldset><legend>Detail needed</legend>
+    <label><input type="radio" name="c2" value="bin" checked> White / Non-White is enough</label><label><input type="radio" name="c2" value="det"> Separate ethnic groups</label></fieldset>
+  <div class="answer" id="cOut"></div>
+</div>
+
+<h2 id="check"><span class="num">7</span>Check yourself</h2>
+<div class="guide" id="quiz"></div>
+<div class="answer" id="quizOut"></div>
+
+<h2 id="report"><span class="num">8</span>The report</h2>
+<ul>
+  <li><a href="ELSA_Ethnicity_Report_SO_30062025_v2.pdf">ELSA and Ethnicity: Detailed Roadmap (PDF)</a></li>
+  <li>ELSA data: <a href="https://www.elsa-project.ac.uk/">elsa-project.ac.uk</a> and the UK Data Service</li>
+</ul>
+<footer>Scott Oatley. Everything on this page runs in your browser; figures are from the published report.</footer>
+</main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+
+// Section 1: wave map from report Table 1.
+const BIN = {0:["ethnic","HSE",26787,26729,"HSE 1998 data fed forward"],1:["aethnicr / fqethnr","HSE",12099,"6,742 (HSE) and 5,275 (ELSA)","HSE-fed and ELSA's own question"],2:["fqethnr","ELSA",9432,9421],3:["fqethnr","ELSA",9771,9765],4:["fqethnr","ELSA",11050,11035],5:["fqethnr","ELSA",10274,10265],6:["fqethnr","ELSA",10601,10597],7:["fqethnr","ELSA",9666,9658],8:["fqethnmr","ELSA",8445,8445],9:["fqethnmr","ELSA",8736,8728],10:["fqethnmr","ELSA",7589,7517,"Refreshment sample aged 50–93 added"],11:["fqethnmr","ELSA",7844,2339,"Interim data"]};
+const DET = {5:["fffqethn","White; Mixed; Black; Black British; Asian; Asian British; Any other group",10274,9981],6:["fffqethn","White; Mixed; Black; Black British; Asian; Asian British; Any other group",10601,9350],7:["fffqethn","White; Mixed; Black; Black British; Asian; Asian British; Any other group",9666,9123],11:["fqethnm","White; Mixed; Asian/Asian British; Black/African/Caribbean/Black British; Other",7844,2339]};
+let on = null;
+function grid() {
+  let h = "<tr><th>Wave</th>" + [...Array(12).keys()].map(w => "<th>" + w + "</th>").join("") + "</tr><tr><th>White / Non-White</th>";
+  for (let w = 0; w < 12; w++) h += '<td class="' + (BIN[w][1] === "HSE" ? "h" : "y") + (on === "b" + w ? " on" : "") + '" data-k="b' + w + '">✓</td>';
+  h += "</tr><tr><th>Detailed</th>";
+  for (let w = 0; w < 12; w++) h += DET[w] ? '<td class="r' + (on === "d" + w ? " on" : "") + '" data-k="d' + w + '">✓</td>' : '<td class="n">–</td>';
+  $("grid").innerHTML = h + "</tr>";
+  $("grid").querySelectorAll("td[data-k]").forEach(td => td.onclick = () => { on = td.dataset.k; grid(); show(); });
+}
+function show() {
+  if (!on) { $("cell").innerHTML = "Detailed ethnicity exists at waves 5, 6, 7 and 11 only."; return; }
+  const w = +on.slice(1), d = on[0] === "b" ? BIN[w] : DET[w];
+  $("cell").innerHTML = "<b>Wave " + w + "</b>: variable <code>" + d[0] + "</code>; " + (on[0] === "b" ? "values 1 = White, 2 = Non-White" : "values: " + d[1]) + "; wave sample " + d[2].toLocaleString() + "; valid answers " + d[3].toLocaleString() + (d[4] ? ". " + d[4] + "." : ".");
+}
+grid(); show();
+
+// Section 2: example person (waves 0-11). null = not interviewed, "" = interviewed but missing.
+const EX = {
+  a: {data: [null,null,null,"","","","Asian","","","","",""], bin: [null,null,null,"","Non-White","","Non-White","","","","",""]},
+  b: {data: [null,"","","","","","","","","","",""], bin: [null,"White","","","","","White","","","","White",""]},
+  c: {data: ["","","","","","Black","",null,null,null,null,null], bin: ["Non-White","","","","","Non-White","",null,null,null,null,null]}
+};
+function person() {
+  const ex = EX[$("pEx").value], v = ex.data.slice(), src = v.map(x => x ? "obs" : "");
+  if ($("pF").checked) { let last = ""; for (let i = 0; i < 12; i++) { if (v[i] === null) continue; if (v[i]) last = v[i]; else if (last) { v[i] = last; src[i] = "fwd"; } } }
+  if ($("pB").checked) { let next = ""; for (let i = 11; i >= 0; i--) { if (v[i] === null) continue; if (v[i] && src[i] !== "fwd") next = v[i]; else if (!v[i] && next) { v[i] = next; src[i] = "bwd"; } } }
+  if ($("pW").checked) for (let i = 0; i < 12; i++) if (v[i] === "" && ex.bin.some(b => b === "White")) { v[i] = "White"; src[i] = "fwd"; }
+  let h = "<tr><th>Wave</th>" + v.map((_, i) => "<th>" + i + "</th>").join("") + "</tr><tr><th>Detailed</th>";
+  v.forEach((x, i) => h += '<td class="' + (x === null ? "miss" : src[i] === "fwd" ? "fwd" : src[i] === "bwd" ? "bwd" : "") + '">' + (x === null ? "·" : x || "?") + "</td>");
+  $("pTab").innerHTML = h + "</tr>";
+  const filled = v.filter(x => x).length, interviewed = v.filter(x => x !== null).length;
+  $("pOut").innerHTML = "Usable values: <b>" + filled + "</b> of " + interviewed + " waves interviewed. <span class='small muted'>· not interviewed, ? missing; green carried forward, orange carried back.</span>";
+}
+["pEx","pF","pB","pW"].forEach(id => $(id).addEventListener("change", person)); person();
+
+// Section 3: gains from the report.
+const GAIN = {
+  d: [["Recorded answers (all waves)", 119774], ["After LOCF", 132128]],
+  x: [["Recorded answers (waves 5, 6, 7, 11)", 30793], ["After LOCF and LOCB", 66101], ["After borrowing “White” from the binary measure", 129404]]
+};
+function gain() {
+  const g = GAIN[$("gM").value];
+  $("gTab").innerHTML = '<thead><tr><th>Step</th><th class="n">Observations</th><th class="n">% of 132,294</th><th></th></tr></thead><tbody>' +
+    g.map((r, i) => "<tr><td>" + r[0] + '</td><td class="n">' + r[1].toLocaleString() + '</td><td class="n">' + (100 * r[1] / 132294).toFixed(1) + '</td><td><span class="bar' + (i ? " g" : "") + '" style="width:' + (r[1] / 132294 * 220) + 'px"></span></td></tr>').join("") + "</tbody>";
+}
+$("gM").addEventListener("change", gain); gain();
+
+// Section 5: trend (report Table 5, dichotomised after imputation).
+const NW = [[1131,4.2],[364,3.0],[229,2.4],[305,3.1],[380,3.4],[353,3.4],[414,3.9],[385,4.0],[317,3.8],[430,4.9],[462,6.1],[611,7.8]];
+function trend() {
+  const pct = $("tShow").value === "pct", vals = NW.map(r => pct ? r[1] : r[0]), mx = pct ? 9 : 1200;
+  const W = 440, H = 220, P = 36, bw = (W - P - 8) / 12;
+  let s = '<svg viewBox="0 0 ' + W + " " + H + '">';
+  vals.forEach((v, i) => { const h = (H - P - 12) * v / mx, x = P + i * bw; s += '<rect x="' + (x + 3) + '" y="' + (H - P - h) + '" width="' + (bw - 6) + '" height="' + h + '" fill="' + (i === 0 ? "#999" : i >= 10 ? "#2e7d6b" : "#111") + '"/><text x="' + (x + bw / 2) + '" y="' + (H - P - h - 4) + '" font-size="10" text-anchor="middle">' + (pct ? v.toFixed(1) : v) + '</text><text x="' + (x + bw / 2) + '" y="' + (H - P + 14) + '" font-size="11" text-anchor="middle">' + i + "</text>"; });
+  s += '<text x="' + (W / 2) + '" y="' + (H - 4) + '" font-size="11" text-anchor="middle">ELSA wave</text>';
+  $("tPlot").innerHTML = s + "</svg>";
+}
+$("tShow").addEventListener("change", trend); trend();
+
+// Section 6: advice from the report's conclusions.
+function choose() {
+  const d = document.querySelector('input[name="c1"]:checked').value, x = document.querySelector('input[name="c2"]:checked').value;
+  const r = [];
+  if (x === "bin") r.push("Use the derived <b>White / Non-White</b> measure. After carrying values forward it covers close to 100% of each wave’s sample, so any wave or combination of waves works.");
+  if (x === "det" && d === "cs") r.push("Use <b>wave 11</b>: it has the largest recorded ethnic minority share of any wave. Avoid waves 0–3 with a detailed measure; use the collapsed measure there.");
+  if (x === "det" && d === "long") r.push("Restrict the analysis to <b>waves 4–11</b>, where every minority group passes the 0.25% threshold. Check whether wave 4, with its lower minority share, has enough cases for your model.");
+  r.push("Whatever you choose, report how many cases each ethnic group has in your final, complete-records sample.");
+  $("cOut").innerHTML = '<ul class="recs">' + r.map(t => "<li>" + t + "</li>").join("") + "</ul>";
+}
+document.querySelectorAll('input[name^="c"]').forEach(i => i.addEventListener("change", choose)); choose();
+
+// Section 7: quiz.
+const Q = [
+  ["At which waves does ELSA record detailed ethnicity?", ["Every wave", "Waves 5, 6, 7 and 11", "Waves 0 to 3"], 1, "All other waves have only the White / Non-White question."],
+  ["What does LOCB do?", ["Drops people with missing ethnicity", "Fills a gap with the person's next later answer", "Uses the household's answer"], 1, "Last observation carried backward."],
+  ["What assumption justifies carrying ethnicity across waves?", ["Ethnicity is fixed for a person", "Attrition is random", "Waves are independent"], 0, "The switcher analysis finds very few changes, supporting it."],
+  ["For a longitudinal analysis by separate ethnic groups, which waves does the report recommend?", ["0–11", "4–11", "0–3"], 1, "From wave 4 every minority group exceeds 0.25% of valid responses."]
+];
+$("quiz").innerHTML = Q.map((q, i) => "<fieldset><legend>" + (i + 1) + ". " + q[0] + "</legend>" + q[1].map((o, j) => '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + o + "</label>").join("") + "</fieldset>").join("") + '<button id="qBtn">Check answers</button>';
+$("qBtn").onclick = () => {
+  let right = 0, out = "";
+  Q.forEach((q, i) => { const c = document.querySelector('input[name="q' + i + '"]:checked'); const ok = c && +c.value === q[2]; if (ok) right++; out += "<p><b>" + (i + 1) + ".</b> " + (ok ? '<span class="good">Correct.</span> ' : '<span class="bad">Not quite.</span> ') + q[3] + "</p>"; });
+  $("quizOut").innerHTML = "<p><b>" + right + " of " + Q.length + " correct.</b></p>" + out;
+};
+</script>
+</body>
+</html>

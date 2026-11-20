@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Surveys in Shiny: an interactive guide | Scott Oatley</title>
+<meta name="description" content="Interactive companion to the workshop Survey and Questionnaire Construction: the Shiny Package in R. Widgets, reactivity, storing responses in Google Sheets, consent, required questions and timing.">
+<link rel="stylesheet" href="../papers/guide.css">
+<style>
+  .back { font-size:14px; margin-bottom:18px; display:inline-block; }
+  .side { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .app { border:1px solid var(--rule); padding:14px; background:#fafafa; min-height:120px; }
+  .app label { display:block; margin:8px 0 4px; font-weight:bold; font-size:15px; }
+  .app input[type=text], .app input[type=number], .app input[type=date], .app select { font:inherit; font-size:15px; padding:4px 6px; border:1px solid #bbb; width:100%; max-width:320px; }
+  .app .opt { font-weight:normal; display:block; margin:2px 0; }
+  .styled { max-width:600px; margin:auto; padding:20px; font-family:Arial, sans-serif; background:#fff; }
+  .styled .q { font-size:18px; font-weight:bold; margin-top:20px; }
+  .styled .ast { color:red; margin-left:5px; font-weight:bold; }
+  .styled .submit { text-align:center; margin-top:30px; }
+  .styled .submit button { background:#4CAF50; border:none; padding:10px 20px; font-size:16px; }
+  .sheet { font-size:13px; }
+  .sheet td, .sheet th { padding:4px 6px; border:1px solid #ddd; }
+  .warnbox { border-left:3px solid var(--red); padding:8px 12px; background:#fdf3f2; margin:12px 0; }
+  pre.live { min-height:60px; }
+  @media (max-width:900px) { .side { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Contents">
+  <div class="navhead">Contents</div>
+  <ol>
+    <li><a href="#start">Start here</a></li>
+    <li><a href="#anatomy">1. Anatomy of an app</a></li>
+    <li><a href="#widgets">2. Widget workshop</a></li>
+    <li><a href="#store">3. Storing responses</a></li>
+    <li><a href="#secrets">4. Authentication and secrets</a></li>
+    <li><a href="#style">5. Making it look like a survey</a></li>
+    <li><a href="#full">6. The finished survey</a></li>
+    <li><a href="#deploy">7. Deploying</a></li>
+    <li><a href="#check">8. Check yourself</a></li>
+    <li><a href="#files">9. Workshop files</a></li>
+  </ol>
+</nav>
+<main>
+<a class="back" href="index.html">&larr; Back to Training</a>
+<header id="start">
+  <h1>Surveys in Shiny: an interactive guide</h1>
+  <p class="sub">Build a web survey in R that stores structured responses, step by step</p>
+  <p class="muted small">Companion to the workshop <em>Survey and Questionnaire Construction: the Shiny Package in R</em>, Edinburgh Futures Institute, November 2024.</p>
+  <p>Shiny turns R code into a web application. This workshop uses it to build a survey that does more than off-the-shelf tools: it asks for consent first, refuses to submit until required questions are answered, records how long each person took, and writes each response as a new row in a Google Sheet. Every widget below runs in your browser and shows the R code that would produce it.</p>
+</header>
+
+<h2 id="anatomy"><span class="num">1</span>Anatomy of an app</h2>
+<p>Every Shiny app lives in one <code>app.R</code> file, in its own folder, and has three parts:</p>
+<ul>
+  <li><b>ui</b>: what the app looks like (its “face”);</li>
+  <li><b>server</b>: the logic that reacts to what the user does;</li>
+  <li><b>shinyApp(ui = ui, server = server)</b>: the call that joins them and runs the app.</li>
+</ul>
+<p>The key idea is <b>reactivity</b>: when an input changes, every output that depends on it re-runs on its own. Move the slider in this copy of the workshop’s first app.</p>
+<div class="widget">
+  <div class="wtitle">Basic Shiny App Example</div>
+  <div class="side">
+    <div class="app">
+      <label for="num">Choose a number:</label>
+      <input type="range" id="num" min="1" max="100" value="50" style="width:100%">
+      <p id="numOut" class="readout"></p>
+    </div>
+<pre>ui &lt;- fluidPage(
+  titlePanel("Basic Shiny App Example"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("num", "Choose a number:",
+                  min = 1, max = 100, value = 50)),
+    mainPanel(textOutput("result"))))
+
+server &lt;- function(input, output) {
+  output$result &lt;- renderText({
+    paste("Your number multiplied by 2 is:",
+          input$num * 2)
+  })
+}
+
+shinyApp(ui = ui, server = server)</pre>
+  </div>
+  <p class="try"><b>Notice</b><code>input$num</code> in the server is the slider called <code>"num"</code> in the ui. That shared name is how the two halves talk to each other.</p>
+</div>
+
+<h2 id="widgets"><span class="num">2</span>Widget workshop</h2>
+<p>Asking every question as free text gives you messy data. <b>Widgets</b> fix the form of the answer. Every widget takes the same first two arguments, an <b>id</b> (used in the server as <code>input$id</code>) and a <b>label</b> (shown to the user), then a default. Choose a widget, edit its label, and see both the widget and its code.</p>
+<div class="widget">
+  <div class="wtitle">Try each widget</div>
+  <div class="controls">
+    <label>Widget <select id="wType"></select></label>
+    <label>Label <input id="wLabel" type="text" style="font:inherit;padding:4px 6px;width:280px"></label>
+  </div>
+  <div class="side">
+    <div class="app" id="wApp"></div>
+    <pre class="live" id="wCode"></pre>
+  </div>
+  <p class="small" id="wUse"></p>
+</div>
+<p><b>A design point from the workshop:</b> for radio buttons use <code>selected = 0</code>, so no answer is pre-selected and nobody is nudged towards one.</p>
+
+<h2 id="store"><span class="num">3</span>Storing responses</h2>
+<p>Saving with <code>write.csv()</code> only works on your own computer. Once the app is hosted on shinyapps.io it runs on a remote server, so responses need to go somewhere remote. The workshop uses <b>Google Sheets</b> through the <code>googlesheets4</code> package: free, structured, and easy to export as .csv.</p>
+<p>Four pieces of server code do the work:</p>
+<table>
+  <thead><tr><th>Piece</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><code>fields &lt;- c("name", "used_shiny", "r_num_years")</code></td><td>Names the inputs to save, which become the sheet’s columns</td></tr>
+    <tr><td><code>formData &lt;- reactive(...)</code></td><td>Collects the current value of each field into one record</td></tr>
+    <tr><td><code>save_data_gsheets()</code> with <code>sheet_append()</code></td><td>Adds that record as a new row, without touching earlier rows</td></tr>
+    <tr><td><code>observeEvent(input$submit, ...)</code></td><td>Runs the save only when Submit is clicked</td></tr>
+  </tbody>
+</table>
+<div class="widget">
+  <div class="wtitle">Submit and watch the sheet grow</div>
+  <div class="side">
+    <div class="app">
+      <label for="sName">Name</label><input type="text" id="sName" value="Ada">
+      <label class="opt"><input type="checkbox" id="sUsed"> I've built a Shiny app in R before</label>
+      <label for="sYears">Number of years using R: <span id="sYearsLab">2</span></label><input type="range" id="sYears" min="0" max="25" value="2" style="width:100%">
+      <p><button id="sSubmit">Submit</button> <button id="sClear" class="ghost">Clear sheet</button></p>
+    </div>
+    <div><p class="small muted">Google Sheet (simulated)</p><table class="sheet" id="sSheet"></table></div>
+  </div>
+</div>
+
+<h2 id="secrets"><span class="num">4</span>Authentication and secrets</h2>
+<p>Every visitor to your app needs to write to the sheet, but none of them should be able to log in as you. The answer is a <b>service account</b>: a robot Google account that the app authenticates as.</p>
+<ol>
+  <li>In Google Cloud Console, go to IAM and Admin, then Service Accounts, and create one.</li>
+  <li>Create a key for it in <b>JSON</b> format and download it.</li>
+  <li>Copy the service account’s email from the JSON file and share your Google Sheet with that email as an editor. Enable the Google Sheets API for the project.</li>
+  <li>In your app’s folder create a <code>.secrets</code> folder, put the key there as <code>service-account.json</code>, and authenticate with <code>gs4_auth(path = ".secrets/service-account.json")</code>.</li>
+</ol>
+<div class="warnbox"><b>Keep these private:</b> the JSON key and the sheet’s URL (<code>SHEET_ID</code>). Anyone with either can read or change your respondents’ data. Never put them in a public repository, a slide or a handout. Sharing the sheet with the service account is enough; you do not need to make it editable by “anyone with the link”.</div>
+
+<h2 id="style"><span class="num">5</span>Making it look like a survey</h2>
+<p>An unstyled app puts everything on the left and looks unfinished. The workshop adds a small style sheet with <code>tags$style(HTML("..."))</code> and wraps each question in <code>div(class = ...)</code>. Toggle the styling to see the difference.</p>
+<div class="widget">
+  <div class="wtitle">Styling on and off</div>
+  <div class="controls"><label class="inline"><input type="checkbox" id="stOn" checked> apply survey styles</label></div>
+  <div class="app" id="stApp">
+    <div class="q">Name<span class="ast">*</span></div><input type="text" placeholder="Enter your name">
+    <div class="q">This course seems to be worth my time<span class="ast">*</span></div>
+    <label class="opt"><input type="radio" name="st"> YES!</label><label class="opt"><input type="radio" name="st"> Not Sure</label><label class="opt"><input type="radio" name="st"> No :(</label>
+    <div class="submit"><button>Submit Survey</button></div>
+  </div>
+<pre>div(class = "survey-question",
+    HTML("Name&lt;span class='mandatory-asterisk'&gt;*&lt;/span&gt;")),
+div(class = "survey-input",
+    textInput("name", label = NULL, placeholder = "Enter your name"))</pre>
+  <p class="small">Six classes do the work: <code>survey-container</code> (centred, 600px wide), <code>survey-question</code> (bold 18px), <code>survey-input</code>, <code>btn-primary</code> (green button), <code>submit-container</code> and <code>mandatory-asterisk</code> (the red star).</p>
+</div>
+
+<h2 id="full"><span class="num">6</span>The finished survey</h2>
+<p>The final app adds three pieces of logic:</p>
+<ul>
+  <li><b>Consent first.</b> <code>conditionalPanel()</code> shows a consent page. With consent the survey appears; without it, a thank-you page.</li>
+  <li><b>Required questions.</b> <code>shinyjs::disable("submit")</code> greys out the button until a reactive check finds every starred question answered.</li>
+  <li><b>Timing.</b> A small JavaScript timer starts when the app connects and sends the seconds taken to <code>input$time_spent</code> on submit, which helps spot rushed answers or bots.</li>
+</ul>
+<p>The “how did you travel” checkboxes are also split into one 0/1 column per option, which is much easier to analyse than a list. Try the full flow.</p>
+<div class="widget">
+  <div class="wtitle">Consent → survey → stored row</div>
+  <div class="app styled" id="fApp"></div>
+  <p class="small muted">Stored rows (simulated sheet)</p>
+  <div style="overflow-x:auto"><table class="sheet" id="fSheet"></table></div>
+  <p class="try"><b>Try this</b>Decline consent once, then restart. Leave the travel question blank and watch the Submit button. Submit quickly, then slowly, and compare <code>time_spent</code>.</p>
+</div>
+
+<h2 id="deploy"><span class="num">7</span>Deploying</h2>
+<p>Run the app locally with the Run App button, then publish it to shinyapps.io with the Publish button. If publishing fails (for example, shinyapps.io mistakes the app for a Quarto document), deploy from the console and list the secrets folder so the key travels with the app:</p>
+<pre>rsconnect::deployApp(appDir = "your_app",
+                     appPrimaryDoc = "app.R",
+                     appFiles = c("app.R", ".secrets/"))</pre>
+
+<h2 id="check"><span class="num">8</span>Check yourself</h2>
+<div class="guide" id="quiz"></div>
+<div class="answer" id="quizOut"></div>
+
+<h2 id="files"><span class="num">9</span>Workshop files</h2>
+<ul>
+  <li><a href="shinytrainingblog.pdf">Training materials (PDF)</a> and <a href="shinytraining.pptx">slides</a></li>
+  <li>Example code, building the app step by step:
+    <a href="examplecode1_SO_21112024.R">#1</a>, <a href="examplecode2_SO_21112024.R">#2</a>, <a href="examplecode3_SO_21112024.R">#3</a>, <a href="examplecode4_SO_21112024.R">#4</a>,
+    <a href="examplecode5_SO_22112024.R">#5</a>, <a href="examplecode6_SO_22112024.R">#6</a>, <a href="examplecode7_SO_22112024.R">#7</a>, <a href="examplecode8_SO_22112024.R">#8</a></li>
+  <li><a href="custom.css">Example .css</a> and <a href="customjavascript.js">example .js</a></li>
+  <li>See it running: <a href="https://scottoatley.shinyapps.io/trainingapp/">the survey app on shinyapps.io</a></li>
+</ul>
+<footer>Scott Oatley. Everything on this page runs in your browser; nothing you type is sent anywhere.</footer>
+</main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// Section 1: reactive slider.
+function num() { $("numOut").textContent = "Your number multiplied by 2 is: " + ($("num").value * 2); }
+$("num").addEventListener("input", num); num();
+
+// Section 2: widget workshop. Each: id, default label, html builder, R code builder, use.
+const TRAVEL = ["Walk","Cycle","Car","Bus","Tram","Other"];
+const W = {
+  textInput: ["name", "Name", l => '<label>' + l + '</label><input type="text">', l => 'textInput("name", "' + l + '", "")', "Free text, such as a name. Use sparingly: free text is hard to analyse."],
+  checkboxInput: ["used_shiny", "I've built a Shiny app in R before", l => '<label class="opt"><input type="checkbox"> ' + l + '</label>', l => 'checkboxInput("used_shiny", "' + l + '", FALSE)', "A single yes/no question. Stored as TRUE or FALSE."],
+  sliderInput: ["r_num_years", "Number of years using R", l => '<label>' + l + ': <span id="slv">2</span></label><input type="range" min="0" max="25" value="2" oninput="document.getElementById(\'slv\').textContent=this.value" style="width:100%">', l => 'sliderInput("r_num_years", "' + l + '", 0, 25, 2, ticks = FALSE)', "A number within a fixed range."],
+  dateInput: ["date", "Date of Birth", l => '<label>' + l + '</label><input type="date" value="2014-01-01">', l => 'dateInput("date", "' + l + '", value = "2014-01-01")', "A single date."],
+  checkboxGroupInput: ["checkGroup", "How did you get to work today?", l => '<label>' + l + '</label>' + TRAVEL.map(t => '<label class="opt"><input type="checkbox"> ' + t + '</label>').join(""), l => 'checkboxGroupInput("checkGroup", "' + l + '",\n  choices = list("Walk" = "walk", "Cycle" = "cycle",\n                 "Car" = "car", "Bus" = "bus",\n                 "Tram" = "tram", "Other" = "other"))', "Several answers allowed (tick all that apply)."],
+  dateRangeInput: ["dates", "How long have you lived in current flat/house?", l => '<label>' + l + '</label><input type="date"> to <input type="date">', l => 'dateRangeInput("dates", "' + l + '")', "A start and an end date."],
+  numericInput: ["num", "Number of Rooms in Flat/House", l => '<label>' + l + '</label><input type="number" value="1">', l => 'numericInput("num", "' + l + '", value = 1)', "Accepts numbers only."],
+  radioButtons: ["radio", "Are you enjoying yourself?", l => '<label>' + l + '</label>' + ["YES!","Not Sure","No :("].map(t => '<label class="opt"><input type="radio" name="rb"> ' + t + '</label>').join(""), l => 'radioButtons("radio", "' + l + '",\n  choices = list("YES!" = 1, "Not Sure" = 2, "No :(" = 3),\n  selected = 0)', "Exactly one answer from a short list. selected = 0 leaves it blank."],
+  selectInput: ["select", "What is your favourite area of Scotland?", l => '<label>' + l + '</label><select><option>Highlands and Moray</option><option>Perthshire</option><option>North East</option><option>Fife and Kinross</option><option>Edinburgh</option><option>Borders</option><option>Glasgow</option></select>', l => 'selectInput("select", "' + l + '",\n  choices = list("Highlands and Moray" = 1, "Perthshire" = 2,\n                 "North East" = 3, ...),\n  selected = 1)', "One answer from a long list, as a drop-down."],
+  fileInput: ["file", "Upload a funny meme here", l => '<label>' + l + '</label><input type="file">', l => 'fileInput("file", "' + l + '")', "Upload a file. In the finished app only the file name is stored."]
+};
+$("wType").innerHTML = Object.keys(W).map(k => "<option>" + k + "</option>").join("");
+function widget(resetLabel) {
+  const w = W[$("wType").value];
+  if (resetLabel) $("wLabel").value = w[1];
+  const l = esc($("wLabel").value);
+  $("wApp").innerHTML = w[2](l);
+  $("wCode").textContent = w[3]($("wLabel").value);
+  $("wUse").innerHTML = "<b>Use:</b> " + w[4] + " In the server this answer is <code>input$" + w[0] + "</code>.";
+}
+$("wType").addEventListener("change", () => widget(true)); $("wLabel").addEventListener("input", () => widget(false)); widget(true);
+
+// Section 3: simulated sheet.
+let rows = [];
+function drawSheet() {
+  $("sSheet").innerHTML = "<tr><th>name</th><th>used_shiny</th><th>r_num_years</th></tr>" + (rows.length ? rows.map(r => "<tr><td>" + esc(r[0]) + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td></tr>").join("") : '<tr><td colspan="3" class="muted">No responses yet</td></tr>');
+}
+$("sYears").addEventListener("input", () => $("sYearsLab").textContent = $("sYears").value);
+$("sSubmit").onclick = () => { rows.push([$("sName").value, $("sUsed").checked ? "TRUE" : "FALSE", $("sYears").value]); drawSheet(); };
+$("sClear").onclick = () => { rows = []; drawSheet(); };
+drawSheet();
+
+// Section 5: styling toggle.
+function styleToggle() { $("stApp").className = "app" + ($("stOn").checked ? " styled" : ""); }
+$("stOn").addEventListener("change", styleToggle); styleToggle();
+
+// Section 6: full survey flow.
+let fRows = [], startTime = 0;
+function consentPage() {
+  $("fApp").innerHTML = '<h3 style="text-align:center">Survey Consent Form</h3><p>Thank you for considering participating in our survey. Your responses will be anonymised and used solely for academic purposes.</p><label class="opt"><input type="checkbox" id="fConsent"> I agree to participate in the survey and understand my data will be anonymised.</label><div class="submit"><button id="fCont">Continue</button></div>';
+  $("fCont").onclick = () => $("fConsent").checked ? surveyPage() : thanksPage();
+}
+function thanksPage() {
+  $("fApp").innerHTML = '<p style="text-align:center;font-size:22px;font-weight:bold;margin-top:30px">Thank you for your time. Have a great day!</p><div class="submit"><button id="fRestart" class="ghost">Restart demo</button></div>';
+  $("fRestart").onclick = consentPage;
+}
+function surveyPage() {
+  startTime = Date.now();
+  $("fApp").innerHTML = '<h3 style="text-align:center">Survey Form</h3>' +
+    '<div class="q">Name<span class="ast">*</span></div><input type="text" id="fName" placeholder="Enter your name">' +
+    '<div class="q">How did you travel here today? (Tick all that apply)<span class="ast">*</span></div>' + TRAVEL.map(t => '<label class="opt"><input type="checkbox" class="fTr" value="' + t.toLowerCase() + '"> ' + t + "</label>").join("") +
+    '<div class="q">Number of years using R<span class="ast">*</span>: <span id="fYl">2</span></div><input type="range" id="fYears" min="0" max="25" value="2" style="width:100%">' +
+    '<div class="q">This course seems to be worth my time<span class="ast">*</span></div>' + ["YES!","Not Sure","No :("].map((t, i) => '<label class="opt"><input type="radio" name="fRadio" value="' + (i + 1) + '"> ' + t + "</label>").join("") +
+    '<div class="q">Tick if you have read this message<span class="ast">*</span></div><label class="opt"><input type="checkbox" id="fRead"> Read</label>' +
+    '<div class="submit"><button id="fSubmit" disabled>Submit Survey</button></div><p class="small muted" id="fWhy"></p>';
+  const check = () => {
+    const missing = [];
+    if (!$("fName").value.trim()) missing.push("name");
+    if (!document.querySelectorAll(".fTr:checked").length) missing.push("travel");
+    if (!document.querySelector('input[name="fRadio"]:checked')) missing.push("worth my time");
+    $("fSubmit").disabled = missing.length > 0;
+    $("fWhy").textContent = missing.length ? "Submit is disabled until answered: " + missing.join(", ") : "All required questions answered.";
+  };
+  $("fApp").querySelectorAll("input").forEach(i => i.addEventListener("input", check));
+  $("fApp").querySelectorAll("input").forEach(i => i.addEventListener("change", check));
+  $("fYears").addEventListener("input", () => $("fYl").textContent = $("fYears").value);
+  check();
+  $("fSubmit").onclick = () => {
+    const tr = [...document.querySelectorAll(".fTr")].map(c => c.checked ? 1 : 0);
+    fRows.push([$("fName").value, $("fYears").value, document.querySelector('input[name="fRadio"]:checked').value, $("fRead").checked ? 1 : 0, ((Date.now() - startTime) / 1000).toFixed(1)].concat(tr));
+    drawF(); thanksPage();
+  };
+}
+function drawF() {
+  $("fSheet").innerHTML = "<tr><th>name</th><th>r_num_years</th><th>time_worth</th><th>read</th><th>time_spent</th>" + TRAVEL.map(t => "<th>" + t.toLowerCase() + "</th>").join("") + "</tr>" +
+    (fRows.length ? fRows.map(r => "<tr>" + r.map(v => "<td>" + esc(v) + "</td>").join("") + "</tr>").join("") : '<tr><td colspan="11" class="muted">No responses yet</td></tr>');
+}
+consentPage(); drawF();
+
+// Section 8: quiz.
+const Q = [
+  ["How does the server read the slider created with sliderInput(\"num\", ...)?", ["output$num", "input$num", "ui$num"], 1, "The id given in the ui becomes input$id in the server."],
+  ["Why not save responses with write.csv() once the app is online?", ["It is too slow", "It writes to the server the app runs on, not anywhere you can collect from", "It cannot save numbers"], 1, "A hosted app runs remotely; remote storage such as Google Sheets is needed."],
+  ["Which should never appear in public code or handouts?", ["The fields vector", "The service account JSON key and the sheet URL", "The widget labels"], 1, "Either one gives access to respondents' data."],
+  ["What does recording time_spent help with?", ["Making the app faster", "Spotting rushed responses or bots", "Deploying to shinyapps.io"], 1, "A survey finished in a few seconds is unlikely to be genuine."]
+];
+$("quiz").innerHTML = Q.map((q, i) => "<fieldset><legend>" + (i + 1) + ". " + esc(q[0]) + "</legend>" + q[1].map((o, j) => '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + esc(o) + "</label>").join("") + "</fieldset>").join("") + '<button id="qBtn">Check answers</button>';
+$("qBtn").onclick = () => {
+  let right = 0, out = "";
+  Q.forEach((q, i) => { const c = document.querySelector('input[name="q' + i + '"]:checked'); const ok = c && +c.value === q[2]; if (ok) right++; out += "<p><b>" + (i + 1) + ".</b> " + (ok ? '<span class="good">Correct.</span> ' : '<span class="bad">Not quite.</span> ') + q[3] + "</p>"; });
+  $("quizOut").innerHTML = "<p><b>" + right + " of " + Q.length + " correct.</b></p>" + out;
+};
+</script>
+</body>
+</html>

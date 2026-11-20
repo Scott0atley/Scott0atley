@@ -137,14 +137,14 @@
     "href": "projects/index.html",
     "title": "Projects",
     "section": "",
-    "text": "Here is a list of my web applications, data projects, and other software solutions:\n\n\nDescription:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with teh ability to test how different measure of social class are constructed and used in a survey environment.\n-View Project\n-Source Code\n\n\n\n\nDescription:\nThis web application was designed to aid in conference presentation, it hosts every figure/graph/table in a given paper presentation. The app itself uses R code using the Shiny package.\n-View Project\n\n\n\n\nDescription:\nThis web application was designed to showcase the verstalilty of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote google sheets.\n-View Project\n\n\n\n\nDescription:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option and generates a new variable that represents the computed social stratification variable.\n-View Project\n\n\n\n\nDescription:\nDetailed Roadmap of Ethnicity Data Collection in the English Longitudinal Study of Ageing (ELSA)\n-View Project"
+    "text": "Here is a list of my web applications, data projects, and other software solutions:\n\n\nDescription:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with the ability to test how different measures of social class are constructed and used in a survey environment.\n-View Project\n-Source Code\n\n\n\n\nDescription:\nThis web application was designed to aid in conference presentation, it hosts every figure/graph/table in a given paper presentation. The app itself uses R code using the Shiny package.\n-View Project\n\n\n\n\nDescription:\nThis web application was designed to showcase the versatility of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote Google Sheet.\n-View Project\n\n\n\n\nDescription:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option) and generates a new variable that represents the computed social stratification variable.\n-View Project\n\n\n\n\nDescription:\nDetailed Roadmap of Ethnicity Data Collection in the English Longitudinal Study of Ageing (ELSA)\n-View Project"
   },
   {
     "objectID": "projects/index.html#project-1-class-calculator",
     "href": "projects/index.html#project-1-class-calculator",
     "title": "Projects",
     "section": "",
-    "text": "Description:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with teh ability to test how different measure of social class are constructed and used in a survey environment.\n-View Project\n-Source Code"
+    "text": "Description:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with the ability to test how different measures of social class are constructed and used in a survey environment.\n-View Project\n-Source Code"
   },
   {
     "objectID": "projects/index.html#project-2-shiny-conference-appendix-app",
@@ -158,7 +158,7 @@
     "href": "projects/index.html#project-3-remote-survey-hosting-and-structured-data-storage-app",
     "title": "Projects",
     "section": "",
-    "text": "Description:\nThis web application was designed to showcase the verstalilty of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote google sheets.\n-View Project"
+    "text": "Description:\nThis web application was designed to showcase the versatility of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote Google Sheet.\n-View Project"
   },
   {
     "objectID": "teaching/index.html",
@@ -270,7 +270,7 @@
     "href": "projects/index.html#project-4-socstrat-a-social-stratification-command-in-stata",
     "title": "Projects",
     "section": "",
-    "text": "Description:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option and generates a new variable that represents the computed social stratification variable.\n-View Project"
+    "text": "Description:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option) and generates a new variable that represents the computed social stratification variable.\n-View Project"
   },
   {
     "objectID": "projects/index.html#project-5-dervied-detailed-ethnicity-measure-for-english-longitudinal-study-of-ageing-elsa",
@@ -536,14 +536,14 @@
     "href": "docs/projects/index.html",
     "title": "Projects",
     "section": "",
-    "text": "Here is a list of my web applications, data projects, and other software solutions:\n\n\nDescription:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with teh ability to test how different measure of social class are constructed and used in a survey environment.\n-View Project\n-Source Code\n\n\n\n\nDescription:\nThis web application was designed to aid in conference presentation, it hosts every figure/graph/table in a given paper presentation. The app itself uses R code using the Shiny package.\n-View Project\n\n\n\n\nDescription:\nThis web application was designed to showcase the verstalilty of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote google sheets.\n-View Project\n\n\n\n\nDescription:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option and generates a new variable that represents the computed social stratification variable.\n-View Project"
+    "text": "Here is a list of my web applications, data projects, and other software solutions:\n\n\nDescription:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with the ability to test how different measures of social class are constructed and used in a survey environment.\n-View Project\n-Source Code\n\n\n\n\nDescription:\nThis web application was designed to aid in conference presentation, it hosts every figure/graph/table in a given paper presentation. The app itself uses R code using the Shiny package.\n-View Project\n\n\n\n\nDescription:\nThis web application was designed to showcase the versatility of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote Google Sheet.\n-View Project\n\n\n\n\nDescription:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option) and generates a new variable that represents the computed social stratification variable.\n-View Project"
   },
   {
     "objectID": "docs/projects/index.html#project-1-class-calculator",
     "href": "docs/projects/index.html#project-1-class-calculator",
     "title": "Projects",
     "section": "",
-    "text": "Description:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with teh ability to test how different measure of social class are constructed and used in a survey environment.\n-View Project\n-Source Code"
+    "text": "Description:\nThis web application was designed to aid in teaching Sociology students about the operationalisation of social class. It was built using R and the Shiny package, and it provides users with the ability to test how different measures of social class are constructed and used in a survey environment.\n-View Project\n-Source Code"
   },
   {
     "objectID": "docs/projects/index.html#project-2-shiny-conference-appendix-app",
@@ -557,14 +557,14 @@
     "href": "docs/projects/index.html#project-3-remote-survey-hosting-and-structured-data-storage-app",
     "title": "Projects",
     "section": "",
-    "text": "Description:\nThis web application was designed to showcase the verstalilty of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote google sheets.\n-View Project"
+    "text": "Description:\nThis web application was designed to showcase the versatility of Shiny, being able to construct surveys and save user inputs using google cloud servers to store in a remote Google Sheet.\n-View Project"
   },
   {
     "objectID": "docs/projects/index.html#project-4-socstrat-a-social-stratification-command-in-stata",
     "href": "docs/projects/index.html#project-4-socstrat-a-social-stratification-command-in-stata",
     "title": "Projects",
     "section": "",
-    "text": "Description:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option and generates a new variable that represents the computed social stratification variable.\n-View Project"
+    "text": "Description:\nStata program to compute and analyze social stratification variables. socstrat is designed to calculate and analyze social stratification variables based on two variables: the National Statistics Socio-Economic Classification (NS-SEC) or Registrar General’s Social Class (RGSC). The command requires at least two variables to define the standard occupation classification (SOC) code and the employment status (via the socstatus() option) and generates a new variable that represents the computed social stratification variable.\n-View Project"
   },
   {
     "objectID": "presentations/Gender_Performance_SO_10032025_V2.html",
@@ -774,7 +774,7 @@
     "href": "training/index.html#handling-missing-data-a-practical-introduction-to-techniques-and-methods",
     "title": "Training",
     "section": "Handling Missing Data: A Practical Introduction To Techniques And Methods",
-    "text": "Handling Missing Data: A Practical Introduction To Techniques And Methods\nType: Workshop Delivered\nDate: May 13th 2025 Location: Edinburgh Futures Institute, Edinburgh, Scotland\nDescription: This training event will cover teaching users about the Handling Missing Data techniques and how to deploy them into their own reserach agendas using popular data analyst software: Stata and R. Jupyter Notebooks, PowerPoint slide decks, and reference lists are provided. This training is split into four sessions, each increasing in speciality.\n\nView PowerPoint\n\nView Jupyter Notebook Handling Missing Data Comparison Methods\n\nView Jupyter Notebook Handling Missing Data Simulation\n\nView Reference List for Handling Missing Data Methods\n\nView Session #1 STATA\n\nView Session #1 R\n\nView Session #2 STATA\n\nView Session #2 R\n\nView Session #3 STATA\n\nView Session #3 R\n\nView Session #4 STATA\n\nView Session #4 R"
+    "text": "Handling Missing Data: A Practical Introduction To Techniques And Methods\nType: Workshop Delivered\nDate: May 13th 2025 Location: Edinburgh Futures Institute, Edinburgh, Scotland\nDescription: This training event will cover teaching users about the Handling Missing Data techniques and how to deploy them into their own research agendas using popular data analysis software: Stata and R. Jupyter Notebooks, PowerPoint slide decks, and reference lists are provided. This training is split into four sessions, each increasing in speciality.\n\nView PowerPoint\n\nView Jupyter Notebook Handling Missing Data Comparison Methods\n\nView Jupyter Notebook Handling Missing Data Simulation\n\nView Reference List for Handling Missing Data Methods\n\nView Session #1 STATA\n\nView Session #1 R\n\nView Session #2 STATA\n\nView Session #2 R\n\nView Session #3 STATA\n\nView Session #3 R\n\nView Session #4 STATA\n\nView Session #4 R"
   },
   {
     "objectID": "presentations/index.html#synthetic-cohort-construction-using-linked-administrative-data-with-the-ukhls",
@@ -803,5 +803,33 @@
     "title": "Presentations",
     "section": "",
     "text": "Conference: British and Irish Longitudinal Studies of Ageing (BILS) meeting\nDate: 2026\nLocation: London, England\n\nView Slides\n\nNOTE: due to data safe haven restrictions replication materials are currently unavailable. This will be rectified in the future."
+  },
+  {
+    "objectID": "papers/index.html",
+    "href": "papers/index.html",
+    "title": "Papers",
+    "section": "",
+    "text": "Published and forthcoming papers, newest first, with links to each paper, its code and an interactive guide to its design and method."
+  },
+  {
+    "objectID": "papers/index.html#measuring-social-class",
+    "href": "papers/index.html#measuring-social-class",
+    "title": "Papers",
+    "section": "Measuring social class (2027)",
+    "text": "Oatley, S. (2027) Measuring social class. Encyclopedia of Measurement in Social Sciences, 2nd edn, Volume 3. RGSC, EGP, NS-SEC, ESeC, micro-classes, Wright, capitals assets and resources, sensitivity analysis. Interactive guide."
+  },
+  {
+    "objectID": "papers/index.html#measuring-educational-attainment",
+    "href": "papers/index.html#measuring-educational-attainment",
+    "title": "Papers",
+    "section": "Measuring educational attainment (2027)",
+    "text": "Oatley, S. and Costello, P. (2027) Measuring educational attainment. Encyclopedia of Measurement in Social Sciences. Years of education, highest qualification, NVQ, CASMIN, ISCED, scaling. Interactive guide."
+  },
+  {
+    "objectID": "papers/index.html#socstrat",
+    "href": "papers/index.html#socstrat",
+    "title": "Papers",
+    "section": "socstrat (Stata Journal, accepted)",
+    "text": "socstrat: an automated command that constructs commonly employed British social stratification measures. The Stata Journal. NS-SEC and RGSC from SOC 1990, 2000, 2010 and 2020. Example do-file and interactive guide."
   }
 ]

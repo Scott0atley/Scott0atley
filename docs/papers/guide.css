@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap");
 :root { --ink:#111; --grey:#6a6a6a; --rule:#d9d9d9; --light:#f5f5f5; --red:#c0392b; --teal:#2e7d6b; }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -63,3 +64,20 @@
   .refs p { padding-left:24px; text-indent:-24px; font-size:15px; margin-bottom:8px; }
   footer { margin-top:64px; padding-top:16px; border-top:1px solid var(--rule); font-size:14px; color:var(--grey); }
   @media (max-width: 900px) { table { display:block; overflow-x:auto; } .widget { padding:12px 10px 6px; } .wrap { grid-template-columns:1fr; } nav { display:none; } .plots { grid-template-columns:1fr; } }
+
+/* Site font and site header for all guides (added in the 2026 redesign). Guides stay in light mode. */
+:root { color-scheme: light; }
+body { font-family: "Source Sans 3", Arial, Helvetica, sans-serif; }
+svg { font-family: "Source Sans 3", Arial, Helvetica, sans-serif; }
+.gh { border-bottom: 1px solid var(--rule); background: #fff; position: sticky; top: 0; z-index: 10; }
+.gh-in { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 22px; min-height: 58px; flex-wrap: wrap; }
+.gh-brand { font-weight: 700; font-size: 19px; color: var(--ink); text-decoration: none; margin-right: auto; }
+.gh-menu { display: flex; gap: 20px; }
+.gh-menu a { color: var(--grey); text-decoration: none; font-weight: 600; font-size: 16px; padding: 4px 0; border-bottom: 2px solid transparent; }
+.gh-menu a:hover, .gh-menu a.on { color: var(--ink); border-bottom-color: var(--teal); }
+nav[aria-label="Contents"] { top: 82px; }
+@media (max-width: 900px) {
+  .gh-in { padding: 8px 16px; gap: 8px 16px; }
+  .gh-menu { width: 100%; overflow-x: auto; white-space: nowrap; gap: 14px; }
+}
+.back { font-size:14px; margin-bottom:18px; display:inline-block; }

@@ -5,75 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Handling missing data: an interactive guide | Scott Oatley</title>
 <meta name="description" content="Interactive training material on missing data mechanisms, complete records analysis, FIML and multiple imputation, with live simulations in the browser.">
-<style>
-  :root { --ink:#111; --grey:#6a6a6a; --rule:#d9d9d9; --light:#f5f5f5; --red:#c0392b; --teal:#2e7d6b; }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin:0; font-family: Arial, Helvetica, sans-serif; color:var(--ink); background:#fff; line-height:1.55; font-size:17px; }
-  a { color:#1f5fa8; }
-  .wrap { display:grid; grid-template-columns: 230px minmax(0, 860px); gap:48px; max-width:1180px; margin:0 auto; padding:40px 24px 80px; }
-  nav { position:sticky; top:24px; align-self:start; font-size:14px; }
-  nav ol { list-style:none; padding:0; margin:0; counter-reset:s; }
-  nav li { margin:0 0 6px; }
-  nav a { color:var(--grey); text-decoration:none; }
-  nav a:hover, nav a.on { color:var(--ink); }
-  nav .navhead { font-weight:bold; color:var(--ink); margin-bottom:10px; }
-  main { min-width:0; }
-  header h1 { font-size:34px; line-height:1.2; margin:0 0 6px; }
-  header .sub { color:var(--grey); font-size:19px; margin:0 0 18px; }
-  h2 { font-size:26px; margin:64px 0 12px; padding-top:8px; border-top:1px solid var(--ink); }
-  h2 .num { color:var(--grey); font-weight:normal; margin-right:10px; }
-  h3 { font-size:19px; margin:28px 0 8px; }
-  p { margin:0 0 14px; }
-  .muted { color:var(--grey); }
-  .small { font-size:14px; }
-  .bad { color:var(--red); }
-  .good { color:var(--teal); }
-  code, pre { font-family: "Courier New", Courier, monospace; }
-  pre { background:var(--light); border:1px solid #e3e3e3; padding:14px 16px; overflow-x:auto; font-size:14px; line-height:1.45; margin:0 0 16px; }
-  table { border-collapse:collapse; width:100%; margin:6px 0 18px; font-size:15px; }
-  th, td { text-align:left; padding:6px 10px; vertical-align:top; }
-  thead th { border-top:1.5px solid var(--ink); border-bottom:1px solid var(--ink); }
-  tbody tr:last-child td { border-bottom:1.5px solid var(--ink); }
-  tbody td { border-bottom:1px solid #eee; }
-  td.n, th.n { text-align:right; font-variant-numeric: tabular-nums; }
-  .model { font-size:18px; margin:4px 0 16px; }
-  .widget { border:1px solid var(--rule); padding:18px 18px 10px; margin:18px 0 22px; }
-  .widget .wtitle { font-weight:bold; margin-bottom:10px; }
-  .controls { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:flex-end; margin-bottom:14px; font-size:15px; }
-  .controls label { display:flex; flex-direction:column; gap:4px; color:var(--grey); }
-  .controls label.inline { flex-direction:row; align-items:center; gap:6px; color:var(--ink); }
-  select, button, input[type=range] { font:inherit; font-size:15px; }
-  select { padding:4px 6px; border:1px solid #bbb; background:#fff; }
-  button { padding:6px 14px; border:1px solid var(--ink); background:var(--ink); color:#fff; cursor:pointer; }
-  button.ghost { background:#fff; color:var(--ink); }
-  button:disabled { opacity:.5; cursor:wait; }
-  .progress { height:4px; background:#eee; margin:-6px 0 12px; }
-  .progress > div { height:100%; width:0; background:var(--ink); transition:width .1s; }
-  .plots { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .plots.one { grid-template-columns:1fr; }
-  svg { width:100%; height:auto; display:block; font-family: Arial, Helvetica, sans-serif; }
-  svg text { fill:#333; }
-  .readout { font-size:16px; margin:6px 0 10px; }
-  .try { font-size:15px; margin:10px 0 6px; }
-  .try b { display:block; margin-bottom:4px; }
-  .try ul { margin:0; padding-left:20px; }
-  .legend { font-size:13px; color:var(--grey); margin:4px 0 8px; display:flex; gap:16px; flex-wrap:wrap; }
-  .legend span::before { content:""; display:inline-block; width:10px; height:10px; margin-right:6px; vertical-align:-1px; background:var(--c); border-radius:50%; }
-  .legend span.hollow::before { background:#fff; border:1.5px solid var(--red); }
-  details { border-bottom:1px solid #eee; padding:10px 0; }
-  details summary { cursor:pointer; }
-  details p { margin:8px 0 0; }
-  .guide label { display:block; margin:4px 0; }
-  .guide fieldset { border:none; padding:0; margin:0 0 14px; }
-  .guide legend { font-weight:bold; margin-bottom:6px; }
-  .answer { border-top:1px solid var(--ink); padding-top:12px; margin-top:6px; min-height:60px; }
-  .refs p { padding-left:24px; text-indent:-24px; font-size:15px; margin-bottom:8px; }
-  footer { margin-top:64px; padding-top:16px; border-top:1px solid var(--rule); font-size:14px; color:var(--grey); }
-  @media (max-width: 900px) { table { display:block; overflow-x:auto; } .widget { padding:12px 10px 6px; } .wrap { grid-template-columns:1fr; } nav { display:none; } .plots { grid-template-columns:1fr; } }
-</style>
+<link rel="stylesheet" href="../papers/guide.css">
 </head>
 <body>
+<header class="gh"><div class="gh-in">
+  <a class="gh-brand" href="../index.html">Dr Scott Oatley</a>
+  <nav class="gh-menu" aria-label="Main">
+    <a href="../research/index.html">Research</a>
+    <a class="on" href="../guides/index.html">Guides</a>
+    <a href="../teaching/index.html">Teaching &amp; training</a>
+    <a href="../projects/index.html">Tools</a>
+    <a href="../cv/index.html">CV</a>
+  </nav>
+</div></header>
+
 <div class="wrap">
 <nav aria-label="Contents">
   <div class="navhead">Contents</div>
@@ -95,6 +40,7 @@
   </ol>
 </nav>
 <main>
+<a class="back" href="../guides/index.html">&larr; All guides</a>
 <header id="start">
   <h1>Handling missing data: an interactive guide</h1>
   <p class="sub">Mechanisms, methods and evidence, with simulations you can run in your browser</p>

@@ -1,0 +1,43 @@
+<main class="container">
+  <div class="page-head">
+    <h1>Interactive guides</h1>
+    <p>Each guide explains a method or a paper and lets you try it: simulations, builders and quizzes that run in your browser. No data leave your computer.</p>
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <section class="section" style="border-top:none">
+    <div class="cards" id="cards"></div>
+  </section>
+</main>
+<script>
+// One card per guide: [kind, title, description, link, preview bar heights].
+const GUIDES = [
+  ["Methods", "Handling missing data", "Mechanisms, complete records, FIML and multiple imputation, with a repeated-sampling lab.", "{root}training/missing-data-interactive.html", [30, 55, 80, 60, 40, 70]],
+  ["Methods", "Statistics with Stata", "Sampling, confidence intervals, power, regression, confounding, interactions and logistic models.", "{root}training/guide-statistics-stata.html", [20, 45, 75, 95, 75, 45, 20]],
+  ["Paper", "Measuring social class", "RGSC, EGP, NS-SEC, ESeC, Wright and inductive measures, and how to choose between them.", "{root}papers/guide-measuring-social-class.html", [90, 70, 55, 40, 30, 20]],
+  ["Paper", "Measuring educational attainment", "Years of education, NVQ levels, CASMIN, ISCED and scaled measures.", "{root}papers/guide-measuring-educational-attainment.html", [15, 35, 55, 75, 95]],
+  ["Paper", "socstrat", "Build NS-SEC and RGSC from SOC codes in Stata, with the full SOC 1990 matrix to explore.", "{root}papers/guide-socstrat.html", [60, 60, 40, 80, 50, 70, 30]],
+  ["Project", "Ethnicity in ELSA", "Which waves record what, carrying values across waves, and which waves to use.", "{root}projects/guide-elsa-ethnicity.html", [40, 30, 25, 30, 35, 35, 40, 40, 38, 50, 62, 80]],
+  ["Workshop", "Surveys in Shiny", "Widgets, reactivity, storing responses in Google Sheets, consent and required questions.", "{root}training/guide-shiny-surveys.html", [50, 50, 50, 90]],
+  ["Workshop", "Jupyter for social research", "Installing, connecting Stata, cells, Markdown and keyboard shortcuts.", "{root}training/guide-jupyter.html", [35, 65, 35, 65, 35]]
+];
+const cards = document.getElementById("cards");
+cards.innerHTML = GUIDES.map(g =>
+  '<article class="card" data-kind="' + g[0] + '"><div class="preview" aria-hidden="true">' + g[4].map(h => '<i style="height:' + h + '%"></i>').join("") + '</div>' +
+  '<div class="kicker">' + g[0] + "</div><h3>" + g[1] + "</h3><p>" + g[2] + '</p><a class="more" href="' + g[3] + '">Open the guide →</a></article>'
+).join("");
+
+// Filter by kind of guide.
+const bar = document.getElementById("filters");
+["All", "Methods", "Paper", "Project", "Workshop"].forEach(kind => {
+  const b = document.createElement("button");
+  b.textContent = kind === "All" ? "All" : kind === "Paper" ? "Papers" : kind === "Project" ? "Projects" : kind === "Workshop" ? "Workshops" : kind;
+  b.onclick = () => {
+    bar.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    cards.querySelectorAll(".card").forEach(c => c.hidden = kind !== "All" && c.dataset.kind !== kind);
+  };
+  bar.appendChild(b);
+});
+bar.firstChild.classList.add("on");
+</script>

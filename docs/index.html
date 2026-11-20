@@ -14,7 +14,7 @@
 <body>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="index.html">Dr Scott Oatley</a>
+    <a class="brand" href="index.html"><b>Scott Oatley</b><span>Sociology / UCL</span></a>
     <nav class="menu" aria-label="Main">
       <a href="research/index.html">Research</a>
       <a href="guides/index.html">Guides</a>
@@ -33,56 +33,117 @@
 
 <main class="container">
   <section class="hero">
-    <img src="img/profile.jpeg" alt="Scott Oatley">
     <div>
-      <h1>Scott Oatley</h1>
-      <p class="role">Research Fellow, University College London</p>
-      <p class="statement">I study social stratification: how social class, education and ethnicity shape people’s chances from school to later life, using longitudinal birth cohort and panel data.</p>
+      <div class="id">
+        <img src="img/profile.jpeg" alt="Scott Oatley">
+        <div class="mono">Research Fellow<br>University College London</div>
+      </div>
+      <h1>Who gets <em>where</em>, and why.</h1>
+      <p class="statement">I study social stratification: how class, education and ethnicity shape people’s chances from school to later life, using longitudinal birth cohort and panel data.</p>
       <div class="buttons">
         <a class="btn primary" href="research/index.html">Research</a>
-        <a class="btn" href="guides/index.html">Interactive guides</a>
-        <a class="btn" href="mailto:qtznoat@ucl.ac.uk">Get in touch</a>
+        <a class="btn" href="guides/index.html">Guides</a>
+        <a class="btn" href="mailto:qtznoat@ucl.ac.uk">Email</a>
       </div>
     </div>
+    <figure class="flow" aria-label="Decorative drawing of paths from social origins to destinations" style="margin:0">
+      <svg id="flow" viewBox="0 0 520 360" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+      <div class="cap"><span>Origin</span><span>Destination</span></div>
+    </figure>
   </section>
 
-  <section class="section">
-    <div class="cards">
-      <article class="card">
-        <div class="kicker">Latest paper</div>
-        <h3>Measuring social class</h3>
-        <p>Encyclopedia of Measurement in Social Sciences, 2027. Which class measures to use, how each is built, and why sensitivity analysis beats choosing on theory alone.</p>
-        <a class="more" href="research/index.html#papers">All papers →</a>
-      </article>
-      <article class="card">
-        <div class="kicker">Interactive guides</div>
-        <h3>Learn the methods by trying them</h3>
-        <p>Eight guides with live simulations: missing data, class and education measures, socstrat, ethnicity in ELSA, Shiny surveys, Jupyter and statistics with Stata.</p>
-        <a class="more" href="guides/index.html">Browse the guides →</a>
-      </article>
-      <article class="card">
-        <div class="kicker">Current projects</div>
-        <h3>Two Nuffield Foundation studies</h3>
-        <p>School climate and pupil belonging, attendance and achievement; and racial inequalities in access to professional careers.</p>
-        <a class="more" href="https://www.nuffieldfoundation.org/project/school-climate-and-pupil-belonging-attendance-and-achievement">Read more →</a>
-      </article>
+  <section class="now">
+    <div>
+      <div class="meta">01 / Latest paper</div>
+      <h3>Measuring social class</h3>
+      <p>Encyclopedia of Measurement in Social Sciences, 2027. With a companion chapter on measuring educational attainment.</p>
+      <a class="go" href="research/index.html#papers">Papers</a>
+    </div>
+    <div>
+      <div class="meta">02 / Interactive guides</div>
+      <h3>Try the methods in your browser</h3>
+      <p>Missing data, class and education measures, socstrat, ethnicity in ELSA, Shiny surveys, Jupyter and statistics with Stata.</p>
+      <a class="go" href="guides/index.html">All guides</a>
+    </div>
+    <div>
+      <div class="meta">03 / Current projects</div>
+      <h3>Two Nuffield Foundation studies</h3>
+      <p><a href="https://www.nuffieldfoundation.org/project/school-climate-and-pupil-belonging-attendance-and-achievement">School climate and pupil belonging</a>, and <a href="https://www.nuffieldfoundation.org/project/racial-inequalities-in-access-to-professional-careers-what-matters">racial inequalities in access to professional careers</a>.</p>
     </div>
   </section>
 
   <section class="section">
-    <h2>Research themes</h2>
-    <p class="lead">Quantitative sociology with a focus on longitudinal data and careful measurement.</p>
-    <ul class="themes">
-      <li><b>Measuring class and status</b><span>NS-SEC, RGSC, capitals-based classes in later life, Weberian status</span></li>
-      <li><b>Youth transitions</b><span>Staying on in education at 16 across British cohorts</span></li>
-      <li><b>Missing data</b><span>Simulation evidence on multiple imputation, FIML and complete records</span></li>
-      <li><b>Ageing and ethnicity</b><span>Ethnicity measures in ELSA; age at death</span></li>
-      <li><b>Sexuality and gender</b><span>Sexual orientation pay gaps; gender performance scales</span></li>
-      <li><b>Open tools</b><span>socstrat for Stata; Shiny apps for teaching and surveys</span></li>
+    <div class="section-title"><span class="meta">Themes</span><h2>What I work on</h2></div>
+    <ul class="index-list">
+      <li><div><b>Measuring class and status</b><span>NS-SEC, RGSC, capitals-based classes in later life, Weberian status</span></div></li>
+      <li><div><b>Youth transitions</b><span>Staying on in education at 16 across British cohorts</span></div></li>
+      <li><div><b>Missing data</b><span>Simulation evidence on multiple imputation, FIML and complete records</span></div></li>
+      <li><div><b>Ageing and ethnicity</b><span>Ethnicity measures in ELSA; age at death</span></div></li>
+      <li><div><b>Sexuality and gender</b><span>Sexual orientation pay gaps; gender performance scales</span></div></li>
+      <li><div><b>Open tools</b><span>socstrat for Stata; Shiny apps for teaching and surveys</span></div></li>
     </ul>
   </section>
 </main>
 
-<footer class="site"><div class="container">Scott Oatley · University College London · <a href="mailto:qtznoat@ucl.ac.uk">qtznoat@ucl.ac.uk</a></div></footer>
+<script>
+// Mobility-flow drawing: curves from five origins (left) to five destinations (right).
+// Most paths end near where they start; a few travel far. Purely decorative.
+(function () {
+  const svg = document.getElementById("flow");
+  const NS = "http://www.w3.org/2000/svg";
+  const W = 520, H = 330, X0 = 34, X1 = 486, ROWS = 5;
+  const y = i => 30 + i * (H - 60) / (ROWS - 1);
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const paths = [];
+
+  // Draw the paths. Each origin sends 12 paths; the destination is the origin plus a small random step.
+  for (let o = 0; o < ROWS; o++) {
+    for (let k = 0; k < 12; k++) {
+      const step = Math.round((Math.random() + Math.random() + Math.random() - 1.5) * 1.6);
+      const d = Math.min(ROWS - 1, Math.max(0, o + step));
+      const y0 = y(o) + (Math.random() - 0.5) * 22, y1 = y(d) + (Math.random() - 0.5) * 22;
+      const p = document.createElementNS(NS, "path");
+      p.setAttribute("d", "M" + X0 + " " + y0 + " C " + (W / 2) + " " + y0 + ", " + (W / 2) + " " + y1 + ", " + X1 + " " + y1);
+      p.dataset.origin = o;
+      if (!still) {
+        p.style.strokeDasharray = 600;
+        p.style.strokeDashoffset = 600;
+        p.style.transition = "stroke-dashoffset 1.4s ease " + (o * 0.12 + k * 0.03) + "s";
+      }
+      svg.appendChild(p);
+      paths.push(p);
+    }
+  }
+
+  // Origin and destination markers. Pointing at an origin highlights its paths.
+  for (let i = 0; i < ROWS; i++) {
+    [X0 - 14, X1].forEach((x, side) => {
+      const r = document.createElementNS(NS, "rect");
+      r.setAttribute("class", "node");
+      r.setAttribute("x", x);
+      r.setAttribute("y", y(i) - 16);
+      r.setAttribute("width", 14);
+      r.setAttribute("height", 32);
+      if (side === 0) {
+        r.style.cursor = "pointer";
+        r.addEventListener("mouseenter", () => paths.forEach(p => p.classList.toggle("hi", +p.dataset.origin === i)));
+        r.addEventListener("mouseleave", () => paths.forEach(p => p.classList.remove("hi")));
+      }
+      svg.appendChild(r);
+    });
+  }
+
+  // Start the drawing animation, then highlight one trajectory at a time.
+  if (!still) {
+    setTimeout(() => paths.forEach(p => p.style.strokeDashoffset = 0), 60);
+    setInterval(() => {
+      paths.forEach(p => p.classList.remove("hi"));
+      paths[Math.floor(Math.random() * paths.length)].classList.add("hi");
+    }, 1800);
+  }
+})();
+</script>
+
+<footer class="site"><div class="container"><span>Scott Oatley / University College London</span><a href="mailto:qtznoat@ucl.ac.uk">qtznoat@ucl.ac.uk</a></div></footer>
 </body>
 </html>

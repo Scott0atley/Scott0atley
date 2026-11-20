@@ -14,7 +14,7 @@
 <body>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="../index.html">Dr Scott Oatley</a>
+    <a class="brand" href="../index.html"><b>Scott Oatley</b><span>Sociology / UCL</span></a>
     <nav class="menu" aria-label="Main">
       <a href="../research/index.html">Research</a>
       <a class="active" href="../guides/index.html">Guides</a>
@@ -34,38 +34,103 @@
 <main class="container">
   <div class="page-head">
     <h1>Interactive guides</h1>
-    <p>Each guide explains a method or a paper and lets you try it: simulations, builders and quizzes that run in your browser. No data leave your computer.</p>
   </div>
 
   <div class="filters" id="filters"></div>
 
-  <section class="section" style="border-top:none">
+  <section class="section" style="padding-top:16px">
     <div class="cards" id="cards"></div>
   </section>
 </main>
+
 <script>
-// One card per guide: [kind, title, description, link, preview bar heights].
+// One card per guide: [kind, title, description, link, drawing].
 const GUIDES = [
-  ["Methods", "Handling missing data", "Mechanisms, complete records, FIML and multiple imputation, with a repeated-sampling lab.", "../training/missing-data-interactive.html", [30, 55, 80, 60, 40, 70]],
-  ["Methods", "Statistics with Stata", "Sampling, confidence intervals, power, regression, confounding, interactions and logistic models.", "../training/guide-statistics-stata.html", [20, 45, 75, 95, 75, 45, 20]],
-  ["Paper", "Measuring social class", "RGSC, EGP, NS-SEC, ESeC, Wright and inductive measures, and how to choose between them.", "../papers/guide-measuring-social-class.html", [90, 70, 55, 40, 30, 20]],
-  ["Paper", "Measuring educational attainment", "Years of education, NVQ levels, CASMIN, ISCED and scaled measures.", "../papers/guide-measuring-educational-attainment.html", [15, 35, 55, 75, 95]],
-  ["Paper", "socstrat", "Build NS-SEC and RGSC from SOC codes in Stata, with the full SOC 1990 matrix to explore.", "../papers/guide-socstrat.html", [60, 60, 40, 80, 50, 70, 30]],
-  ["Project", "Ethnicity in ELSA", "Which waves record what, carrying values across waves, and which waves to use.", "../projects/guide-elsa-ethnicity.html", [40, 30, 25, 30, 35, 35, 40, 40, 38, 50, 62, 80]],
-  ["Workshop", "Surveys in Shiny", "Widgets, reactivity, storing responses in Google Sheets, consent and required questions.", "../training/guide-shiny-surveys.html", [50, 50, 50, 90]],
-  ["Workshop", "Jupyter for social research", "Installing, connecting Stata, cells, Markdown and keyboard shortcuts.", "../training/guide-jupyter.html", [35, 65, 35, 65, 35]]
+  ["Methods", "Handling missing data", "Mechanisms, complete records, FIML and multiple imputation, with a repeated-sampling lab.", "../training/missing-data-interactive.html", "missing"],
+  ["Methods", "Statistics with Stata", "Sampling, confidence intervals, power, regression, confounding, interactions and logistic models.", "../training/guide-statistics-stata.html", "stats"],
+  ["Paper", "Measuring social class", "RGSC, EGP, NS-SEC, ESeC, Wright and inductive measures, and how to choose between them.", "../papers/guide-measuring-social-class.html", "class"],
+  ["Paper", "Measuring educational attainment", "Years of education, NVQ levels, CASMIN, ISCED and scaled measures.", "../papers/guide-measuring-educational-attainment.html", "education"],
+  ["Paper", "socstrat", "Build NS-SEC and RGSC from SOC codes in Stata, with the full SOC 1990 matrix to explore.", "../papers/guide-socstrat.html", "matrix"],
+  ["Project", "Ethnicity in ELSA", "Which waves record what, carrying values across waves, and which waves to use.", "../projects/guide-elsa-ethnicity.html", "waves"],
+  ["Workshop", "Surveys in Shiny", "Widgets, reactivity, storing responses in Google Sheets, consent and required questions.", "../training/guide-shiny-surveys.html", "form"],
+  ["Workshop", "Jupyter for social research", "Installing, connecting Stata, cells, Markdown and keyboard shortcuts.", "../training/guide-jupyter.html", "cells"]
 ];
+
+// Small drawings, one per guide, in a 300 x 120 box.
+const DRAW = {
+  // A grid of observations with some missing (hollow).
+  missing: () => {
+    let s = "";
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 16; c++) {
+      const gap = (c * 7 + r * 3) % 5 === 0;
+      s += '<rect class="' + (gap ? "hollow" : "ink") + '" x="' + (22 + c * 16) + '" y="' + (18 + r * 17) + '" width="11" height="11"/>';
+    }
+    return s;
+  },
+  // A sampling distribution: histogram bars under a bell curve.
+  stats: () => {
+    let s = "", d = "";
+    for (let i = 0; i < 17; i++) { const x = -2.4 + i * 0.3, h = 82 * Math.exp(-x * x / 2); s += '<rect class="acc" x="' + (30 + i * 14.5) + '" y="' + (104 - h) + '" width="11" height="' + h + '"/>'; }
+    for (let i = 0; i <= 60; i++) { const x = -3 + i * 0.1; d += (i ? "L" : "M") + (24 + i * 4.2).toFixed(1) + " " + (104 - 86 * Math.exp(-x * x / 2)).toFixed(1); }
+    return s + '<path class="line" d="' + d + '"/>';
+  },
+  // A class schema collapsing from eight to five to three groups.
+  class: () => {
+    const rows = [[1, 1, 3, 2, 1, 1.4, 2, 2], [5, 2, 1, 1.4, 4], [5, 3, 5.4]];
+    let s = "";
+    rows.forEach((row, r) => {
+      const total = row.reduce((a, b) => a + b, 0); let x = 24;
+      row.forEach((w, i) => { const width = w / total * 252; s += '<rect class="' + (i % 2 ? "ink" : "acc") + '" x="' + x + '" y="' + (20 + r * 30) + '" width="' + (width - 3) + '" height="20"/>'; x += width; });
+    });
+    return s;
+  },
+  // A staircase of qualification levels.
+  education: () => {
+    let s = "";
+    for (let i = 0; i < 5; i++) s += '<rect class="' + (i === 4 ? "hl" : "ink") + '" x="' + (34 + i * 48) + '" y="' + (96 - (i + 1) * 16) + '" width="44" height="' + ((i + 1) * 16) + '"/>';
+    return s;
+  },
+  // A derivation matrix: occupation codes by employment status.
+  matrix: () => {
+    let s = "";
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 7; c++) {
+      const v = (r * 3 + c * 2) % 4;
+      s += '<rect class="' + ["acc", "ink", "hollow", "hl"][v] + '" x="' + (52 + c * 29) + '" y="' + (14 + r * 19) + '" width="24" height="15"/>';
+    }
+    return s;
+  },
+  // Twelve survey waves; detailed ethnicity at waves 5, 6, 7 and 11.
+  waves: () => {
+    let s = '<line class="line" x1="24" y1="60" x2="276" y2="60"/>';
+    for (let w = 0; w < 12; w++) s += '<circle class="' + ([5, 6, 7, 11].includes(w) ? "acc" : "hollow") + '" cx="' + (24 + w * 22.9) + '" cy="60" r="8"/>';
+    return s;
+  },
+  // A survey form: fields, a tick box and a submit button.
+  form: () => '<rect class="hollow" x="40" y="16" width="220" height="16"/><rect class="hollow" x="40" y="40" width="160" height="16"/>' +
+    '<rect class="ink" x="40" y="66" width="14" height="14"/><rect class="ink" x="62" y="70" width="90" height="6"/><rect class="acc" x="40" y="90" width="80" height="20"/>',
+  // Notebook cells: alternating code and text.
+  cells: () => {
+    let s = "";
+    [[0, 180, "acc"], [1, 220, "ink"], [2, 140, "acc"], [3, 200, "ink"]].forEach(([i, w, cls]) => {
+      s += '<text x="22" y="' + (30 + i * 24) + '" font-family="JetBrains Mono, monospace" font-size="10" class="ink" stroke="none">[' + (i + 1) + "]</text>";
+      s += '<rect class="' + cls + '" x="52" y="' + (20 + i * 24) + '" width="' + w + '" height="13"/>';
+    });
+    return s;
+  }
+};
+
 const cards = document.getElementById("cards");
 cards.innerHTML = GUIDES.map(g =>
-  '<article class="card" data-kind="' + g[0] + '"><div class="preview" aria-hidden="true">' + g[4].map(h => '<i style="height:' + h + '%"></i>').join("") + '</div>' +
-  '<div class="kicker">' + g[0] + "</div><h3>" + g[1] + "</h3><p>" + g[2] + '</p><a class="more" href="' + g[3] + '">Open the guide →</a></article>'
+  '<article class="card" data-kind="' + g[0] + '">' +
+  '<a class="specimen" href="' + g[3] + '" aria-hidden="true" tabindex="-1"><svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet">' + DRAW[g[4]]() + "</svg></a>" +
+  '<div class="kicker">' + g[0] + "</div><h3>" + g[1] + "</h3><p>" + g[2] + '</p><a class="go" href="' + g[3] + '">Open</a></article>'
 ).join("");
 
 // Filter by kind of guide.
 const bar = document.getElementById("filters");
-["All", "Methods", "Paper", "Project", "Workshop"].forEach(kind => {
+[["All", "All"], ["Methods", "Methods"], ["Paper", "Papers"], ["Project", "Projects"], ["Workshop", "Workshops"]].forEach(([kind, label]) => {
   const b = document.createElement("button");
-  b.textContent = kind === "All" ? "All" : kind === "Paper" ? "Papers" : kind === "Project" ? "Projects" : kind === "Workshop" ? "Workshops" : kind;
+  b.textContent = label;
   b.onclick = () => {
     bar.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
     cards.querySelectorAll(".card").forEach(c => c.hidden = kind !== "All" && c.dataset.kind !== kind);
@@ -75,6 +140,6 @@ const bar = document.getElementById("filters");
 bar.firstChild.classList.add("on");
 </script>
 
-<footer class="site"><div class="container">Scott Oatley · University College London · <a href="mailto:qtznoat@ucl.ac.uk">qtznoat@ucl.ac.uk</a></div></footer>
+<footer class="site"><div class="container"><span>Scott Oatley / University College London</span><a href="mailto:qtznoat@ucl.ac.uk">qtznoat@ucl.ac.uk</a></div></footer>
 </body>
 </html>

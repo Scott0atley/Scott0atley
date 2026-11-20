@@ -14,7 +14,7 @@
 <body>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="../index.html">Dr Scott Oatley</a>
+    <a class="brand" href="../index.html"><b>Scott Oatley</b><span>Sociology / UCL</span></a>
     <nav class="menu" aria-label="Main">
       <a class="active" href="../research/index.html">Research</a>
       <a href="../guides/index.html">Guides</a>
@@ -34,8 +34,9 @@
 <main class="container">
   <div class="page-head">
     <h1>Research</h1>
-    <p>Papers first, then conference presentations grouped by theme. Each entry links straight to its slides, code, preprint or interactive guide.</p>
   </div>
+
+  <div class="timeline" id="timeline"></div>
 
   <div class="filters" id="filters"></div>
 
@@ -149,22 +150,63 @@
   </section>
 </main>
 <script>
-// Theme filter buttons: show one theme or all.
-const THEMES = [["all", "All"], ["papers", "Papers"], ["class", "Class and status"], ["youth", "Youth transitions"], ["missing", "Missing data"], ["ageing", "Ageing and ethnicity"], ["sexuality", "Sexuality and gender"]];
+// Themes, in the order they appear on the page.
+const THEMES = [["papers", "Papers"], ["class", "Class and status"], ["youth", "Youth transitions"], ["missing", "Missing data"], ["ageing", "Ageing and ethnicity"], ["sexuality", "Sexuality and gender"]];
+const YEARS = ["2023", "2024", "2025", "2026", "2027"];
 const bar = document.getElementById("filters");
-THEMES.forEach(([key, label]) => {
+
+// Show one theme, or all of them, in the list and highlight it in the timeline.
+function show(key) {
+  bar.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.key === key));
+  document.querySelectorAll(".tl-label").forEach(b => b.classList.toggle("on", b.dataset.key === key));
+  document.querySelectorAll(".group").forEach(g => g.hidden = key !== "all" && g.dataset.theme !== key);
+}
+
+// Filter buttons.
+[["all", "All"]].concat(THEMES).forEach(([key, label]) => {
   const b = document.createElement("button");
   b.textContent = label;
   b.dataset.key = key;
-  b.onclick = () => {
-    bar.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
-    document.querySelectorAll(".group").forEach(g => g.hidden = key !== "all" && g.dataset.theme !== key);
-  };
+  b.onclick = () => show(key);
   bar.appendChild(b);
 });
-bar.firstChild.classList.add("on");
+
+// Timeline grid: one row per theme, one column per year, one marker per entry.
+// Clicking a marker scrolls to that entry; clicking a row label filters to that theme.
+const grid = document.createElement("div");
+grid.className = "tl-grid";
+grid.style.gridTemplateColumns = "170px repeat(" + YEARS.length + ", 1fr)";
+grid.innerHTML = '<div class="tl-cell tl-head" style="border-left:0"></div>' + YEARS.map(y => '<div class="tl-cell tl-head">' + y + "</div>").join("");
+THEMES.forEach(([key, label]) => {
+  const rowLabel = document.createElement("button");
+  rowLabel.className = "tl-cell tl-label";
+  rowLabel.textContent = label;
+  rowLabel.dataset.key = key;
+  rowLabel.onclick = () => show(key);
+  grid.appendChild(rowLabel);
+  const cells = YEARS.map(() => { const c = document.createElement("div"); c.className = "tl-cell"; grid.appendChild(c); return c; });
+  document.querySelectorAll('.group[data-theme="' + key + '"] .entry').forEach((entry, n) => {
+    entry.id = key + "-" + (n + 1);
+    const yearText = entry.querySelector(".year").textContent.trim();
+    const col = YEARS.indexOf(yearText) >= 0 ? YEARS.indexOf(yearText) : YEARS.indexOf("2026");
+    const dot = document.createElement("button");
+    dot.className = "tl-dot" + (key === "papers" ? " paper" : "");
+    dot.title = entry.querySelector("h3").textContent + " (" + yearText + ")";
+    dot.setAttribute("aria-label", dot.title);
+    dot.onclick = () => {
+      show("all");
+      entry.scrollIntoView({behavior: "smooth", block: "center"});
+      entry.classList.remove("flash"); void entry.offsetWidth; entry.classList.add("flash");
+    };
+    cells[col].appendChild(dot);
+  });
+});
+const timeline = document.getElementById("timeline");
+timeline.appendChild(grid);
+timeline.insertAdjacentHTML("beforeend", '<div class="tl-key"><span><i class="paper"></i>Paper</span><span><i></i>Presentation or report</span></div>');
+show("all");
 </script>
 
-<footer class="site"><div class="container">Scott Oatley · University College London · <a href="mailto:qtznoat@ucl.ac.uk">qtznoat@ucl.ac.uk</a></div></footer>
+<footer class="site"><div class="container"><span>Scott Oatley / University College London</span><a href="mailto:qtznoat@ucl.ac.uk">qtznoat@ucl.ac.uk</a></div></footer>
 </body>
 </html>

@@ -51,7 +51,6 @@ const GUIDES = [
   ["Paper", "Measuring social class", "RGSC, EGP, NS-SEC, ESeC, Wright and inductive measures, and how to choose between them.", "../papers/guide-measuring-social-class.html", "class"],
   ["Paper", "Measuring educational attainment", "Years of education, NVQ levels, CASMIN, ISCED and scaled measures.", "../papers/guide-measuring-educational-attainment.html", "education"],
   ["Paper", "socstrat", "Build NS-SEC and RGSC from SOC codes in Stata, with the full SOC 1990 matrix to explore.", "../papers/guide-socstrat.html", "matrix"],
-  ["Project", "School climate and belonging", "Which parts of school climate predict belonging, attendance and test scores, and which survey items matter most.", "../projects/guide-school-climate-belonging.html", "climate"],
   ["Project", "Ethnicity in ELSA", "Which waves record what, carrying values across waves, and which waves to use.", "../projects/guide-elsa-ethnicity.html", "waves"],
   ["Workshop", "Surveys in Shiny", "Widgets, reactivity, storing responses in Google Sheets, consent and required questions.", "../training/guide-shiny-surveys.html", "form"],
   ["Workshop", "Jupyter for social research", "Installing, connecting Stata, cells, Markdown and keyboard shortcuts.", "../training/guide-jupyter.html", "cells"]
@@ -99,13 +98,6 @@ const DRAW = {
       s += '<rect class="' + ["acc", "ink", "hollow", "hl"][v] + '" x="' + (52 + c * 29) + '" y="' + (14 + r * 19) + '" width="24" height="15"/>';
     }
     return s;
-  },
-  // Five aspects of climate feeding two belonging outcomes.
-  climate: () => {
-    const c = ["acc", "ink", "hollow", "ink", "acc"];
-    let s = "";
-    for (let i = 0; i < 5; i++) s += '<rect class="' + c[i] + '" x="30" y="' + (12 + i * 20) + '" width="80" height="14"/><line class="line" x1="112" y1="' + (19 + i * 20) + '" x2="178" y2="' + (i < 2 ? 40 : 80) + '"/>';
-    return s + '<rect class="hl" x="180" y="30" width="90" height="20"/><rect class="hl" x="180" y="70" width="90" height="20"/>';
   },
   // Twelve survey waves; detailed ethnicity at waves 5, 6, 7 and 11.
   waves: () => {
